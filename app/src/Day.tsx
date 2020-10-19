@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 const DEFAULT_FORMAT = 'YYYY-MM-DD'
 
 type DayProps = Partial<{
@@ -5,14 +7,30 @@ type DayProps = Partial<{
 }>
 
 /**
- * 日付を指定されたフォーマットで取得
+ * 指定された日付を含む、一ヶ月分の日付文字列を配列で取得
+ * @param {string} date 日付文字列
  * @param {DayProps} props プロパティ
- * @return {Date} 日付
+ * @return {Array} 日付文字列の配列
  */
-function Day(props?: DayProps): Date {
+export function Days(date: string, props?: DayProps): Array<string> {
+	// 配列:当該月の日付分
+	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((v, i) => i)
+	// 月初日
+	const firstDate = dayjs(date).startOf('month')
+	// 日付文字列の配列
+	return daysInNumber.map((v, i) => firstDate.add(i, 'day').format(getFormat(props)))
+}
+
+/**
+ * 日付を指定されたフォーマットで取得
+ * @param {string} date 日付
+ * @param {DayProps} props プロパティ
+ * @return {string} 日付文字列
+ */
+function Day(date: string, props?: DayProps): string {
 	// propsが空の場合、default formatを設定
 	const format = getFormat(props)
-	return getDate(format)
+	return getDate(date, format)
 }
 
 /**
@@ -30,19 +48,12 @@ function getFormat(props?: DayProps): string {
 
 /**
  * 日付を取得
+ * @param {string} date 日付
  * @param {DayProps} format 日付用フォーマット
- * @returns {Date} 日付
+ * @returns {string} 日付文字列
  */
-function getDate(format: string): Date {
-	const date = new Date()
-	switch (format) {
-		case DEFAULT_FORMAT:
-			break
-		default:
-			break
-	}
-
-	return date
+function getDate(date: string, format: string): string {
+	const day = dayjs(date)
+	console.log('getDate', day.format(format))
+	return day.format(format)
 }
-
-export default Day
