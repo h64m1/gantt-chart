@@ -1,3 +1,11 @@
 .gantt-head {
 	border: solid thin;
 }
+
+td.sat {
+	background-color: rgb(167, 221, 252);
+}
+
+td.sun {
+	background-color: rgb(252, 167, 167);
+}

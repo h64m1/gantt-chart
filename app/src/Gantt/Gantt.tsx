@@ -29,8 +29,15 @@ function getDatesInMonth(date: string): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(date, { format: 'DD (ddd)' })
 	const rows = dates.map((v, i) => {
+		// 曜日判定
+		let className = 'gantt-head'
+		const dayOfWeek = getDayOfWeek(v)
+		if (dayOfWeek) {
+			className = className.concat(' ', dayOfWeek)
+		}
+
 		return (
-			<td key={`head${i + 1}`} className="gantt-head">
+			<td key={`head${i + 1}`} className={className}>
 				{v}
 			</td>
 		)
@@ -39,6 +46,25 @@ function getDatesInMonth(date: string): Array<JSX.Element> {
 	// 処理月
 	const month = Day(date, { format: 'MMM' })
 	return [<td key="head0">{month}</td>, ...rows]
+}
+
+/**
+ * 曜日を取得
+ * @param date 日付
+ * @return 曜日
+ */
+function getDayOfWeek(date: string): string {
+	return getDayOfWeekString(date, 'Sat') || getDayOfWeekString(date, 'Sun')
+}
+
+/**
+ * 日付が曜日に該当する場合、曜日を返却
+ * @param date 日付
+ * @param dayOfWeek 曜日
+ * @return 曜日
+ */
+function getDayOfWeekString(date: string, dayOfWeek: string): string {
+	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
 
 function GanttBody(props: Object) {
