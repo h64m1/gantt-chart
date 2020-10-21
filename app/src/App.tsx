@@ -1,6 +1,5 @@
 import React from 'react'
-import logo from './logo.svg'
-import Gantt from './Gantt'
+import Gantt from './Gantt/Gantt'
 import './App.css'
 
 function App() {

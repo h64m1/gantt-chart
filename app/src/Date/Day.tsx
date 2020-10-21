@@ -27,7 +27,7 @@ export function Days(date: string, props?: DayProps): Array<string> {
  * @param {DayProps} props プロパティ
  * @return {string} 日付文字列
  */
-function Day(date: string, props?: DayProps): string {
+export function Day(date: string, props?: DayProps): string {
 	// propsが空の場合、default formatを設定
 	const format = getFormat(props)
 	return getDate(date, format)
