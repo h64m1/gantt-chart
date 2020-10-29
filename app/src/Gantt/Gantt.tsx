@@ -7,11 +7,11 @@ type GanttProps = Partial<{
 	option: string // 仮オプション
 }>
 
-function Gantt(props: GanttProps) {
+function Gantt(props: GanttProps): JSX.Element {
 	return <GanttTable {...props} />
 }
 
-function GanttTable(props: GanttProps) {
+function GanttTable(props: GanttProps): JSX.Element {
 	return (
 		<table>
 			<thead>{GanttHead(props)}</thead>
@@ -21,7 +21,7 @@ function GanttTable(props: GanttProps) {
 	)
 }
 
-function GanttHead(props: GanttProps) {
+function GanttHead(props: GanttProps): JSX.Element {
 	const rows = getDatesInMonth('2020-10-01')
 	return <tr key={0}>{rows}</tr>
 }
