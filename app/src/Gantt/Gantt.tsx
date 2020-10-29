@@ -2,11 +2,15 @@ import React from 'react'
 import { Days, Day } from '../Date/Day'
 import './Gantt.css'
 
-function Gantt(props: Object) {
+type GanttProps = Partial<{
+	option: string // 仮オプション
+}>
+
+function Gantt(props: GanttProps) {
 	return <GanttTable {...props} />
 }
 
-function GanttTable(props: Object) {
+function GanttTable(props: GanttProps) {
 	return (
 		<table>
 			<thead>{GanttHead(props)}</thead>
@@ -16,7 +20,7 @@ function GanttTable(props: Object) {
 	)
 }
 
-function GanttHead(props: Object) {
+function GanttHead(props: GanttProps) {
 	const rows = getDatesInMonth('2020-10-01')
 	return <tr key={0}>{rows}</tr>
 }
@@ -67,7 +71,7 @@ function getDayOfWeekString(date: string, dayOfWeek: string): string {
 	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
 
-function GanttBody(props: Object) {
+function GanttBody(props: GanttProps) {
 	return <tr></tr>
 }
 
