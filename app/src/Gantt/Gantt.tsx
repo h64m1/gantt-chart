@@ -1,5 +1,6 @@
 import React from 'react'
 import { Days, Day } from '../Date/Day'
+import { Select } from './Select'
 import './Gantt.css'
 
 type GanttProps = Partial<{
@@ -48,7 +49,12 @@ function getDatesInMonth(date: string): Array<JSX.Element> {
 	})
 
 	// 処理月
-	const month = Day(date, { format: 'MMM' })
+	//const month = Day(date, { format: 'MMM' })
+	// テスト
+	const props = {
+		list: ['選択肢1', '選択肢2', '選択肢3'],
+	}
+	const month = <Select {...props} />
 	return [<td key="head0">{month}</td>, ...rows]
 }
 
