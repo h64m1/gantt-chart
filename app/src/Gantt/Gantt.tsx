@@ -49,13 +49,27 @@ function getDatesInMonth(date: string): Array<JSX.Element> {
 	})
 
 	// 処理月
-	//const month = Day(date, { format: 'MMM' })
+
+	const yearMonths = getMonths('2021')
+
 	// テスト
 	const props = {
-		list: ['選択肢1', '選択肢2', '選択肢3'],
+		list: yearMonths,
 	}
 	const month = <Select {...props} />
 	return [<td key="head0">{month}</td>, ...rows]
+}
+
+/**
+ * 当該年の月リストを取得する
+ * @param year 年 (e.g. 2020)
+ * @return 月リスト
+ */
+function getMonths(year: string): Array<string> {
+	const months: Array<string> = []
+	const format = { format: 'YYYY/MM' }
+	months.push(Day('2021-01-01', format))
+	return months
 }
 
 /**
