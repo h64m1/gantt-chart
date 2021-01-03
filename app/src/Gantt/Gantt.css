@@ -9,3 +9,21 @@ td.sat {
 td.sun {
 	background-color: rgb(252, 167, 167);
 }
+
+.App {
+	grid-area: main;
+	display: grid;
+	grid-template-columns: 2fr 8fr;
+	grid-template-rows: 1fr 9fr;
+	grid-template-areas:
+		'title body'
+		'title body';
+}
+
+#navigation {
+	grid-area: title
+}
+
+#gantt-main {
+	grid-area: body
+}

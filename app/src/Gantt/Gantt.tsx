@@ -14,20 +14,53 @@ function Gantt(): JSX.Element {
 		today: Day(undefined, { format: 'YYYY-MM-DD' }),
 	}
 
-	return <GanttTable {...props} />
+	return (
+		<>
+			<nav id="navigation">
+				<GanttHeader {...props} />
+			</nav>
+			<article id="gantt-main">
+				<GanttTable {...props} />
+			</article>
+		</>
+	)
 }
 
+/**
+ * ガントチャートのヘッダー
+ * @param props オプション
+ */
+function GanttHeader(props: GanttProps): JSX.Element {
+	// 処理月
+	const yearMonths = getMonths(props.thisYear)
+
+	// テスト
+	const option = {
+		list: yearMonths,
+	}
+
+	return <Select {...option} />
+}
+
+/**
+ * ガントチャートの本体
+ * @param props オプション
+ */
 function GanttTable(props: GanttProps): JSX.Element {
 	return (
 		<table>
-			<thead>{GanttHead(props)}</thead>
-			<tbody>{GanttBody(props)}</tbody>
+			<thead>{GanttTableHeader(props)}</thead>
+			<tbody>{GanttTableBody(props)}</tbody>
 			<tfoot></tfoot>
 		</table>
 	)
 }
 
-function GanttHead(props: GanttProps): JSX.Element {
+/**
+ * ガントチャート、テーブル部分のヘッダー
+ * @param props オプション
+ */
+function GanttTableHeader(props: GanttProps): JSX.Element {
 	const rows = getDatesInMonth(props)
 	return <tr key={0}>{rows}</tr>
 }
@@ -39,7 +72,7 @@ function GanttHead(props: GanttProps): JSX.Element {
 function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(props.today, { format: 'DD (ddd)' })
-	const rows = dates.map((v, i) => {
+	return dates.map((v, i) => {
 		// 曜日判定
 		let className = 'gantt-head'
 		const dayOfWeek = getDayOfWeek(v)
@@ -53,16 +86,6 @@ function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 			</td>
 		)
 	})
-
-	// 処理月
-	const yearMonths = getMonths(props.thisYear)
-
-	// テスト
-	const option = {
-		list: yearMonths,
-	}
-	const month = <Select {...option} />
-	return [<td key="head0">{month}</td>, ...rows]
 }
 
 /**
@@ -96,7 +119,11 @@ function getDayOfWeekString(date: string, dayOfWeek: string): string {
 	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
 
-function GanttBody(props: GanttProps) {
+/**
+ * ガントチャート、テーブル部分のボディ
+ * @param props オプション
+ */
+function GanttTableBody(props: GanttProps) {
 	return <tr></tr>
 }
 
