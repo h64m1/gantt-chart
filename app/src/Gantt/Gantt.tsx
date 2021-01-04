@@ -32,11 +32,17 @@ function Gantt(): JSX.Element {
  */
 function GanttHeader(props: GanttProps): JSX.Element {
 	// 処理月
-	const yearMonths = getMonths(props.thisYear)
+	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	const yearMonths: Array<string> = []
+	months.forEach((value) => {
+		const month = `${value}`
+		const yearMonth = `${props.thisYear}-${month.padStart(2, `0`)}-01`
+		yearMonths.push(yearMonth)
+	})
 
 	// テスト
 	const option = {
-		list: yearMonths,
+		list: getMonths(yearMonths),
 	}
 
 	return <Select {...option} />
@@ -90,13 +96,15 @@ function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 
 /**
  * 当該年の月リストを取得する
- * @param year 年 (e.g. 2020)
+ * @param yearMonths 処理年月 (e.g. 2020-01-01)
  * @return 月リスト
  */
-function getMonths(year?: string): Array<string> {
+function getMonths(yearMonths: Array<string>): Array<string> {
 	const months: Array<string> = []
 	const format = { format: 'YYYY/MM' }
-	months.push(Day('2021-01-01', format))
+	yearMonths.forEach((value) => {
+		months.push(Day(value, format))
+	})
 	return months
 }
 
