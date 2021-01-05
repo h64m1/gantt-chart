@@ -1,51 +1,39 @@
 import React from 'react'
+import { useState } from 'react'
 import { Days, Day } from '../Date/Day'
-import { Select } from './Select'
 import './Gantt.css'
 
 type GanttProps = Partial<{
 	thisYear: string // 今年
-	today: string // 当日の日付
+	yearMonth: string // 処理年月
 }>
 
 function Gantt(): JSX.Element {
+	// 当日の日付で処理年月stateを初期化
+	const today = Day(undefined, { format: 'YYYY-MM-DD' })
+	const [yearMonth, useYearMonth] = useState(today)
+
+	// props
 	const props: GanttProps = {
 		thisYear: Day(undefined, { format: 'YYYY' }),
-		today: Day(undefined, { format: 'YYYY-MM-DD' }),
+		yearMonth: yearMonth,
 	}
+
+	// selecterのoption
+	const options = GetMonthOptions(props)
 
 	return (
 		<>
 			<nav id="navigation">
-				<GanttHeader {...props} />
+				<select value={yearMonth} onChange={(e) => useYearMonth(e.target.value)}>
+					{options}
+				</select>
 			</nav>
 			<article id="gantt-main">
 				<GanttTable {...props} />
 			</article>
 		</>
 	)
-}
-
-/**
- * ガントチャートのヘッダー
- * @param props オプション
- */
-function GanttHeader(props: GanttProps): JSX.Element {
-	// 処理月
-	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	const yearMonths: Array<string> = []
-	months.forEach((value) => {
-		const month = `${value}`
-		const yearMonth = `${props.thisYear}-${month.padStart(2, `0`)}-01`
-		yearMonths.push(yearMonth)
-	})
-
-	// テスト
-	const option = {
-		list: getMonths(yearMonths),
-	}
-
-	return <Select {...option} />
 }
 
 /**
@@ -77,7 +65,7 @@ function GanttTableHeader(props: GanttProps): JSX.Element {
  */
 function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 	// 一ヶ月分の日付
-	const dates = Days(props.today, { format: 'DD (ddd)' })
+	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
 	return dates.map((v, i) => {
 		// 曜日判定
 		let className = 'gantt-head'
@@ -95,17 +83,27 @@ function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 }
 
 /**
- * 当該年の月リストを取得する
- * @param yearMonths 処理年月 (e.g. 2020-01-01)
- * @return 月リスト
+ * 処理年月selecterのoptionを取得
+ * @param props オプション
  */
-function getMonths(yearMonths: Array<string>): Array<string> {
-	const months: Array<string> = []
-	const format = { format: 'YYYY/MM' }
-	yearMonths.forEach((value) => {
-		months.push(Day(value, format))
+function GetMonthOptions(props: GanttProps): Array<JSX.Element> {
+	// 処理月
+	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	const yearMonths: Array<string> = []
+	months.forEach((value) => {
+		const month = `${value}`
+		const yearMonth = `${props.thisYear}-${month.padStart(2, `0`)}-01`
+		yearMonths.push(yearMonth)
 	})
-	return months
+
+	return yearMonths.map((v, i) => {
+		const label = Day(v, { format: 'YYYY/MM' })
+		return (
+			<option key={`${i}`} value={`${v}`} label={label}>
+				{v}
+			</option>
+		)
+	})
 }
 
 /**
