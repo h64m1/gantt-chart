@@ -59,6 +59,5 @@ function getDate(date?: string, format?: string): string {
 	}
 
 	const day = dayjs(date)
-	console.log('getDate', day.format(format))
 	return day.format(format)
 }

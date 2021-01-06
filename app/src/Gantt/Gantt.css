@@ -2,6 +2,17 @@
 	border: solid thin;
 }
 
+.gantt-body {
+	border: solid thin;
+	padding: 1rem 0;
+}
+
+td.title {
+	font-weight: bold;
+	background-color:paleturquoise;
+	padding: 0 5rem;
+}
+
 td.sat {
 	background-color: rgb(167, 221, 252);
 }
@@ -13,7 +24,7 @@ td.sun {
 .App {
 	grid-area: main;
 	display: grid;
-	grid-template-columns: 2fr 8fr;
+	grid-template-columns: 1fr 9fr;
 	grid-template-rows: 1fr 9fr;
 	grid-template-areas:
 		'title body'

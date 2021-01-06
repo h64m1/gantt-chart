@@ -66,12 +66,19 @@ function GanttTableHeader(props: GanttProps): JSX.Element {
 function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
+	// タイトル用の要素を追加
+	dates.unshift('')
+
 	return dates.map((v, i) => {
 		// 曜日判定
 		let className = 'gantt-head'
 		const dayOfWeek = getDayOfWeek(v)
 		if (dayOfWeek) {
 			className = className.concat(' ', dayOfWeek)
+		}
+		if (v === '') {
+			// title用のクラス名を付加
+			className = className.concat(' ', 'title')
 		}
 
 		return (
@@ -130,7 +137,28 @@ function getDayOfWeekString(date: string, dayOfWeek: string): string {
  * @param props オプション
  */
 function GanttTableBody(props: GanttProps) {
-	return <tr></tr>
+	const body = getBody(props)
+	return <tr>{body}</tr>
+}
+
+/**
+ * 1ヶ月分の枠を<td>の配列で取得
+ * @param props オプション
+ */
+function getBody(props: GanttProps): Array<JSX.Element> {
+	// 一ヶ月分の日付
+	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
+	// タイトル用の要素を追加
+	dates.unshift('')
+	return dates.map((v, i) => {
+		let className = 'gantt-body'
+		if (v === '') {
+			// title用のクラス名を付加
+			className = className.concat(' ', 'title')
+		}
+
+		return <td key={`body${i + 1}`} className={className}></td>
+	})
 }
 
 export default Gantt
