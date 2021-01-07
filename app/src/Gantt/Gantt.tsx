@@ -1,3 +1,5 @@
+import { TouchBarOtherItemsProxy } from 'electron'
+import { Task } from 'electron/main'
 import React from 'react'
 import { useState } from 'react'
 import { Days, Day } from '../Date/Day'
@@ -6,17 +8,38 @@ import './Gantt.css'
 type GanttProps = Partial<{
 	thisYear: string // 今年
 	yearMonth: string // 処理年月
+	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
 }>
+
+interface TaskStatus {
+	row: number
+	column: number
+	isOn: boolean
+}
 
 function Gantt(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
 	const today = Day(undefined, { format: 'YYYY-MM-DD' })
-	const [yearMonth, useYearMonth] = useState(today)
+	const [yearMonth, setYearMonth] = useState(today)
+	const [tasks, setTasks] = useState([
+		{
+			row: 0,
+			column: 0,
+			isOn: false,
+		},
+	])
+
+	const addIsOn = (event: React.MouseEvent, task: TaskStatus) => {
+		setTasks([...tasks, task])
+	}
+
+	console.log(tasks)
 
 	// props
 	const props: GanttProps = {
 		thisYear: Day(undefined, { format: 'YYYY' }),
 		yearMonth: yearMonth,
+		addIsOn: addIsOn,
 	}
 
 	// selecterのoption
@@ -25,7 +48,7 @@ function Gantt(): JSX.Element {
 	return (
 		<>
 			<nav id="navigation">
-				<select value={yearMonth} onChange={(e) => useYearMonth(e.target.value)}>
+				<select value={yearMonth} onChange={(e) => setYearMonth(e.target.value)}>
 					{options}
 				</select>
 			</nav>
@@ -157,7 +180,24 @@ function getBody(props: GanttProps): Array<JSX.Element> {
 			className = className.concat(' ', 'title')
 		}
 
-		return <td key={`body${i + 1}`} className={className}></td>
+		return (
+			<td
+				key={`body${i + 1}`}
+				className={className}
+				onClick={(e) => {
+					// clickで当該セルをtasksに追加
+					// TODO: 追加済みの要素は追加しないよう条件を設定
+					if (props.addIsOn) {
+						props.addIsOn(e, {
+							row: 0,
+							column: i,
+							isOn: true,
+						})
+					}
+					console.log(i)
+				}}
+			></td>
+		)
 	})
 }
 
