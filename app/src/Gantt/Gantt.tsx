@@ -3,19 +3,15 @@ import { Task } from 'electron/main'
 import React from 'react'
 import { useState } from 'react'
 import { Days, Day } from '../Date/Day'
+import { TaskStatus } from '../Types'
 import './Gantt.css'
 
+// props type
 type GanttProps = Partial<{
 	thisYear: string // 今年
 	yearMonth: string // 処理年月
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
 }>
-
-interface TaskStatus {
-	row: number
-	column: number
-	isOn: boolean
-}
 
 function Gantt(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
@@ -194,7 +190,6 @@ function getBody(props: GanttProps): Array<JSX.Element> {
 							isOn: true,
 						})
 					}
-					console.log(i)
 				}}
 			></td>
 		)
