@@ -12,7 +12,7 @@ type DayProps = Partial<{
  * @param {DayProps} props プロパティ
  * @return {Array} 日付文字列の配列
  */
-export function Days(date: string, props?: DayProps): Array<string> {
+export function Days(date?: string, props?: DayProps): Array<string> {
 	// 配列:当該月の日付分
 	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((v, i) => i)
 	// 月初日
@@ -27,7 +27,7 @@ export function Days(date: string, props?: DayProps): Array<string> {
  * @param {DayProps} props プロパティ
  * @return {string} 日付文字列
  */
-export function Day(date: string, props?: DayProps): string {
+export function Day(date?: string, props?: DayProps): string {
 	// propsが空の場合、default formatを設定
 	const format = getFormat(props)
 	return getDate(date, format)
@@ -52,8 +52,12 @@ function getFormat(props?: DayProps): string {
  * @param {DayProps} format 日付用フォーマット
  * @returns {string} 日付文字列
  */
-function getDate(date: string, format: string): string {
+function getDate(date?: string, format?: string): string {
+	// dateがnull or undefinedの場合、現在時刻を返す
+	if (date === null || date === undefined) {
+		return dayjs().format(format)
+	}
+
 	const day = dayjs(date)
-	console.log('getDate', day.format(format))
 	return day.format(format)
 }
