@@ -1,5 +1,3 @@
-import { TouchBarOtherItemsProxy } from 'electron'
-import { Task } from 'electron/main'
 import React from 'react'
 import { useState } from 'react'
 import { Days, Day } from '../Date/Day'
@@ -40,6 +38,8 @@ function Gantt(): JSX.Element {
 
 	// selecterのoption
 	const options = GetMonthOptions(props)
+	const headRows = getDatesInMonth(props)
+	const titles = ['a', 'b', 'c']
 
 	return (
 		<>
@@ -49,33 +49,21 @@ function Gantt(): JSX.Element {
 				</select>
 			</nav>
 			<article id="gantt-main">
-				<GanttTable {...props} />
+				<table>
+					<thead>
+						<tr key={0}>{headRows}</tr>
+					</thead>
+					<tbody>
+						{titles.map((e, i) => {
+							const bodyRows = getBody(props, i)
+							return <tr key={i}>{bodyRows}</tr>
+						})}
+					</tbody>
+					<tfoot></tfoot>
+				</table>
 			</article>
 		</>
 	)
-}
-
-/**
- * ガントチャートの本体
- * @param props オプション
- */
-function GanttTable(props: GanttProps): JSX.Element {
-	return (
-		<table>
-			<thead>{GanttTableHeader(props)}</thead>
-			<tbody>{GanttTableBody(props)}</tbody>
-			<tfoot></tfoot>
-		</table>
-	)
-}
-
-/**
- * ガントチャート、テーブル部分のヘッダー
- * @param props オプション
- */
-function GanttTableHeader(props: GanttProps): JSX.Element {
-	const rows = getDatesInMonth(props)
-	return <tr key={0}>{rows}</tr>
 }
 
 /**
@@ -152,19 +140,11 @@ function getDayOfWeekString(date: string, dayOfWeek: string): string {
 }
 
 /**
- * ガントチャート、テーブル部分のボディ
- * @param props オプション
- */
-function GanttTableBody(props: GanttProps) {
-	const body = getBody(props)
-	return <tr>{body}</tr>
-}
-
-/**
  * 1ヶ月分の枠を<td>の配列で取得
  * @param props オプション
+ * @param row 行番号
  */
-function getBody(props: GanttProps): Array<JSX.Element> {
+function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
 	// タイトル用の要素を追加
@@ -178,7 +158,7 @@ function getBody(props: GanttProps): Array<JSX.Element> {
 
 		return (
 			<td
-				key={`body${i + 1}`}
+				key={`body-${row}-${i}`}
 				className={className}
 				onClick={(e) => {
 					// clickで当該セルをtasksに追加
