@@ -161,11 +161,16 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 				key={`body-${row}-${i}`}
 				className={className}
 				onClick={(e) => {
+					// title列は追加しない
+					if (i === 0) {
+						return
+					}
+
 					// clickで当該セルをtasksに追加
 					// TODO: 追加済みの要素は追加しないよう条件を設定
 					if (props.addIsOn) {
 						props.addIsOn(e, {
-							row: 0,
+							row: row,
 							column: i,
 							isOn: true,
 						})
