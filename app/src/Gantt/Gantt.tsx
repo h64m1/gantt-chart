@@ -24,7 +24,24 @@ function Gantt(): JSX.Element {
 	])
 
 	const addIsOn = (event: React.MouseEvent, task: TaskStatus) => {
-		setTasks([...tasks, task])
+		// 既存taskの場合は追加しない
+		const isRowColumnMatch = (e: TaskStatus) => {
+			return e.row === task.row && e.column === task.column
+		}
+		const isTaskFound = tasks.some(isRowColumnMatch)
+
+		if (isTaskFound) {
+			// 既存のタスクが存在する場合
+			tasks.forEach((e: TaskStatus, i: number, o: Array<TaskStatus>) => {
+				if (isRowColumnMatch(e)) {
+					o[i].isOn = !o[i].isOn
+				}
+			})
+			setTasks([...tasks])
+		} else {
+			// タスク新規追加
+			setTasks([...tasks, task])
+		}
 	}
 
 	console.log(tasks)
@@ -167,7 +184,6 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 					}
 
 					// clickで当該セルをtasksに追加
-					// TODO: 追加済みの要素は追加しないよう条件を設定
 					if (props.addIsOn) {
 						props.addIsOn(e, {
 							row: row,
