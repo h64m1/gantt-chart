@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { Days, Day } from '../Date/Day'
+import { Days, Day, YearMonth } from '../Date/Day'
 import { TaskStatus } from '../Types/Types'
 import './Gantt.css'
 
@@ -13,8 +13,9 @@ type GanttProps = {
 
 function Gantt(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
-	const today = Day(undefined, { format: 'YYYY-MM-DD' })
-	const [yearMonth, setYearMonth] = useState(today)
+	const format = { format: 'YYYY-MM-DD' }
+	const today = Day(undefined, format)
+	const [yearMonth, setYearMonth] = useState(YearMonth(today, format))
 	const [tasks, setTasks] = useState([
 		{
 			yearMonth: yearMonth,
