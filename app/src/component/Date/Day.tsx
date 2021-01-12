@@ -12,7 +12,7 @@ type DayProps = Partial<{
  * @param {DayProps} props プロパティ
  * @return {Array} 日付文字列の配列
  */
-export function Days(date?: string, props?: DayProps): Array<string> {
+export function Days(date: string, props?: DayProps): Array<string> {
 	// 配列:当該月の日付分
 	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((v, i) => i)
 	// 月初日
