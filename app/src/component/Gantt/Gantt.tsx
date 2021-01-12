@@ -1,15 +1,15 @@
 import React from 'react'
 import { useState } from 'react'
 import { Days, Day } from '../Date/Day'
-import { TaskStatus } from '../Types'
+import { TaskStatus } from '../Types/Types'
 import './Gantt.css'
 
 // props type
-type GanttProps = Partial<{
+type GanttProps = {
 	thisYear: string // 今年
 	yearMonth: string // 処理年月
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
-}>
+}
 
 function Gantt(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
@@ -17,6 +17,7 @@ function Gantt(): JSX.Element {
 	const [yearMonth, setYearMonth] = useState(today)
 	const [tasks, setTasks] = useState([
 		{
+			yearMonth: yearMonth,
 			row: 0,
 			column: 0,
 			isOn: false,
@@ -186,6 +187,7 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 					// clickで当該セルをtasksに追加
 					if (props.addIsOn) {
 						props.addIsOn(e, {
+							yearMonth: props.yearMonth,
 							row: row,
 							column: i,
 							isOn: true,
