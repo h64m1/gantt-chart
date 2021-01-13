@@ -8,6 +8,7 @@ import './Gantt.css'
 type GanttProps = {
 	thisYear: string // 今年
 	yearMonth: string // 処理年月
+	tasks: Array<TaskStatus>
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
 }
 
@@ -52,6 +53,7 @@ function Gantt(): JSX.Element {
 	const props: GanttProps = {
 		thisYear: Day(undefined, { format: 'YYYY' }),
 		yearMonth: yearMonth,
+		tasks: tasks,
 		addIsOn: addIsOn,
 	}
 
@@ -168,11 +170,21 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
 	// タイトル用の要素を追加
 	dates.unshift('')
+
+	const tasks = props.tasks
+
 	return dates.map((v, i) => {
 		let className = 'gantt-body'
 		if (v === '') {
 			// title用のクラス名を付加
 			className = className.concat(' ', 'title')
+		}
+
+		// 当該カラムのtaskが存在するか
+		const column = i
+		const task = tasks.find((e) => e.row === row && e.column === column)
+		if (task?.isOn) {
+			className = className.concat(' ', 'task')
 		}
 
 		return (
