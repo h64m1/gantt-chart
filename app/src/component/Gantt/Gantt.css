@@ -7,6 +7,10 @@
 	padding: 1rem 0;
 }
 
+.gantt-button {
+	float: left;
+}
+
 td.title {
 	font-weight: bold;
 	background-color:paleturquoise;
