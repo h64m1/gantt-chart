@@ -25,6 +25,7 @@ function Gantt(): JSX.Element {
 			isOn: false,
 		},
 	])
+	const [title, setTitle] = useState([''])
 
 	const addIsOn = (event: React.MouseEvent, task: TaskStatus) => {
 		// 既存taskの場合は追加しない
@@ -60,7 +61,18 @@ function Gantt(): JSX.Element {
 	// selecterのoption
 	const options = GetMonthOptions(props)
 	const headRows = getDatesInMonth(props)
-	const titles = ['a', 'b', 'c']
+
+	// 行追加と削除
+	const addRow = () => {
+		console.log('行追加')
+		setTitle([...title, ''])
+	}
+
+	const deleteRow = () => {
+		console.log('行削除')
+		title.pop()
+		setTitle([...title])
+	}
 
 	return (
 		<>
@@ -70,18 +82,26 @@ function Gantt(): JSX.Element {
 				</select>
 			</nav>
 			<article id="gantt-main">
+				{/* ガントチャートのボディ部分 */}
 				<table>
 					<thead>
 						<tr key={0}>{headRows}</tr>
 					</thead>
 					<tbody>
-						{titles.map((e, i) => {
+						{title.map((e, i) => {
 							const bodyRows = getBody(props, i)
 							return <tr key={i}>{bodyRows}</tr>
 						})}
 					</tbody>
 					<tfoot></tfoot>
 				</table>
+				{/* 行追加、行削除のボタン */}
+				<button className={'gantt-button'} onClick={addRow}>
+					行追加
+				</button>
+				<button className={'gantt-button'} onClick={deleteRow}>
+					行削除
+				</button>
 			</article>
 		</>
 	)
