@@ -7,6 +7,10 @@
 	padding: 1rem 0;
 }
 
+.gantt-button {
+	float: left;
+}
+
 td.title {
 	font-weight: bold;
 	background-color:paleturquoise;
@@ -21,6 +25,10 @@ td.sun {
 	background-color: rgb(252, 167, 167);
 }
 
+td.task {
+	background-color: yellow;
+}
+
 .App {
 	grid-area: main;
 	display: grid;
@@ -32,9 +40,11 @@ td.sun {
 }
 
 #navigation {
-	grid-area: title
+	grid-area: title;
+	background-color: white;
 }
 
 #gantt-main {
-	grid-area: body
+	grid-area: body;
+	background-color: white;
 }

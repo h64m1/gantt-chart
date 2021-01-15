@@ -1,5 +1,5 @@
 import React from 'react'
-import Gantt from './Gantt/Gantt'
+import Gantt from './component/Gantt/Gantt'
 import './App.css'
 
 function App(): JSX.Element {
