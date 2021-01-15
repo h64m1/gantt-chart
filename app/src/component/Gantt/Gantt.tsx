@@ -193,27 +193,30 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 
 	const tasks = props.tasks
 
-	return dates.map((v, i) => {
+	return dates.map((v, column) => {
 		let className = 'gantt-body'
-		if (v === '') {
+		const isTitle = v === ''
+		if (isTitle) {
 			// title用のクラス名を付加
 			className = className.concat(' ', 'title')
 		}
 
 		// 当該カラムのtaskが存在するか
-		const column = i
 		const task = tasks.find((e) => e.row === row && e.column === column)
 		if (task?.isOn) {
 			className = className.concat(' ', 'task')
 		}
 
+		// タイトル列にはフォームを表示（フォーム仮置）
+		const cell = isTitle ? <input type="text" /> : ''
+
 		return (
 			<td
-				key={`body-${row}-${i}`}
+				key={`body-${row}-${column}`}
 				className={className}
 				onClick={(e) => {
 					// title列は追加しない
-					if (i === 0) {
+					if (column === 0) {
 						return
 					}
 
@@ -222,12 +225,14 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 						props.addIsOn(e, {
 							yearMonth: props.yearMonth,
 							row: row,
-							column: i,
+							column: column,
 							isOn: true,
 						})
 					}
 				}}
-			></td>
+			>
+				{cell}
+			</td>
 		)
 	})
 }
