@@ -10,6 +10,12 @@
 	float: left;
 }
 
+input.title {
+	background-color: paleturquoise;
+	border-style: none;
+	margin: 2px;
+}
+
 /* テーブルセル */
 td.title {
 	font-weight: bold;

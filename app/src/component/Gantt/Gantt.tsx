@@ -70,7 +70,10 @@ function Gantt(): JSX.Element {
 
 	const deleteRow = () => {
 		console.log('行削除')
-		title.pop()
+		if (title.length > 1) {
+			// 要素が1つの場合は削除しない
+			title.pop()
+		}
 		setTitle([...title])
 	}
 
@@ -208,7 +211,7 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 		}
 
 		// タイトル列にはフォームを表示（フォーム仮置）
-		const cell = isTitle ? <input type="text" /> : ''
+		const cell = isTitle ? <input type="text" className="title" /> : ''
 
 		return (
 			<td
