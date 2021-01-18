@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { Days, Day, YearMonth } from '../Date/Day'
-import { TaskStatus } from '../Types/Types'
+import { TaskStatus, Title } from '../Types/Types'
 import './Gantt.css'
 
 // props type
@@ -10,6 +10,7 @@ type GanttProps = {
 	yearMonth: string // 処理年月
 	tasks: Array<TaskStatus>
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
+	changeTitle: (event: ChangeEvent, title: Title) => void
 }
 
 function Gantt(): JSX.Element {
@@ -17,6 +18,13 @@ function Gantt(): JSX.Element {
 	const format = { format: 'YYYY-MM-DD' }
 	const today = Day(undefined, format)
 	const [yearMonth, setYearMonth] = useState(YearMonth(today, format))
+	const [titles, setTitle] = useState([
+		{
+			yearMonth: yearMonth,
+			row: 0,
+			title: '',
+		},
+	])
 	const [tasks, setTasks] = useState([
 		{
 			yearMonth: yearMonth,
@@ -25,8 +33,9 @@ function Gantt(): JSX.Element {
 			isOn: false,
 		},
 	])
-	const [title, setTitle] = useState([''])
+	const [row, setRow] = useState([''])
 
+	// タスクを追加
 	const addIsOn = (event: React.MouseEvent, task: TaskStatus) => {
 		// 既存taskの場合は追加しない
 		const isRowColumnMatch = (e: TaskStatus) => {
@@ -48,7 +57,31 @@ function Gantt(): JSX.Element {
 		}
 	}
 
-	console.log(tasks)
+	// タイトルを変更
+	const changeTitle = (event: ChangeEvent, title: Title) => {
+		// 既存タイトルの場合は追加しない
+		const isRowMatch = (e: Title) => {
+			return e.row === title.row
+		}
+		const isTitleFound = titles.some(isRowMatch)
+
+		if (isTitleFound) {
+			// 既存タイトルが存在する場合
+			titles.forEach((e: Title, i: number, o: Array<Title>) => {
+				if (isRowMatch(e)) {
+					o[i].title = title.title
+				}
+			})
+
+			setTitle([...titles])
+		} else {
+			// タイトル新規追加
+			setTitle([...titles, title])
+		}
+	}
+
+	// 確認
+	console.log(tasks, titles)
 
 	// props
 	const props: GanttProps = {
@@ -56,6 +89,7 @@ function Gantt(): JSX.Element {
 		yearMonth: yearMonth,
 		tasks: tasks,
 		addIsOn: addIsOn,
+		changeTitle: changeTitle,
 	}
 
 	// selecterのoption
@@ -64,17 +98,17 @@ function Gantt(): JSX.Element {
 
 	// 行追加と削除
 	const addRow = () => {
-		console.log('行追加')
-		setTitle([...title, ''])
+		console.log('行追加:', row.length)
+		setRow([...row, ''])
 	}
 
 	const deleteRow = () => {
 		console.log('行削除')
-		if (title.length > 1) {
+		if (row.length > 1) {
 			// 要素が1つの場合は削除しない
-			title.pop()
+			row.pop()
 		}
-		setTitle([...title])
+		setRow([...row])
 	}
 
 	return (
@@ -91,7 +125,7 @@ function Gantt(): JSX.Element {
 						<tr key={0}>{headRows}</tr>
 					</thead>
 					<tbody>
-						{title.map((e, i) => {
+						{row.map((e, i) => {
 							const bodyRows = getBody(props, i)
 							return <tr key={i}>{bodyRows}</tr>
 						})}
@@ -211,7 +245,23 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 		}
 
 		// タイトル列にはフォームを表示（フォーム仮置）
-		const cell = isTitle ? <input type="text" className="title" /> : ''
+		const cell = isTitle ? (
+			<input
+				type="text"
+				className="title"
+				onChange={(e) => {
+					if (props.changeTitle) {
+						props.changeTitle(e, {
+							yearMonth: props.yearMonth,
+							row: row,
+							title: e.target.value,
+						})
+					}
+				}}
+			/>
+		) : (
+			''
+		)
 
 		return (
 			<td

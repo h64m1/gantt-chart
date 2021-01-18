@@ -5,3 +5,9 @@ export interface TaskStatus {
 	column: number
 	isOn: boolean
 }
+
+export interface Title {
+	yearMonth: string
+	row: number
+	title: string
+}
