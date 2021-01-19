@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 import { useState } from 'react'
 import { Days, Day, YearMonth } from '../Date/Day'
 import { Task, TaskStatus, Title } from '../Types/Types'
@@ -131,6 +131,11 @@ function Gantt(): JSX.Element {
 		}
 		setRow([...row])
 	}
+
+	useEffect(() => {
+		// マウント時に行数を初期化
+		setRow([])
+	}, [yearMonth])
 
 	return (
 		<>
