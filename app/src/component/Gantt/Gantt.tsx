@@ -1,14 +1,15 @@
 import React, { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { Days, Day, YearMonth } from '../Date/Day'
-import { TaskStatus, Title } from '../Types/Types'
+import { Task, TaskStatus, Title } from '../Types/Types'
 import './Gantt.css'
 
 // props type
 type GanttProps = {
 	thisYear: string // 今年
 	yearMonth: string // 処理年月
-	tasks: Array<TaskStatus>
+	// tasks: Array<TaskStatus>
+	task: Task
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
 	changeTitle: (event: ChangeEvent, title: Title) => void
 }
@@ -18,42 +19,61 @@ function Gantt(): JSX.Element {
 	const format = { format: 'YYYY-MM-DD' }
 	const today = Day(undefined, format)
 	const [yearMonth, setYearMonth] = useState(YearMonth(today, format))
-	const [titles, setTitle] = useState([
-		{
-			yearMonth: yearMonth,
-			row: 0,
-			title: '',
-		},
-	])
-	const [tasks, setTasks] = useState([
-		{
-			yearMonth: yearMonth,
-			row: 0,
-			column: 0,
-			isOn: false,
-		},
-	])
+
+	const emptyTitle = {
+		yearMonth: yearMonth,
+		row: 0,
+		title: '',
+	}
+	const [titles, setTitle] = useState([emptyTitle])
+
+	const emptyTaskStatus = {
+		yearMonth: yearMonth,
+		row: 0,
+		column: 0,
+		isOn: false,
+	}
+	// const [tasks, setTasks] = useState([emptyTaskStatus])
+
+	const emptyTask = {
+		yearMonth: yearMonth,
+		row: [0],
+		titles: [emptyTitle],
+		tasks: [emptyTaskStatus],
+	}
+	const [task, setTask] = useState(emptyTask)
 	const [row, setRow] = useState([''])
 
 	// タスクを追加
-	const addIsOn = (event: React.MouseEvent, task: TaskStatus) => {
+	const addIsOn = (event: React.MouseEvent, taskStatus: TaskStatus) => {
 		// 既存taskの場合は追加しない
 		const isRowColumnMatch = (e: TaskStatus) => {
-			return e.row === task.row && e.column === task.column
+			return e.row === taskStatus.row && e.column === taskStatus.column
 		}
-		const isTaskFound = tasks.some(isRowColumnMatch)
+		// const isTaskFound = tasks.some(isRowColumnMatch)
+		const isTaskFound = task.tasks.some(isRowColumnMatch)
 
 		if (isTaskFound) {
 			// 既存のタスクが存在する場合
-			tasks.forEach((e: TaskStatus, i: number, o: Array<TaskStatus>) => {
+			task.tasks.forEach((e: TaskStatus, i: number, o: Array<TaskStatus>) => {
 				if (isRowColumnMatch(e)) {
 					o[i].isOn = !o[i].isOn
 				}
 			})
-			setTasks([...tasks])
+			setTask({
+				yearMonth: yearMonth,
+				row: task.row,
+				titles: task.titles,
+				tasks: task.tasks,
+			})
 		} else {
 			// タスク新規追加
-			setTasks([...tasks, task])
+			setTask({
+				yearMonth: yearMonth,
+				row: task.row,
+				titles: task.titles,
+				tasks: [...task.tasks, taskStatus],
+			})
 		}
 	}
 
@@ -81,13 +101,14 @@ function Gantt(): JSX.Element {
 	}
 
 	// 確認
-	console.log(tasks, titles)
+	console.log('titles', titles, 'task', task)
 
 	// props
 	const props: GanttProps = {
 		thisYear: Day(undefined, { format: 'YYYY' }),
 		yearMonth: yearMonth,
-		tasks: tasks,
+		// tasks: tasks,
+		task: task,
 		addIsOn: addIsOn,
 		changeTitle: changeTitle,
 	}
@@ -228,7 +249,7 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 	// タイトル用の要素を追加
 	dates.unshift('')
 
-	const tasks = props.tasks
+	const tasks = props.task.tasks
 
 	return dates.map((v, column) => {
 		let className = 'gantt-body'
