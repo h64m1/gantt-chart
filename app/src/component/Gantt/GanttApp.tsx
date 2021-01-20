@@ -2,11 +2,11 @@ import React, { ChangeEvent, useEffect } from 'react'
 import { useState } from 'react'
 import { Days, Day, YearMonth } from '../Date/Day'
 import { Task, TaskStatus, Title } from '../Types/Types'
+import { Select } from '../Select/Select'
 import './Gantt.css'
 
 // props type
 type GanttProps = {
-	thisYear: string // 今年
 	yearMonth: string // 処理年月
 	// tasks: Array<TaskStatus>
 	task: Task
@@ -14,7 +14,7 @@ type GanttProps = {
 	changeTitle: (event: ChangeEvent, title: Title) => void
 }
 
-function Gantt(): JSX.Element {
+function GanttApp(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
 	const format = { format: 'YYYY-MM-DD' }
 	const today = Day(undefined, format)
@@ -105,17 +105,12 @@ function Gantt(): JSX.Element {
 
 	// props
 	const props: GanttProps = {
-		thisYear: Day(undefined, { format: 'YYYY' }),
 		yearMonth: yearMonth,
 		// tasks: tasks,
 		task: task,
 		addIsOn: addIsOn,
 		changeTitle: changeTitle,
 	}
-
-	// selecterのoption
-	const options = GetMonthOptions(props)
-	const headRows = getDatesInMonth(props)
 
 	// 行追加と削除
 	const addRow = () => {
@@ -140,32 +135,48 @@ function Gantt(): JSX.Element {
 	return (
 		<>
 			<nav id="navigation">
-				<select value={yearMonth} onChange={(e) => setYearMonth(e.target.value)}>
-					{options}
-				</select>
+				<Select value={yearMonth} onChange={(v) => setYearMonth(v)} />
 			</nav>
 			<article id="gantt-main">
-				{/* ガントチャートのボディ部分 */}
-				<table>
-					<thead>
-						<tr key={0}>{headRows}</tr>
-					</thead>
-					<tbody>
-						{row.map((e, i) => {
-							const bodyRows = getBody(props, i)
-							return <tr key={i}>{bodyRows}</tr>
-						})}
-					</tbody>
-					<tfoot></tfoot>
-				</table>
-				{/* 行追加、行削除のボタン */}
-				<button className={'gantt-button'} onClick={addRow}>
-					行追加
-				</button>
-				<button className={'gantt-button'} onClick={deleteRow}>
-					行削除
-				</button>
+				<Gantt props={props} row={row} addRow={addRow} deleteRow={deleteRow} />
 			</article>
+		</>
+	)
+}
+
+type Props = {
+	children?: never
+	props: GanttProps
+	row: string[]
+	addRow: (event: React.MouseEvent) => void
+	deleteRow: (event: React.MouseEvent) => void
+}
+
+const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
+	console.log('render Gantt')
+	const headRows = getDatesInMonth(props)
+	return (
+		<>
+			{/* ガントチャートのボディ部分 */}
+			<table>
+				<thead>
+					<tr key={0}>{headRows}</tr>
+				</thead>
+				<tbody>
+					{row.map((e, i) => {
+						const bodyRows = getBody(props, i)
+						return <tr key={i}>{bodyRows}</tr>
+					})}
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+			{/* 行追加、行削除のボタン */}
+			<button className={'gantt-button'} onClick={addRow}>
+				行追加
+			</button>
+			<button className={'gantt-button'} onClick={deleteRow}>
+				行削除
+			</button>
 		</>
 	)
 }
@@ -196,30 +207,6 @@ function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
 			<td key={`head${i + 1}`} className={className}>
 				{v}
 			</td>
-		)
-	})
-}
-
-/**
- * 処理年月selecterのoptionを取得
- * @param props オプション
- */
-function GetMonthOptions(props: GanttProps): Array<JSX.Element> {
-	// 処理月
-	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	const yearMonths: Array<string> = []
-	months.forEach((value) => {
-		const month = `${value}`
-		const yearMonth = `${props.thisYear}-${month.padStart(2, `0`)}-01`
-		yearMonths.push(yearMonth)
-	})
-
-	return yearMonths.map((v, i) => {
-		const label = Day(v, { format: 'YYYY/MM' })
-		return (
-			<option key={`${i}`} value={`${v}`} label={label}>
-				{v}
-			</option>
 		)
 	})
 }
@@ -316,4 +303,4 @@ function getBody(props: GanttProps, row: number): Array<JSX.Element> {
 	})
 }
 
-export default Gantt
+export default GanttApp

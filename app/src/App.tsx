@@ -1,11 +1,11 @@
 import React from 'react'
-import Gantt from './component/Gantt/Gantt'
+import GanttApp from './component/Gantt/GanttApp'
 import './App.css'
 
 function App(): JSX.Element {
 	return (
 		<div className="App">
-			<Gantt />
+			<GanttApp />
 		</div>
 	)
 }
