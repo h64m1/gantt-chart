@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Days, Day, YearMonth } from '../Date/Day'
 import { Task, TaskStatus, Title } from '../Types/Types'
 import { Select } from '../Select/Select'
+import { HeadRow } from './HeadRow'
 import './Gantt.css'
 
 // props type
@@ -154,13 +155,12 @@ type Props = {
 
 const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 	console.log('render Gantt')
-	const headRows = getDatesInMonth(props)
 	return (
 		<>
 			{/* ガントチャートのボディ部分 */}
 			<table>
 				<thead>
-					<tr key={0}>{headRows}</tr>
+					<HeadRow yearMonth={props.yearMonth} />
 				</thead>
 				<tbody>
 					{row.map((e, i) => {
@@ -179,55 +179,6 @@ const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 			</button>
 		</>
 	)
-}
-
-/**
- * 1ヶ月分の日付を<td>の配列で取得
- * @param props オプション
- */
-function getDatesInMonth(props: GanttProps): Array<JSX.Element> {
-	// 一ヶ月分の日付
-	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
-	// タイトル用の要素を追加
-	dates.unshift('')
-
-	return dates.map((v, i) => {
-		// 曜日判定
-		let className = 'gantt-head'
-		const dayOfWeek = getDayOfWeek(v)
-		if (dayOfWeek) {
-			className = className.concat(' ', dayOfWeek)
-		}
-		if (v === '') {
-			// title用のクラス名を付加
-			className = className.concat(' ', 'title')
-		}
-
-		return (
-			<td key={`head${i + 1}`} className={className}>
-				{v}
-			</td>
-		)
-	})
-}
-
-/**
- * 曜日を取得
- * @param date 日付
- * @return 曜日
- */
-function getDayOfWeek(date: string): string {
-	return getDayOfWeekString(date, 'Sat') || getDayOfWeekString(date, 'Sun')
-}
-
-/**
- * 日付が曜日に該当する場合、曜日を返却
- * @param date 日付
- * @param dayOfWeek 曜日
- * @return 曜日
- */
-function getDayOfWeekString(date: string, dayOfWeek: string): string {
-	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
 
 /**
