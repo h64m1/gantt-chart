@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import { useState } from 'react'
-import { Days, Day, YearMonth } from '../Date/Day'
-import { Task, TaskStatus, Title } from '../Types/Types'
+import { Day, YearMonth } from '../Date/Day'
+import { TaskStatus, Title } from '../Types/Types'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
+import { BodyRow } from './BodyRow'
 import './Gantt.css'
 
 // props type
 type GanttProps = {
 	yearMonth: string // 処理年月
-	// tasks: Array<TaskStatus>
-	task: Task
+	tasks: Array<TaskStatus>
 	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
 	changeTitle: (event: ChangeEvent, title: Title) => void
 }
@@ -34,15 +34,8 @@ function GanttApp(): JSX.Element {
 		column: 0,
 		isOn: false,
 	}
-	// const [tasks, setTasks] = useState([emptyTaskStatus])
 
-	const emptyTask = {
-		yearMonth: yearMonth,
-		row: [0],
-		titles: [emptyTitle],
-		tasks: [emptyTaskStatus],
-	}
-	const [task, setTask] = useState(emptyTask)
+	const [tasks, setTasks] = useState([emptyTaskStatus])
 	const [row, setRow] = useState([''])
 
 	// タスクを追加
@@ -51,30 +44,19 @@ function GanttApp(): JSX.Element {
 		const isRowColumnMatch = (e: TaskStatus) => {
 			return e.row === taskStatus.row && e.column === taskStatus.column
 		}
-		// const isTaskFound = tasks.some(isRowColumnMatch)
-		const isTaskFound = task.tasks.some(isRowColumnMatch)
+		const isTaskFound = tasks.some(isRowColumnMatch)
 
 		if (isTaskFound) {
 			// 既存のタスクが存在する場合
-			task.tasks.forEach((e: TaskStatus, i: number, o: Array<TaskStatus>) => {
+			tasks.forEach((e: TaskStatus, i: number, o: Array<TaskStatus>) => {
 				if (isRowColumnMatch(e)) {
 					o[i].isOn = !o[i].isOn
 				}
 			})
-			setTask({
-				yearMonth: yearMonth,
-				row: task.row,
-				titles: task.titles,
-				tasks: task.tasks,
-			})
+			setTasks([...tasks])
 		} else {
 			// タスク新規追加
-			setTask({
-				yearMonth: yearMonth,
-				row: task.row,
-				titles: task.titles,
-				tasks: [...task.tasks, taskStatus],
-			})
+			setTasks([...tasks, taskStatus])
 		}
 	}
 
@@ -102,13 +84,13 @@ function GanttApp(): JSX.Element {
 	}
 
 	// 確認
-	console.log('titles', titles, 'task', task)
+	console.log('titles', titles, 'task', tasks)
 
 	// props
 	const props: GanttProps = {
 		yearMonth: yearMonth,
-		// tasks: tasks,
-		task: task,
+		tasks: tasks,
+		// task: task,
 		addIsOn: addIsOn,
 		changeTitle: changeTitle,
 	}
@@ -164,8 +146,16 @@ const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 				</thead>
 				<tbody>
 					{row.map((e, i) => {
-						const bodyRows = getBody(props, i)
-						return <tr key={i}>{bodyRows}</tr>
+						return (
+							<BodyRow
+								key={`${i}`}
+								row={i}
+								yearMonth={props.yearMonth}
+								tasks={props.tasks}
+								changeTitle={props.changeTitle}
+								addIsOn={props.addIsOn}
+							/>
+						)
 					})}
 				</tbody>
 				<tfoot></tfoot>
@@ -179,79 +169,6 @@ const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 			</button>
 		</>
 	)
-}
-
-/**
- * 1ヶ月分の枠を<td>の配列で取得
- * @param props オプション
- * @param row 行番号
- */
-function getBody(props: GanttProps, row: number): Array<JSX.Element> {
-	// 一ヶ月分の日付
-	const dates = Days(props.yearMonth, { format: 'DD (ddd)' })
-	// タイトル用の要素を追加
-	dates.unshift('')
-
-	const tasks = props.task.tasks
-
-	return dates.map((v, column) => {
-		let className = 'gantt-body'
-		const isTitle = v === ''
-		if (isTitle) {
-			// title用のクラス名を付加
-			className = className.concat(' ', 'title')
-		}
-
-		// 当該カラムのtaskが存在するか
-		const task = tasks.find((e) => e.row === row && e.column === column)
-		if (task?.isOn) {
-			className = className.concat(' ', 'task')
-		}
-
-		// タイトル列にはフォームを表示（フォーム仮置）
-		const cell = isTitle ? (
-			<input
-				type="text"
-				className="title"
-				onChange={(e) => {
-					if (props.changeTitle) {
-						props.changeTitle(e, {
-							yearMonth: props.yearMonth,
-							row: row,
-							title: e.target.value,
-						})
-					}
-				}}
-			/>
-		) : (
-			''
-		)
-
-		return (
-			<td
-				key={`body-${row}-${column}`}
-				className={className}
-				onClick={(e) => {
-					// title列は追加しない
-					if (column === 0) {
-						return
-					}
-
-					// clickで当該セルをtasksに追加
-					if (props.addIsOn) {
-						props.addIsOn(e, {
-							yearMonth: props.yearMonth,
-							row: row,
-							column: column,
-							isOn: true,
-						})
-					}
-				}}
-			>
-				{cell}
-			</td>
-		)
-	})
 }
 
 export default GanttApp
