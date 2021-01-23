@@ -34,6 +34,15 @@ export function Day(date?: string, props?: DayProps): string {
 }
 
 /**
+ * 当日の日付を指定されたフォーマットで取得
+ * @param {DayProps} props プロパティ
+ * @return {string} 日付文字列
+ */
+export function Today(props?: DayProps): string {
+	return Day(undefined, props)
+}
+
+/**
  * 月初日を取得
  * @param {string} date 日付
  * @param {DayProps} props プロパティ
@@ -48,6 +57,15 @@ export function YearMonth(date?: string, props?: DayProps): string {
 	}
 
 	return dayjs(day).startOf('month').format(format)
+}
+
+/**
+ * 当月の月初日を指定されたフォーマットで取得
+ * @param {DayProps} props プロパティ
+ * @return {string} 日付文字列
+ */
+export function ThisYearMonth(props?: DayProps): string {
+	return YearMonth(Day(undefined, props), props)
 }
 
 /**

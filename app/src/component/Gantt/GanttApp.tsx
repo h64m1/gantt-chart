@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import { useState } from 'react'
-import { Day, YearMonth } from '../Date/Day'
+import { ThisYearMonth } from '../Date/Day'
 import { TaskStatus, Title } from '../Types/Types'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
@@ -17,25 +17,22 @@ type GanttProps = {
 
 function GanttApp(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
-	const format = { format: 'YYYY-MM-DD' }
-	const today = Day(undefined, format)
-	const [yearMonth, setYearMonth] = useState(YearMonth(today, format))
-
-	const emptyTitle = {
-		yearMonth: yearMonth,
-		row: 0,
-		title: '',
-	}
-	const [titles, setTitle] = useState([emptyTitle])
-
-	const emptyTaskStatus = {
-		yearMonth: yearMonth,
-		row: 0,
-		column: 0,
-		isOn: false,
-	}
-
-	const [tasks, setTasks] = useState([emptyTaskStatus])
+	const [yearMonth, setYearMonth] = useState(ThisYearMonth({ format: 'YYYY-MM-DD' }))
+	const [titles, setTitle] = useState([
+		{
+			yearMonth: yearMonth,
+			row: 0,
+			title: '',
+		},
+	])
+	const [tasks, setTasks] = useState([
+		{
+			yearMonth: yearMonth,
+			row: 0,
+			column: 0,
+			isOn: false,
+		},
+	])
 	const [row, setRow] = useState([''])
 
 	// タスクを追加
@@ -139,6 +136,11 @@ const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 	console.log('render Gantt')
 	return (
 		<>
+			{/* 行追加、行削除のボタン */}
+			<div className={'gantt-button'}>
+				<button onClick={addRow}>行追加</button>
+				<button onClick={deleteRow}>行削除</button>
+			</div>
 			{/* ガントチャートのボディ部分 */}
 			<table>
 				<thead>
@@ -160,13 +162,6 @@ const Gantt: React.FC<Props> = ({ props, row, addRow, deleteRow }) => {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			{/* 行追加、行削除のボタン */}
-			<button className={'gantt-button'} onClick={addRow}>
-				行追加
-			</button>
-			<button className={'gantt-button'} onClick={deleteRow}>
-				行削除
-			</button>
 		</>
 	)
 }
