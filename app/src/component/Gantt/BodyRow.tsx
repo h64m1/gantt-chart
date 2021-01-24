@@ -1,24 +1,24 @@
-import React, { ChangeEvent } from 'react'
+import React, { Dispatch } from 'react'
 
 import { Days } from '../Date/Day'
-import { TaskStatus, Title } from '../Types/Types'
+import { Action, Task } from '../Types/Types'
 import { TitleColumn } from './TitleColumn'
 
 type Props = {
 	row: number
 	yearMonth: string
-	tasks: Array<TaskStatus>
-	changeTitle: (event: ChangeEvent, title: Title) => void
-	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void
+	task: Task
+	dispatch: Dispatch<Action>
 }
 
-export const BodyRow: React.FC<Props> = ({ row, yearMonth, tasks, changeTitle, addIsOn }) => {
+export const BodyRow: React.FC<Props> = ({ row, yearMonth, task, dispatch }) => {
 	console.log('render BodyRow', row)
 
-	const bodyRows = getBody(yearMonth, row, tasks, addIsOn)
+	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
+	const bodyRows = getBody(yearMonth, row, taskStatus, dispatch)
 	return (
 		<tr key={row}>
-			<TitleColumn yearMonth={yearMonth} row={row} changeTitle={changeTitle} />
+			<TitleColumn row={row} dispatch={dispatch} />
 			{bodyRows}
 		</tr>
 	)
@@ -32,8 +32,8 @@ export const BodyRow: React.FC<Props> = ({ row, yearMonth, tasks, changeTitle, a
 function getBody(
 	yearMonth: string,
 	row: number,
-	tasks: Array<TaskStatus>,
-	addIsOn: (event: React.MouseEvent, task: TaskStatus) => void,
+	taskStatusList: Array<boolean>,
+	dispatch: Dispatch<Action>,
 ): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(yearMonth, { format: 'DD (ddd)' })
@@ -44,8 +44,8 @@ function getBody(
 		let className = 'gantt-body'
 
 		// 当該カラムのtaskが存在するか
-		const task = tasks.find((e) => e.row === row && e.column === column)
-		if (task?.isOn) {
+		const taskStatus = taskStatusList.find((status, i) => i === column)
+		if (taskStatus) {
 			className = className.concat(' ', 'task')
 		}
 
@@ -53,16 +53,13 @@ function getBody(
 			<td
 				key={`body-${row}-${column}`}
 				className={className}
-				onClick={(e) => {
+				onClick={() => {
 					// clickで当該セルをtasksに追加
-					if (addIsOn) {
-						addIsOn(e, {
-							yearMonth: yearMonth,
-							row: row,
-							column: column,
-							isOn: true,
-						})
-					}
+					dispatch({
+						type: 'task',
+						row: row,
+						column: column,
+					})
 				}}
 			></td>
 		)
