@@ -1,14 +1,12 @@
-import React, { ChangeEvent } from 'react'
-
-import { Title } from '../Types/Types'
+import React, { Dispatch } from 'react'
+import { Action } from '../Types/Types'
 
 type Props = {
-	yearMonth: string
 	row: number
-	changeTitle: (event: ChangeEvent, title: Title) => void
+	dispatch: Dispatch<Action>
 }
 
-export const TitleColumn: React.FC<Props> = ({ yearMonth, row, changeTitle }) => {
+export const TitleColumn: React.FC<Props> = ({ row, dispatch }) => {
 	console.log('render TitleColumn', row)
 
 	const className = 'gantt-body title'
@@ -21,15 +19,13 @@ export const TitleColumn: React.FC<Props> = ({ yearMonth, row, changeTitle }) =>
 				<input
 					type="text"
 					className="title"
-					onChange={(e) => {
-						if (changeTitle) {
-							changeTitle(e, {
-								yearMonth: yearMonth,
-								row: row,
-								title: e.target.value,
-							})
-						}
-					}}
+					onChange={(e) =>
+						dispatch({
+							type: 'title',
+							index: row,
+							title: e.target.value,
+						})
+					}
 				/>
 			}
 		</td>

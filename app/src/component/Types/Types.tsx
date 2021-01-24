@@ -1,20 +1,44 @@
 // state type
 
 export type Task = {
-	yearMonth: string
-	row: Array<number>
-	titles: Array<Title>
-	tasks: Array<TaskStatus>
-}
-export interface TaskStatus {
-	yearMonth: string
-	row: number
-	column: number
-	isOn: boolean
-}
-
-export interface Title {
-	yearMonth: string
 	row: number
 	title: string
+	taskStatus: Array<boolean>
 }
+
+export type State = {
+	yearMonth: string
+	tasks: Array<Task>
+}
+
+export type Action =
+	| {
+			// 処理年月の変更
+			type: 'yearMonth'
+			yearMonth: string
+	  }
+	| {
+			// 初期化
+			type: 'init'
+	  }
+	| {
+			// 行毎のタイトル変更
+			type: 'title'
+			index: number
+			title: string
+	  }
+	| {
+			// 特定タスク、当該日付のタスクON/OFF
+			type: 'task'
+			row: number
+			column: number
+	  }
+	| {
+			// 行追加
+			type: 'addRow'
+			index: number
+	  }
+	| {
+			// 行削除
+			type: 'deleteRow'
+	  }

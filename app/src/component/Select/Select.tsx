@@ -1,20 +1,29 @@
-import React from 'react'
-import { Day } from '../Date/Day'
+import React, { Dispatch } from 'react'
+import { Day, Today } from '../Date/Day'
+import { Action } from '../Types/Types'
 
 type Props = {
 	value: string
-	onChange: (value: string) => void
+	dispatch: Dispatch<Action>
 }
 
-export const Select: React.FC<Props> = ({ value, onChange }) => {
+export const Select: React.FC<Props> = React.memo(({ value, dispatch }) => {
 	console.log('render Select', value)
-	const thisYear = Day(undefined, { format: 'YYYY' })
+	const thisYear = Today({ format: 'YYYY' })
 	return (
-		<select value={value} onChange={(e) => onChange(e.target.value)}>
+		<select
+			value={value}
+			onChange={(e) =>
+				dispatch({
+					type: 'yearMonth',
+					yearMonth: e.target.value,
+				})
+			}
+		>
 			{getMonthOptions(thisYear)}
 		</select>
 	)
-}
+})
 
 /**
  * 処理年月selecterのoptionを取得
