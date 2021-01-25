@@ -4,17 +4,22 @@
 
 .gantt-body {
 	border: solid thin;
-	padding: 1rem 0;
 }
 
 .gantt-button {
-	float: left;
+	text-align: left;
 }
 
+input.title {
+	background-color: paleturquoise;
+	border-style: none;
+	margin: 2px;
+}
+
+/* テーブルセル */
 td.title {
 	font-weight: bold;
 	background-color:paleturquoise;
-	padding: 0 5rem;
 }
 
 td.sat {
