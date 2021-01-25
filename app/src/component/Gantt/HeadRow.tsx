@@ -5,11 +5,13 @@ type Props = {
 	yearMonth: string
 }
 
-export const HeadRow: React.FC<Props> = ({ yearMonth }) => {
+export const HeadRow: React.FC<Props> = React.memo(({ yearMonth }) => {
 	console.log('render HeadRow')
 	const headRows = getDatesInMonth(yearMonth)
 	return <tr key={0}>{headRows}</tr>
-}
+})
+
+HeadRow.displayName = 'HeadRow'
 
 /**
  * 1ヶ月分の日付を<td>の配列で取得

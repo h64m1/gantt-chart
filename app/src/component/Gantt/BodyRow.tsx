@@ -1,7 +1,7 @@
 import React, { Dispatch } from 'react'
 
 import { Days } from '../Date/Day'
-import { Action, Task } from '../Types/Types'
+import { Action, Task, getTaskKey } from '../Types/Types'
 import { TitleColumn } from './TitleColumn'
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 	dispatch: Dispatch<Action>
 }
 
-export const BodyRow: React.FC<Props> = ({ row, yearMonth, task, dispatch }) => {
+export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, dispatch }) => {
 	console.log('render BodyRow', row)
 
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
@@ -22,7 +22,9 @@ export const BodyRow: React.FC<Props> = ({ row, yearMonth, task, dispatch }) => 
 			{bodyRows}
 		</tr>
 	)
-}
+})
+
+BodyRow.displayName = 'BodyRow'
 
 /**
  * 1ヶ月分の枠を<td>の配列で取得
@@ -57,7 +59,7 @@ function getBody(
 					// clickで当該セルをtasksに追加
 					dispatch({
 						type: 'task',
-						row: row,
+						id: getTaskKey(row + 1),
 						column: column,
 					})
 				}}
