@@ -1,15 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
-import { Action, State } from './component/Types/Types'
+import { Action, State, createTasks, createTask, getTaskKey } from './component/Types/Types'
 import { ThisYearMonth } from './component/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
 import './App.css'
-
-/**
- * 31日分の要素を持つ配列を取得
- */
-const getEmptyDateArray = (): Array<boolean> => {
-	return Array(31).fill(false)
-}
 
 const reducer = (state: State, action: Action) => {
 	switch (action.type) {
@@ -22,18 +15,12 @@ const reducer = (state: State, action: Action) => {
 		case 'init':
 			return {
 				...state,
-				tasks: [
-					{
-						row: 0,
-						title: '',
-						taskStatus: getEmptyDateArray(),
-					},
-				],
+				tasks: createTasks(),
 			}
 		case 'title': {
 			console.log('タイトル変更', state)
-			const newTasks = [...state.tasks]
-			newTasks[action.index].title = action.title
+			const newTasks = { ...state.tasks }
+			newTasks.entities[action.id].title = action.title
 			return {
 				...state,
 				tasks: newTasks,
@@ -41,16 +28,10 @@ const reducer = (state: State, action: Action) => {
 		}
 		case 'task': {
 			console.log('タスク変更', state)
-			const newTasks = [...state.tasks]
-			const currentTask = newTasks[action.row]
-			if (currentTask.taskStatus === undefined) {
-				return {
-					...state,
-				}
-			}
-
-			currentTask.taskStatus[action.column] = !currentTask.taskStatus[action.column]
-			console.log('タスク状態', currentTask.taskStatus[action.column])
+			const newTasks = { ...state.tasks }
+			const task = newTasks.entities[action.id]
+			// ONとOFFを切り替える
+			task.taskStatus[action.column] = !task.taskStatus[action.column]
 			return {
 				...state,
 				tasks: newTasks,
@@ -59,32 +40,41 @@ const reducer = (state: State, action: Action) => {
 
 		// 行追加と削除
 		case 'addRow': {
-			const newTasks = [...state.tasks]
-			console.log('行追加:', action, state.tasks, newTasks)
-			if (newTasks[action.index]) {
-				newTasks[action.index].row = action.index
-			} else {
-				newTasks.push({
-					row: action.index,
-					title: '',
-					taskStatus: getEmptyDateArray(),
-				})
-			}
+			const newTasks = { ...state.tasks }
+			console.log('行追加:', action)
+			const ids = newTasks.ids
+			const entities = newTasks.entities
+
+			const key = getTaskKey(ids.length + 1)
+			ids.push(key)
+			entities[key] = createTask()
+
 			return {
 				...state,
-				tasks: newTasks,
+				tasks: {
+					ids: ids,
+					entities: entities,
+				},
 			}
 		}
 		case 'deleteRow': {
-			const newTasks = [...state.tasks]
-			console.log('行削除', action, state.tasks.length)
-			if (state.tasks.length > 1) {
+			const newTasks = { ...state.tasks }
+			console.log('行削除', action)
+			const ids = newTasks.ids
+			const entities = newTasks.entities
+
+			if (ids.length > 1) {
 				// 要素が1つの場合は削除しない
-				newTasks.pop()
+				const key = getTaskKey(ids.length)
+				ids.pop()
+				delete entities[key]
 			}
 			return {
 				...state,
-				tasks: newTasks,
+				tasks: {
+					ids: ids,
+					entities: entities,
+				},
 			}
 		}
 	}
@@ -94,13 +84,7 @@ function App(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
 	const [{ yearMonth, tasks }, dispatch] = useReducer(reducer, {
 		yearMonth: ThisYearMonth({ format: 'YYYY-MM-DD' }),
-		tasks: [
-			{
-				row: 0,
-				title: '',
-				taskStatus: getEmptyDateArray(),
-			},
-		],
+		tasks: createTasks(),
 	})
 
 	useEffect(() => {

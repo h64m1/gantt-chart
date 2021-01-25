@@ -1,12 +1,12 @@
 import React, { Dispatch } from 'react'
-import { Action } from '../Types/Types'
+import { Action, getTaskKey } from '../Types/Types'
 
 type Props = {
 	row: number
 	dispatch: Dispatch<Action>
 }
 
-export const TitleColumn: React.FC<Props> = ({ row, dispatch }) => {
+export const TitleColumn: React.FC<Props> = React.memo(({ row, dispatch }) => {
 	console.log('render TitleColumn', row)
 
 	const className = 'gantt-body title'
@@ -22,7 +22,7 @@ export const TitleColumn: React.FC<Props> = ({ row, dispatch }) => {
 					onChange={(e) =>
 						dispatch({
 							type: 'title',
-							index: row,
+							id: getTaskKey(row + 1),
 							title: e.target.value,
 						})
 					}
@@ -30,4 +30,6 @@ export const TitleColumn: React.FC<Props> = ({ row, dispatch }) => {
 			}
 		</td>
 	)
-}
+})
+
+TitleColumn.displayName = 'TitleColumn'
