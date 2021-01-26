@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const Select: React.FC<Props> = React.memo(({ value, dispatch }) => {
-	console.log('render Select', value)
+	console.debug('render Select', value)
 	const thisYear = Today({ format: 'YYYY' })
 	return (
 		<select
