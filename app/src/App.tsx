@@ -7,7 +7,7 @@ import './App.css'
 const reducer = (state: State, action: Action) => {
 	switch (action.type) {
 		case 'yearMonth':
-			console.log('処理年月変更', action.yearMonth)
+			console.debug('処理年月変更', action.yearMonth)
 			return {
 				...state,
 				yearMonth: action.yearMonth,
@@ -18,7 +18,7 @@ const reducer = (state: State, action: Action) => {
 				tasks: createTasks(),
 			}
 		case 'title': {
-			console.log('タイトル変更', state)
+			console.debug('タイトル変更', state)
 			const newTasks = { ...state.tasks }
 			newTasks.entities[action.id].title = action.title
 			return {
@@ -27,21 +27,29 @@ const reducer = (state: State, action: Action) => {
 			}
 		}
 		case 'task': {
-			console.log('タスク変更', state)
-			const newTasks = { ...state.tasks }
-			const task = newTasks.entities[action.id]
+			console.debug('タスク変更', state)
 			// ONとOFFを切り替える
-			task.taskStatus[action.column] = !task.taskStatus[action.column]
+			const taskStatus = [...state.tasks.entities[action.id].taskStatus]
+			taskStatus[action.column] = !taskStatus[action.column]
 			return {
 				...state,
-				tasks: newTasks,
+				tasks: {
+					...state.tasks,
+					entities: {
+						...state.tasks.entities,
+						[action.id]: {
+							...state.tasks.entities[action.id],
+							taskStatus: taskStatus,
+						},
+					},
+				},
 			}
 		}
 
 		// 行追加と削除
 		case 'addRow': {
 			const newTasks = { ...state.tasks }
-			console.log('行追加:', action)
+			console.debug('行追加:', action)
 			const ids = newTasks.ids
 			const entities = newTasks.entities
 
@@ -59,7 +67,7 @@ const reducer = (state: State, action: Action) => {
 		}
 		case 'deleteRow': {
 			const newTasks = { ...state.tasks }
-			console.log('行削除', action)
+			console.debug('行削除', action)
 			const ids = newTasks.ids
 			const entities = newTasks.entities
 
