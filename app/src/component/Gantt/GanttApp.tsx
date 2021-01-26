@@ -22,7 +22,7 @@ export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 
 const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 	const maxRow = tasks.ids.length
-	console.log('render Gantt', maxRow)
+	console.debug('render Gantt', maxRow)
 	return (
 		<>
 			{/* 行追加、行削除のボタン */}

@@ -6,7 +6,7 @@ type Props = {
 }
 
 export const HeadRow: React.FC<Props> = React.memo(({ yearMonth }) => {
-	console.log('render HeadRow')
+	console.debug('render HeadRow')
 	const headRows = getDatesInMonth(yearMonth)
 	return <tr key={0}>{headRows}</tr>
 })

@@ -7,7 +7,7 @@ type Props = {
 }
 
 export const TitleColumn: React.FC<Props> = React.memo(({ row, dispatch }) => {
-	console.log('render TitleColumn', row)
+	console.debug('render TitleColumn', row)
 
 	const className = 'gantt-body title'
 	const column = 0

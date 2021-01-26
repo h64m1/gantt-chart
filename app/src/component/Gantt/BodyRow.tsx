@@ -12,7 +12,7 @@ type Props = {
 }
 
 export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, dispatch }) => {
-	console.log('render BodyRow', row)
+	console.debug('render BodyRow', row)
 
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
 	const bodyRows = getBody(yearMonth, row, taskStatus, dispatch)
