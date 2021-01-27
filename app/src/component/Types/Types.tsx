@@ -40,6 +40,7 @@ export type Action =
 	| {
 			// 初期化
 			type: 'init'
+			yearMonth: string
 	  }
 	| {
 			// 行毎のタイトル変更
@@ -74,14 +75,14 @@ export const createEmptyDateArray = (): Array<boolean> => {
  * Taskのidを取得
  * @param id ID
  */
-export const getTaskKey = (id: number): string => {
-	return `task${id}`
+export const getTaskKey = (id: number, yearMonth: string): string => {
+	return `task-${yearMonth}-${id}`
 }
 
-export const createTask = (): Task => {
+export const createTask = (yearMonth: string): Task => {
 	// 	{ id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
 	const row = 0
-	const key = getTaskKey(row + 1)
+	const key = getTaskKey(row + 1, yearMonth)
 	return {
 		id: key,
 		row: row,
@@ -90,12 +91,16 @@ export const createTask = (): Task => {
 	}
 }
 
-export const createTasks = (): Tasks => {
+/**
+ * tasksの初期化
+ * @param yearMonth 処理年月
+ */
+export const createTasks = (yearMonth: string): Tasks => {
 	// 	'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
 	const row = 0
-	const key = getTaskKey(row + 1)
+	const key = getTaskKey(row + 1, yearMonth)
 	const entities: TaskEntities = {}
-	entities[key] = createTask()
+	entities[key] = createTask(yearMonth)
 	return {
 		ids: [key],
 		entities: entities,

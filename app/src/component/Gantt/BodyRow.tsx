@@ -14,7 +14,7 @@ type Props = {
 
 // ガントチャート本体の行全体を描画
 export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, dispatch }) => {
-	console.debug('render BodyRow', row)
+	console.debug('render BodyRow', row, yearMonth, task)
 
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
 
@@ -23,13 +23,14 @@ export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, disp
 
 	return (
 		<tr key={row}>
-			<TitleColumn row={row} dispatch={dispatch} />
+			<TitleColumn row={row} yearMonth={yearMonth} title={task.title} dispatch={dispatch} />
 			{dates.map((_, column) => {
 				return (
 					<BodyColumn
 						key={`body-${row}-${column}`}
 						row={row}
 						column={column}
+						yearMonth={yearMonth}
 						taskStatusList={taskStatus}
 						dispatch={dispatch}
 					/>
