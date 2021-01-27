@@ -4,12 +4,13 @@ import { Action, getTaskKey } from '../Types/Types'
 type Props = {
 	row: number
 	column: number
+	yearMonth: string
 	taskStatusList: Array<boolean>
 	dispatch: Dispatch<Action>
 }
 
 // ガントチャート本体の列を描画
-export const BodyColumn: React.FC<Props> = React.memo(({ row, column, taskStatusList, dispatch }) => {
+export const BodyColumn: React.FC<Props> = React.memo(({ row, column, yearMonth, taskStatusList, dispatch }) => {
 	const className = getClassName(column, taskStatusList)
 
 	return (
@@ -19,7 +20,7 @@ export const BodyColumn: React.FC<Props> = React.memo(({ row, column, taskStatus
 				// clickで当該セルをtasksに追加
 				dispatch({
 					type: 'task',
-					id: getTaskKey(row + 1),
+					id: getTaskKey(row + 1, yearMonth),
 					column: column,
 				})
 			}}

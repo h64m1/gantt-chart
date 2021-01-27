@@ -3,11 +3,13 @@ import { Action, getTaskKey } from '../Types/Types'
 
 type Props = {
 	row: number
+	yearMonth: string
+	title: string
 	dispatch: Dispatch<Action>
 }
 
-export const TitleColumn: React.FC<Props> = React.memo(({ row, dispatch }) => {
-	console.debug('render TitleColumn', row)
+export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title, dispatch }) => {
+	console.debug('render TitleColumn', row, yearMonth, title)
 
 	const className = 'gantt-body title'
 	const column = 0
@@ -19,10 +21,11 @@ export const TitleColumn: React.FC<Props> = React.memo(({ row, dispatch }) => {
 				<input
 					type="text"
 					className="title"
+					value={title}
 					onChange={(e) =>
 						dispatch({
 							type: 'title',
-							id: getTaskKey(row + 1),
+							id: getTaskKey(row + 1, yearMonth),
 							title: e.target.value,
 						})
 					}

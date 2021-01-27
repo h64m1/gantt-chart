@@ -10,19 +10,11 @@ export const reducer = (state: State, action: Action): any => {
 				yearMonth: action.yearMonth,
 			}
 		case 'init':
-			return {
-				...state,
-				tasks: createTasks(),
-			}
-		case 'title': {
-			console.debug('タイトル変更', state)
-			const newTasks = { ...state.tasks }
-			newTasks.entities[action.id].title = action.title
-			return {
-				...state,
-				tasks: newTasks,
-			}
-		}
+			return init(action.yearMonth)
+
+		case 'title':
+			return title(state, action.id, action.title)
+
 		case 'task': {
 			console.debug('タスク変更', state)
 			// ONとOFFを切り替える
@@ -50,9 +42,9 @@ export const reducer = (state: State, action: Action): any => {
 			const ids = newTasks.ids
 			const entities = newTasks.entities
 
-			const key = getTaskKey(ids.length + 1)
+			const key = getTaskKey(ids.length + 1, state.yearMonth)
 			ids.push(key)
-			entities[key] = createTask()
+			entities[key] = createTask(state.yearMonth)
 
 			return {
 				...state,
@@ -70,7 +62,7 @@ export const reducer = (state: State, action: Action): any => {
 
 			if (ids.length > 1) {
 				// 要素が1つの場合は削除しない
-				const key = getTaskKey(ids.length)
+				const key = getTaskKey(ids.length, state.yearMonth)
 				ids.pop()
 				delete entities[key]
 			}
@@ -82,5 +74,51 @@ export const reducer = (state: State, action: Action): any => {
 				},
 			}
 		}
+	}
+}
+
+/**
+ * stateの初期化
+ */
+// eslint-disable-next-line
+export const initializer = (state: State): any => {
+	console.debug('initializer', state)
+	return init(state.yearMonth)
+}
+
+/**
+ * 初期化処理: useEffectでstateを初期化
+ * @param state ステート
+ * @param yearMonth 処理年月
+ */
+const init = (yearMonth: string): State => {
+	console.debug('init', yearMonth)
+
+	return {
+		yearMonth: yearMonth,
+		tasks: createTasks(yearMonth),
+	}
+}
+
+/**
+ * タイトル変更
+ * @param state ステート
+ * @param id ID
+ * @param title タイトル
+ */
+const title = (state: State, id: string, title: string) => {
+	console.debug('タイトル変更', title)
+	return {
+		...state,
+		tasks: {
+			...state.tasks,
+			entities: {
+				...state.tasks.entities,
+				[id]: {
+					...state.tasks.entities[id],
+					title: title,
+				},
+			},
+		},
 	}
 }

@@ -1,21 +1,27 @@
-import React, { useEffect, useReducer } from 'react'
+import React from 'react'
 import { createTasks } from './component/Types/Types'
 import { ThisYearMonth } from './component/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
-import { reducer } from './reducer'
+import { reducer, initializer } from './reducer'
 import './App.css'
 
 function App(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
-	const [{ yearMonth, tasks }, dispatch] = useReducer(reducer, {
-		yearMonth: ThisYearMonth({ format: 'YYYY-MM-DD' }),
-		tasks: createTasks(),
-	})
+	const thisYearMonth = ThisYearMonth({ format: 'YYYY-MM-DD' })
+	const [{ yearMonth, tasks }, dispatch] = React.useReducer(
+		reducer,
+		{
+			yearMonth: thisYearMonth,
+			tasks: createTasks(thisYearMonth),
+		},
+		initializer,
+	)
 
-	useEffect(() => {
+	React.useEffect(() => {
 		// マウント時に行数を初期化
 		dispatch({
 			type: 'init',
+			yearMonth: yearMonth,
 		})
 	}, [yearMonth])
 
