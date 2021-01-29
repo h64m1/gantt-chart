@@ -3,9 +3,13 @@ import { createTasks } from './component/Types/Types'
 import { ThisYearMonth } from './component/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
 import { reducer, initializer } from './reducer'
+import * as db from './db/Database'
 import './App.css'
 
 function App(): JSX.Element {
+	// DB test
+	db.dbTest()
+
 	// 当日の日付で処理年月stateを初期化
 	const thisYearMonth = ThisYearMonth({ format: 'YYYY-MM-DD' })
 	const [{ yearMonth, tasks }, dispatch] = React.useReducer(
