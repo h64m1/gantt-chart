@@ -19,7 +19,7 @@ function App(): JSX.Element {
 	)
 
 	React.useEffect(() => {
-		// マウント時に行数を初期化
+		// マウント時に初期化
 		dispatch({
 			type: 'init',
 			yearMonth: yearMonth,
