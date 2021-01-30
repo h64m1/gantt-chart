@@ -1,9 +1,9 @@
 import React from 'react'
-import { createTasks } from './component/Types/Types'
+import { createTasks } from './reducer/Tasks'
 import { ThisYearMonth } from './component/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
-import { reducer, initializer } from './reducer'
-import * as db from './db/Database'
+import { reducer, initializer } from './reducer/reducer'
+// import * as db from './db/Database'
 import './App.css'
 
 function App(): JSX.Element {

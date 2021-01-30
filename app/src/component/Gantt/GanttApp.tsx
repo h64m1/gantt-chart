@@ -1,5 +1,6 @@
 import React, { Dispatch } from 'react'
-import { Action, Tasks } from '../Types/Types'
+import { Action } from '../../reducer/Action'
+import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'

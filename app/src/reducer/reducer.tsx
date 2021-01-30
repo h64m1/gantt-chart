@@ -1,4 +1,5 @@
-import { Action, State, createTasks, createTask, getTaskKey } from './component/Types/Types'
+import { Action } from './Action'
+import { State, createTasks, createTask, getTaskKey } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {

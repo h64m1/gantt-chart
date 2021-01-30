@@ -1,5 +1,6 @@
 import React, { Dispatch } from 'react'
-import { Action, getTaskKey } from '../Types/Types'
+import { Action } from '../../reducer/Action'
+import { getTaskKey } from '../../reducer/Tasks'
 
 type Props = {
 	row: number
