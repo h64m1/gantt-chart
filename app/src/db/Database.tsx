@@ -13,6 +13,8 @@ type Record = {
 	data: unknown
 }
 
+let _db: IDBDatabase | null = null
+
 /**
  * DBを取得
  * @param event db versionが変わった場合のevent
@@ -56,38 +58,57 @@ const dbPut = (db: IDBDatabase, record: Record): Promise<Record> =>
 		request.onerror = () => reject(new Error('Error: Indexeddbへのput失敗'))
 	})
 
+/**
+ * DBへの登録
+ * @param key {dbKey} レコードを書き出すキー
+ * @param data DBレコード
+ */
 export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
-	let db: IDBDatabase | null = null
-
 	try {
-		db = await dbCreate()
-		await dbPut(db, { key: key, data })
-		db.close()
+		if (_db === null) {
+			console.debug('write: create DB')
+			_db = await dbCreate()
+		} else {
+			console.debug('write: use existing DB')
+		}
+		await dbPut(_db, { key: key, data })
 
 		return true
 	} catch (error) {
 		console.error(error)
-		if (db) {
-			db.close()
-		}
 		return false
 	}
 }
 
+/**
+ * DBからの取り出し
+ * @param key {dbKey} レコードを取り出すキー
+ */
 export const read = async (key: dbKey): Promise<unknown> => {
-	let db: IDBDatabase | null = null
-
 	try {
-		db = await dbCreate()
-		const record = await dbGet(db, key)
-		db.close()
+		if (_db === null) {
+			console.debug('read: create DB')
+			_db = await dbCreate()
+		} else {
+			console.debug('read: use existing DB')
+		}
+		const record = await dbGet(_db, key)
 
 		return record.data
 	} catch (error) {
 		console.error(error)
-		if (db) {
-			db.close()
-		}
 		return null
 	}
+}
+
+/**
+ * DBをclose
+ */
+export const close = (): void => {
+	if (_db === null) {
+		return
+	}
+
+	console.debug('close: close DB')
+	return _db.close()
 }
