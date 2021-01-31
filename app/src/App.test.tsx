@@ -33,6 +33,8 @@ describe('Test IndexedDB', () => {
 
 			const ret2 = await db.read(key)
 			expect(ret2).toEqual(object)
+
+			db.close()
 		})
 	})
 })
