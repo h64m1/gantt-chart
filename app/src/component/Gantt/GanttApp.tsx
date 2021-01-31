@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 import { Action } from '../../reducer/Action'
 import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
@@ -9,7 +9,7 @@ import './Gantt.css'
 type Props = {
 	yearMonth: string
 	tasks: Tasks
-	dispatch: Dispatch<Action>
+	dispatch: React.Dispatch<Action>
 }
 
 export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {

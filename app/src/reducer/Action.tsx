@@ -24,7 +24,6 @@ export type Action =
 	| {
 			// 行追加
 			type: 'addRow'
-			// id: string
 	  }
 	| {
 			// 行削除
