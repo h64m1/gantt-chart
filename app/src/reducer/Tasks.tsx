@@ -1,13 +1,10 @@
 // state type
 
 // const state = {
-// 	yearMonth: '2021-01-01',
-// 	tasks: {
-// 		ids: ['task1', 'task2', 'task3'],
-// 		entities: {
-// 			'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
-// 		}
-// 	}
+//   yearMonth: '2021-01-01',
+// 	 tasks: {
+// 		'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
+// 	 }
 // }
 
 export type Task = {
@@ -17,13 +14,8 @@ export type Task = {
 	taskStatus: Array<boolean>
 }
 
-export type TaskEntities = {
-	[id: string]: Task
-}
-
 export type Tasks = {
-	ids: Array<string>
-	entities: TaskEntities
+	[id: string]: Task
 }
 
 export type State = {
@@ -66,10 +58,7 @@ export const createTasks = (yearMonth: string): Tasks => {
 	// 	'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
 	const row = 0
 	const key = getTaskKey(row + 1, yearMonth)
-	const entities: TaskEntities = {}
-	entities[key] = createTask(yearMonth)
-	return {
-		ids: [key],
-		entities: entities,
-	}
+	const tasks: Tasks = {}
+	tasks[key] = createTask(yearMonth)
+	return tasks
 }

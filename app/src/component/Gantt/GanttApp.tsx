@@ -22,7 +22,7 @@ export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 }
 
 const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
-	const maxRow = tasks.ids.length
+	const maxRow = tasks.length
 	console.debug('render Gantt', maxRow)
 	return (
 		<>
@@ -37,7 +37,7 @@ const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 					<HeadRow yearMonth={yearMonth} />
 				</thead>
 				<tbody>
-					{Object.values(tasks.entities).map((task, row) => {
+					{Object.values(tasks).map((task, row) => {
 						return (
 							<BodyRow key={`${row}`} row={row} yearMonth={yearMonth} task={task} dispatch={dispatch} />
 						)

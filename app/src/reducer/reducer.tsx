@@ -19,18 +19,15 @@ export const reducer = (state: State, action: Action): any => {
 		case 'task': {
 			console.debug('タスク変更', state)
 			// ONとOFFを切り替える
-			const taskStatus = [...state.tasks.entities[action.id].taskStatus]
+			const taskStatus = [...state.tasks[action.id].taskStatus]
 			taskStatus[action.column] = !taskStatus[action.column]
 			return {
 				...state,
 				tasks: {
 					...state.tasks,
-					entities: {
-						...state.tasks.entities,
-						[action.id]: {
-							...state.tasks.entities[action.id],
-							taskStatus: taskStatus,
-						},
+					[action.id]: {
+						...state.tasks[action.id],
+						taskStatus: taskStatus,
 					},
 				},
 			}
@@ -38,41 +35,33 @@ export const reducer = (state: State, action: Action): any => {
 
 		// 行追加と削除
 		case 'addRow': {
-			const newTasks = { ...state.tasks }
+			const tasks = { ...state.tasks }
 			console.debug('行追加:', action)
-			const ids = newTasks.ids
-			const entities = newTasks.entities
+			const length = Object.entries(tasks).length
 
-			const key = getTaskKey(ids.length + 1, state.yearMonth)
-			ids.push(key)
-			entities[key] = createTask(state.yearMonth)
+			const key = getTaskKey(length + 1, state.yearMonth)
 
 			return {
 				...state,
 				tasks: {
-					ids: ids,
-					entities: entities,
+					...tasks,
+					[key]: createTask(state.yearMonth),
 				},
 			}
 		}
 		case 'deleteRow': {
-			const newTasks = { ...state.tasks }
+			const tasks = { ...state.tasks }
 			console.debug('行削除', action)
-			const ids = newTasks.ids
-			const entities = newTasks.entities
+			const length = Object.entries(tasks).length
 
-			if (ids.length > 1) {
+			if (length > 1) {
 				// 要素が1つの場合は削除しない
-				const key = getTaskKey(ids.length, state.yearMonth)
-				ids.pop()
-				delete entities[key]
+				const key = getTaskKey(length, state.yearMonth)
+				delete tasks[key]
 			}
 			return {
 				...state,
-				tasks: {
-					ids: ids,
-					entities: entities,
-				},
+				tasks: tasks,
 			}
 		}
 	}
@@ -113,12 +102,9 @@ const title = (state: State, id: string, title: string) => {
 		...state,
 		tasks: {
 			...state.tasks,
-			entities: {
-				...state.tasks.entities,
-				[id]: {
-					...state.tasks.entities[id],
-					title: title,
-				},
+			[id]: {
+				...state.tasks[id],
+				title: title,
 			},
 		},
 	}
