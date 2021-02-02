@@ -22,7 +22,7 @@ export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 }
 
 const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
-	const maxRow = tasks.length
+	const maxRow = Object.values(tasks).length
 	console.debug('render Gantt', maxRow)
 	return (
 		<>
