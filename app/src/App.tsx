@@ -1,8 +1,9 @@
 import React from 'react'
-import { createTasks } from './component/Types/Types'
+import { createTasks, Tasks } from './reducer/Tasks'
 import { ThisYearMonth } from './component/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
-import { reducer, initializer } from './reducer'
+import { reducer, initializer } from './reducer/reducer'
+import * as db from './db/Database'
 import './App.css'
 
 function App(): JSX.Element {
@@ -18,11 +19,24 @@ function App(): JSX.Element {
 	)
 
 	React.useEffect(() => {
-		// マウント時に行数を初期化
-		dispatch({
-			type: 'init',
-			yearMonth: yearMonth,
-		})
+		let didRead = false
+
+		// { yearMonth: '2021-02-01', tasks: { 'task1': { id: 'task1', row: 0, title: 'title1', taskStatus: [false, false]} }}
+		;(async () => {
+			const tasks = (await db.read(yearMonth)) as Tasks
+			if (!didRead) {
+				// マウント時に初期化
+				dispatch({
+					type: 'init',
+					yearMonth: yearMonth,
+					tasks: tasks,
+				})
+			}
+		})()
+
+		return () => {
+			didRead = true
+		}
 	}, [yearMonth])
 
 	return (

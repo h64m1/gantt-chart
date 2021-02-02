@@ -1,7 +1,8 @@
 import React, { Dispatch } from 'react'
 
 import { Days } from '../Date/Day'
-import { Action, Task } from '../Types/Types'
+import { Action } from '../../reducer/Action'
+import { Task } from '../../reducer/Tasks'
 import { BodyColumn } from './BodyColumn'
 import { TitleColumn } from './TitleColumn'
 
