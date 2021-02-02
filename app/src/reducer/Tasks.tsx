@@ -38,9 +38,8 @@ export const getTaskKey = (id: number, yearMonth: string): string => {
 	return `task-${yearMonth}-${id}`
 }
 
-export const createTask = (yearMonth: string): Task => {
+export const createTask = (row: number, yearMonth: string): Task => {
 	// 	{ id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
-	const row = 0
 	const key = getTaskKey(row + 1, yearMonth)
 	return {
 		id: key,
@@ -59,6 +58,6 @@ export const createTasks = (yearMonth: string): Tasks => {
 	const row = 0
 	const key = getTaskKey(row + 1, yearMonth)
 	const tasks: Tasks = {}
-	tasks[key] = createTask(yearMonth)
+	tasks[key] = createTask(row, yearMonth)
 	return tasks
 }

@@ -72,6 +72,7 @@ export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 			console.debug('write: use existing DB')
 		}
 		await dbPut(_db, { key: key, data })
+		console.debug('write | key', key, 'data', data)
 
 		return true
 	} catch (error) {
@@ -93,7 +94,11 @@ export const read = async (key: dbKey): Promise<unknown> => {
 			console.debug('read: use existing DB')
 		}
 		const record = await dbGet(_db, key)
+		if (record === null || record === undefined) {
+			return null
+		}
 
+		console.debug('read | key', key, 'data', record)
 		return record.data
 	} catch (error) {
 		console.error(error)
