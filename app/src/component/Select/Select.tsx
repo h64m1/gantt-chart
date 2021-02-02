@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
 import { Day, Today } from '../Date/Day'
-import { Action } from '../Types/Types'
+import { Action } from '../../reducer/Action'
 
 type Props = {
 	value: string

@@ -1,5 +1,6 @@
-import React, { Dispatch } from 'react'
-import { Action, Tasks } from '../Types/Types'
+import React from 'react'
+import { Action } from '../../reducer/Action'
+import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'
@@ -8,7 +9,7 @@ import './Gantt.css'
 type Props = {
 	yearMonth: string
 	tasks: Tasks
-	dispatch: Dispatch<Action>
+	dispatch: React.Dispatch<Action>
 }
 
 export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
@@ -21,8 +22,8 @@ export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 }
 
 const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
-	const maxRow = tasks.ids.length
-	console.debug('render Gantt', maxRow)
+	const maxRow = Object.values(tasks).length
+	console.debug('render Gantt', maxRow, 'tasks:', tasks)
 	return (
 		<>
 			{/* 行追加、行削除のボタン */}
@@ -36,7 +37,8 @@ const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 					<HeadRow yearMonth={yearMonth} />
 				</thead>
 				<tbody>
-					{Object.values(tasks.entities).map((task, row) => {
+					{Object.values(tasks).map((task, row) => {
+						console.debug('Gantt:', yearMonth, row, 'task:', task)
 						return (
 							<BodyRow key={`${row}`} row={row} yearMonth={yearMonth} task={task} dispatch={dispatch} />
 						)
