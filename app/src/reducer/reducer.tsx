@@ -76,7 +76,7 @@ const title = (state: State, id: string, title: string) => {
 			},
 		},
 	}
-	db.write(state.yearMonth, newState)
+	db.write(state.yearMonth, newState.tasks)
 
 	return newState
 }
@@ -102,7 +102,7 @@ const task = (state: State, id: string, column: number) => {
 			},
 		},
 	}
-	db.write(state.yearMonth, newState)
+	db.write(state.yearMonth, newState.tasks)
 
 	return newState
 }
@@ -154,7 +154,7 @@ const deleteRow = (state: State) => {
 		...state,
 		tasks: tasks,
 	}
-	db.write(state.yearMonth, newState)
+	db.write(state.yearMonth, newState.tasks)
 
 	return newState
 }

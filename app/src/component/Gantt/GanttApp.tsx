@@ -23,7 +23,7 @@ export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 
 const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 	const maxRow = Object.values(tasks).length
-	console.debug('render Gantt', maxRow)
+	console.debug('render Gantt', maxRow, 'tasks:', tasks)
 	return (
 		<>
 			{/* 行追加、行削除のボタン */}
@@ -38,6 +38,7 @@ const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 				</thead>
 				<tbody>
 					{Object.values(tasks).map((task, row) => {
+						console.debug('Gantt:', yearMonth, row, 'task:', task)
 						return (
 							<BodyRow key={`${row}`} row={row} yearMonth={yearMonth} task={task} dispatch={dispatch} />
 						)
