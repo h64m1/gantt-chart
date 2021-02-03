@@ -19,6 +19,12 @@ export type Action =
 			title: string
 	  }
 	| {
+			// 行毎のタスク背景色の変更
+			type: 'color'
+			id: string
+			color: string
+	  }
+	| {
 			// 特定タスク、当該日付のタスクON/OFF
 			type: 'task'
 			id: string

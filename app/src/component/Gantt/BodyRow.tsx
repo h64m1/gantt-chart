@@ -24,7 +24,7 @@ export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, disp
 
 	return (
 		<tr key={row}>
-			<TitleColumn row={row} yearMonth={yearMonth} title={task.title} dispatch={dispatch} />
+			<TitleColumn row={row} yearMonth={yearMonth} title={task.title} color={task.color} dispatch={dispatch} />
 			{dates.map((_, column) => {
 				return (
 					<BodyColumn
@@ -33,6 +33,7 @@ export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, disp
 						column={column}
 						yearMonth={yearMonth}
 						taskStatusList={taskStatus}
+						color={task.color}
 						dispatch={dispatch}
 					/>
 				)
