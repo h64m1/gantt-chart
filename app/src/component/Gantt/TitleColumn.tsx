@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 import { Action } from '../../reducer/Action'
 import { getTaskKey } from '../../reducer/Tasks'
 
@@ -6,19 +6,20 @@ type Props = {
 	row: number
 	yearMonth: string
 	title: string
-	dispatch: Dispatch<Action>
+	color: string
+	dispatch: React.Dispatch<Action>
 }
 
-export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title, dispatch }) => {
-	console.debug('render TitleColumn', row, yearMonth, title)
+export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title, color, dispatch }) => {
+	console.debug('render TitleColumn', row, yearMonth, title, color)
 
-	const className = 'gantt-body title'
 	const column = 0
+	const id = getTaskKey(row + 1, yearMonth)
 
 	return (
-		<td key={`title-${row}-${column}`} className={className}>
-			{
-				// タイトル列にはフォームを表示（フォーム仮置）
+		<>
+			<td key={`title-${row}-${column}`} className="gantt-body title">
+				{/* タイトル */}
 				<input
 					type="text"
 					className="title"
@@ -26,13 +27,27 @@ export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title,
 					onChange={(e) =>
 						dispatch({
 							type: 'title',
-							id: getTaskKey(row + 1, yearMonth),
+							id: id,
 							title: e.target.value,
 						})
 					}
 				/>
-			}
-		</td>
+			</td>
+			<td key={`color-picker-${row}-${column}`} className="gantt-body color-picker">
+				{/* タスク用のカラーピッカー */}
+				<input
+					type="color"
+					value={color}
+					onChange={(e) =>
+						dispatch({
+							type: 'color',
+							id: id,
+							color: e.target.value,
+						})
+					}
+				/>
+			</td>
+		</>
 	)
 })
 

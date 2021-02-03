@@ -30,10 +30,6 @@ td.sun {
 	background-color: rgb(252, 167, 167);
 }
 
-td.task {
-	background-color: yellow;
-}
-
 .App {
 	grid-area: main;
 	display: grid;

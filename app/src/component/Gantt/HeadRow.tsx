@@ -22,6 +22,8 @@ function getDatesInMonth(yearMonth: string): Array<JSX.Element> {
 	const dates = Days(yearMonth, { format: 'DD (ddd)' })
 	// タイトル用の要素を追加
 	dates.unshift('')
+	// カラーピッカー用の要素追加
+	dates.unshift('')
 
 	return dates.map((v, i) => {
 		// 曜日判定

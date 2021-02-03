@@ -20,6 +20,10 @@ export const reducer = (state: State, action: Action): any => {
 		case 'title':
 			return title(state, action.id, action.title)
 
+		// タスク背景色の変更
+		case 'color':
+			return color(state, action.id, action.color)
+
 		// 当該日のタスク変更
 		case 'task':
 			return task(state, action.id, action.column)
@@ -65,7 +69,7 @@ const init = (yearMonth: string, tasks: Tasks): State => {
  * @param title {string} タイトル
  */
 const title = (state: State, id: string, title: string) => {
-	console.debug('タイトル変更', title)
+	console.debug('タイトル変更', id, title)
 	const newState = {
 		...state,
 		tasks: {
@@ -82,13 +86,36 @@ const title = (state: State, id: string, title: string) => {
 }
 
 /**
+ * タスク背景色の変更
+ * @param state {State} ステート
+ * @param id {string} ID
+ * @param title {string} タイトル
+ */
+const color = (state: State, id: string, color: string) => {
+	console.debug('タスク背景色変更', id, color)
+	const newState = {
+		...state,
+		tasks: {
+			...state.tasks,
+			[id]: {
+				...state.tasks[id],
+				color: color,
+			},
+		},
+	}
+	db.write(state.yearMonth, newState.tasks)
+
+	return newState
+}
+
+/**
  * task変更
  * @param state {State} ステート
  * @param id {string} ID
  * @param column {number} 列ID
  */
 const task = (state: State, id: string, column: number) => {
-	console.debug('タスク変更', state)
+	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
 	const taskStatus = [...state.tasks[id].taskStatus]
 	taskStatus[column] = !taskStatus[column]
