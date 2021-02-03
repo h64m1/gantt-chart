@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 import { Action } from '../../reducer/Action'
 import { getTaskKey } from '../../reducer/Tasks'
 
@@ -7,16 +7,23 @@ type Props = {
 	column: number
 	yearMonth: string
 	taskStatusList: Array<boolean>
-	dispatch: Dispatch<Action>
+	color: string
+	dispatch: React.Dispatch<Action>
 }
 
 // ガントチャート本体の列を描画
-export const BodyColumn: React.FC<Props> = React.memo(({ row, column, yearMonth, taskStatusList, dispatch }) => {
-	const className = getClassName(column, taskStatusList)
+export const BodyColumn: React.FC<Props> = React.memo(({ row, column, yearMonth, taskStatusList, color, dispatch }) => {
+	const className = 'gantt-body'
+
+	const style = { backgroundColor: '' }
+	if (hasTask(column, taskStatusList)) {
+		style.backgroundColor = color
+	}
 
 	return (
 		<td
 			className={className}
+			style={style}
 			onClick={() => {
 				// clickで当該セルをtasksに追加
 				dispatch({
@@ -32,18 +39,12 @@ export const BodyColumn: React.FC<Props> = React.memo(({ row, column, yearMonth,
 BodyColumn.displayName = 'BodyColumn'
 
 /**
- * クラス名指定
+ * 当該カラムがタスクを持っているか
  * @param column 列コード
  * @param taskStatusList タスクの状態リスト
  */
-const getClassName = (column: number, taskStatusList: Array<boolean>): string => {
-	let className = 'gantt-body'
-
+const hasTask = (column: number, taskStatusList: Array<boolean>): boolean => {
 	// 当該カラムのtaskが存在するか
-	const taskStatus = taskStatusList.find((_, i) => i === column)
-	if (taskStatus) {
-		className = className.concat(' ', 'task')
-	}
-
-	return className
+	const taskFound = taskStatusList.find((_, i) => i === column)
+	return taskFound === undefined ? false : taskFound
 }

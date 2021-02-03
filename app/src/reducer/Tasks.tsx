@@ -11,6 +11,7 @@ export type Task = {
 	id: string
 	row: number
 	title: string
+	color: string
 	taskStatus: Array<boolean>
 }
 
@@ -45,8 +46,16 @@ export const createTask = (row: number, yearMonth: string): Task => {
 		id: key,
 		row: row,
 		title: '',
+		color: defaultColor(),
 		taskStatus: createEmptyDateArray(),
 	}
+}
+
+/**
+ * カラーピッカーのデフォルト色を取得
+ */
+export const defaultColor = (): string => {
+	return '#ffff00'
 }
 
 /**
