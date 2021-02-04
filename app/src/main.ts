@@ -1,4 +1,51 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
+
+const isMac = process.platform === 'darwin'
+
+function createAppMenu(): Electron.MenuItemConstructorOptions {
+	console.debug('createAppMenu', process.platform)
+	return isMac
+		? {
+				label: app.name,
+				submenu: [
+					{ role: 'about' },
+					{ type: 'separator' },
+					{ role: 'services' },
+					{ type: 'separator' },
+					{ role: 'hide' },
+					{ role: 'hideOthers' },
+					{ role: 'unhide' },
+					{ type: 'separator' },
+					{ role: 'quit' },
+				],
+		  }
+		: {}
+}
+
+function createMenu(): Menu {
+	// create menu
+	const template: Electron.MenuItemConstructorOptions[] = []
+	// { role: 'appMenu' }
+	template.push(createAppMenu())
+	// template.push({
+	// 	label: 'File',
+	// 	submenu: [
+	// 		isMac ? { role: 'close' } : { role: 'quit' },
+	// 		{
+	// 			label: 'export',
+	// 			click: () => {
+	// 				console.debug('export ....')
+	// 			},
+	// 		},
+	// 	],
+	// })
+
+	console.debug('Create menu ...')
+	const menu = Menu.buildFromTemplate(template)
+	Menu.setApplicationMenu(menu)
+
+	return menu
+}
 
 function createWindow() {
 	// Create the browser window.
@@ -9,6 +56,7 @@ function createWindow() {
 			nodeIntegration: false,
 		},
 	})
+	// win.setMenu(createMenu())
 
 	// and load the index.html of the app.
 	win.loadURL('http://localhost:3000')
