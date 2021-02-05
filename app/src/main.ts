@@ -10,7 +10,7 @@ function createWindow() {
 			nodeIntegration: false,
 		},
 	})
-	win.setMenu(menu.createMenu(app.name))
+	win.setMenu(menu.createMenu(app))
 
 	// and load the index.html of the app.
 	win.loadURL('http://localhost:3000')
