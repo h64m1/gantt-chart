@@ -1,4 +1,5 @@
-import { App, Menu } from 'electron'
+import { App, BrowserWindow, Menu } from 'electron'
+import { dialog } from 'electron'
 
 const isMac = process.platform === 'darwin'
 
@@ -6,11 +7,11 @@ const isMac = process.platform === 'darwin'
  * メニュー作成
  * @param appName アプリケーション名
  */
-export function createMenu(app: App): Menu {
+export function createMenu(app: App, window: BrowserWindow): Menu {
 	// create menu
 	const template: Electron.MenuItemConstructorOptions[] = []
 	template.push(createAppMenu(app.name))
-	template.push(createFileMenu())
+	template.push(createFileMenu(window))
 	template.push(createEditMenu())
 	template.push(createViewMenu())
 	template.push(createWindowMenu())
@@ -47,10 +48,11 @@ function createAppMenu(appName: string): Electron.MenuItemConstructorOptions {
 		: {}
 }
 
-function createFileMenu(): Electron.MenuItemConstructorOptions {
+function createFileMenu(window: BrowserWindow): Electron.MenuItemConstructorOptions {
 	// { role: 'fileMenu' }
 	console.debug('createFileMenu', process.platform)
 	const label = 'File'
+
 	return isMac
 		? {
 				label: label,
@@ -59,7 +61,7 @@ function createFileMenu(): Electron.MenuItemConstructorOptions {
 					{
 						label: 'export',
 						click: () => {
-							console.debug('export ....')
+							exportJson(window)
 						},
 					},
 				],
@@ -68,6 +70,9 @@ function createFileMenu(): Electron.MenuItemConstructorOptions {
 				label: label,
 				submenu: [{ role: 'quit' }],
 		  }
+
+	// import用
+	//console.log(dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }))
 }
 
 /**
@@ -158,4 +163,27 @@ function createWindowMenu(): Electron.MenuItemConstructorOptions {
 				label: label,
 				submenu: [{ role: 'minimize' }, { role: 'zoom' }, { role: 'close' }],
 		  }
+}
+
+/**
+ * データをjsonファイルに保存
+ */
+function exportJson(window: BrowserWindow) {
+	const filters = [{ name: 'Json', extensions: ['json'] }]
+
+	console.debug('export ....')
+	dialog
+		.showSaveDialog(window, {
+			filters: filters,
+		})
+		.then((result) => {
+			console.debug('exportJson: save json ...')
+			console.debug(result.canceled)
+			console.debug(result.filePath)
+		})
+		.catch((error) => {
+			console.debug(error)
+		})
+	// import用
+	//console.log(dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }))
 }
