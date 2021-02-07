@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react'
-import { Day, Today } from '../Date/Day'
+import { Day, Today } from '../../api/Date/Day'
 import { Action } from '../../reducer/Action'
 
 type Props = {

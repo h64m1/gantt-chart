@@ -1,6 +1,6 @@
 import React from 'react'
 import { createTasks, Tasks } from './reducer/Tasks'
-import { ThisYearMonth } from './component/Date/Day'
+import { ThisYearMonth } from './api/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
 import { reducer, initializer } from './reducer/reducer'
 import * as db from './db/Database'
