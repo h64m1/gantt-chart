@@ -1,3 +1,5 @@
+import { Today } from '../component/Date/Day'
+
 require('fake-indexeddb/auto')
 
 const VERSION = 1
@@ -13,7 +15,7 @@ type Record = {
 	data: unknown
 }
 
-let _db: IDBDatabase | null = null
+let _db: IDBDatabase
 
 /**
  * DBを取得
@@ -65,7 +67,7 @@ const dbPut = (db: IDBDatabase, record: Record): Promise<Record> =>
  */
 export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 	try {
-		if (_db === null) {
+		if (_db === undefined) {
 			console.debug('write: create DB')
 			_db = await dbCreate()
 		} else {
@@ -82,12 +84,52 @@ export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 }
 
 /**
+ * DBからの取り出し、export用に全レコードを取得
+ */
+export const readAll = async (): Promise<unknown> => {
+	try {
+		if (_db === undefined) {
+			console.debug('read: create DB')
+			_db = await dbCreate()
+		} else {
+			console.debug('read: use existing DB')
+		}
+
+		const thisYear = Today({ format: 'YYYY' })
+		const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+		const yearMonths: Array<string> = []
+		months.forEach((value) => {
+			const month = `${value}`
+			const yearMonth = `${thisYear}-${month.padStart(2, `0`)}-01`
+			yearMonths.push(yearMonth)
+		})
+
+		const data: Array<unknown> = []
+		await Promise.all(
+			yearMonths.map(async (item) => {
+				const record = await dbGet(_db, item)
+				const isRecordEmpty = record === null || record === undefined
+				if (!isRecordEmpty) {
+					data.push(record)
+				}
+			}),
+		)
+
+		console.debug('read | data', data)
+		return data
+	} catch (error) {
+		console.error(error)
+		return null
+	}
+}
+
+/**
  * DBからの取り出し
  * @param key {dbKey} レコードを取り出すキー
  */
 export const read = async (key: dbKey): Promise<unknown> => {
 	try {
-		if (_db === null) {
+		if (_db === undefined) {
 			console.debug('read: create DB')
 			_db = await dbCreate()
 		} else {
@@ -110,7 +152,7 @@ export const read = async (key: dbKey): Promise<unknown> => {
  * DBをclose
  */
 export const close = (): void => {
-	if (_db === null) {
+	if (_db === undefined) {
 		return
 	}
 
