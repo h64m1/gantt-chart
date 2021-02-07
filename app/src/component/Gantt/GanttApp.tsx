@@ -35,8 +35,13 @@ const Navigation: React.FC<{
 	return (
 		<>
 			<Select value={yearMonth} dispatch={dispatch} />
-			<div>
-				<FontAwesomeIcon icon={faFileExport} />
+			<div
+				className="export"
+				onClick={(event) => {
+					console.debug('click export ...', event)
+				}}
+			>
+				<FontAwesomeIcon icon={faFileExport} className="export-icon" />
 				エクスポート
 			</div>
 		</>

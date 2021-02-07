@@ -49,3 +49,16 @@ td.sun {
 	grid-area: body;
 	background-color: white;
 }
+
+.export {
+	padding-top: 1rem;
+}
+
+.export:hover {
+	cursor: pointer;
+	color: rgb(42, 141, 255);
+}
+
+.export-icon {
+	padding-right: 0.5rem;
+}
