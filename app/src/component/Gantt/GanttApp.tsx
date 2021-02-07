@@ -4,6 +4,10 @@ import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileExport } from '@fortawesome/free-solid-svg-icons'
+
 import './Gantt.css'
 
 type Props = {
@@ -15,8 +19,26 @@ type Props = {
 export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 	return (
 		<>
-			<nav id="navigation">{<Select value={yearMonth} dispatch={dispatch} />}</nav>
+			<nav id="navigation">
+				<Navigation yearMonth={yearMonth} dispatch={dispatch} />
+			</nav>
 			<article id="gantt-main">{<Gantt yearMonth={yearMonth} tasks={tasks} dispatch={dispatch} />}</article>
+		</>
+	)
+}
+
+const Navigation: React.FC<{
+	yearMonth: string
+	dispatch: React.Dispatch<Action>
+}> = ({ yearMonth, dispatch }) => {
+	// TODO: スタイル調整
+	return (
+		<>
+			<Select value={yearMonth} dispatch={dispatch} />
+			<div>
+				<FontAwesomeIcon icon={faFileExport} />
+				エクスポート
+			</div>
 		</>
 	)
 }
