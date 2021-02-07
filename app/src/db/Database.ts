@@ -1,5 +1,3 @@
-import { Today } from '../component/Date/Day'
-
 require('fake-indexeddb/auto')
 
 const VERSION = 1
@@ -67,12 +65,9 @@ const dbPut = (db: IDBDatabase, record: Record): Promise<Record> =>
  */
 export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 	try {
-		if (_db === undefined) {
-			console.debug('write: create DB')
-			_db = await dbCreate()
-		} else {
-			console.debug('write: use existing DB')
-		}
+		// _dbの初期化
+		await initDb('write')
+
 		await dbPut(_db, { key: key, data })
 		console.debug('write | key', key, 'data', data)
 
@@ -86,16 +81,12 @@ export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 /**
  * DBからの取り出し、export用に全レコードを取得
  */
-export const readAll = async (): Promise<unknown> => {
+export const readAll = async (): Promise<Array<unknown>> => {
 	try {
-		if (_db === undefined) {
-			console.debug('read: create DB')
-			_db = await dbCreate()
-		} else {
-			console.debug('read: use existing DB')
-		}
+		// _dbの初期化
+		await initDb('readAll')
 
-		const thisYear = Today({ format: 'YYYY' })
+		const thisYear = new Date().getFullYear()
 		const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 		const yearMonths: Array<string> = []
 		months.forEach((value) => {
@@ -107,7 +98,7 @@ export const readAll = async (): Promise<unknown> => {
 		const data: Array<unknown> = []
 		await Promise.all(
 			yearMonths.map(async (item) => {
-				const record = await dbGet(_db, item)
+				const record = await read(item)
 				const isRecordEmpty = record === null || record === undefined
 				if (!isRecordEmpty) {
 					data.push(record)
@@ -119,7 +110,7 @@ export const readAll = async (): Promise<unknown> => {
 		return data
 	} catch (error) {
 		console.error(error)
-		return null
+		return []
 	}
 }
 
@@ -129,12 +120,9 @@ export const readAll = async (): Promise<unknown> => {
  */
 export const read = async (key: dbKey): Promise<unknown> => {
 	try {
-		if (_db === undefined) {
-			console.debug('read: create DB')
-			_db = await dbCreate()
-		} else {
-			console.debug('read: use existing DB')
-		}
+		// _dbの初期化
+		await initDb('read')
+
 		const record = await dbGet(_db, key)
 		if (record === null || record === undefined) {
 			return null
@@ -158,4 +146,17 @@ export const close = (): void => {
 
 	console.debug('close: close DB')
 	return _db.close()
+}
+
+/**
+ * _dbの初期化
+ * @param methodName 呼び出し元のメソッド名
+ */
+const initDb = async (methodName: string) => {
+	if (_db === undefined) {
+		console.debug(`${methodName}: create DB`)
+		_db = await dbCreate()
+	} else {
+		console.debug(`${methodName}: use existing DB`)
+	}
 }
