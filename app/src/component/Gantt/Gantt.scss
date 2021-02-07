@@ -10,25 +10,33 @@
 	text-align: left;
 }
 
-input.title {
-	background-color: paleturquoise;
-	border-style: none;
-	margin: 2px;
+input {
+	&.title {
+		background-color: paleturquoise;
+		border-style: none;
+		margin: 2px;
+	}
 }
 
-/* テーブルセル */
-td.title {
-	font-weight: bold;
-	background-color:paleturquoise;
+td {
+
+	/* テーブルセル */
+	&.title {
+		font-weight: bold;
+		background-color: paleturquoise;
+	}
+
+	// 曜日毎の色
+	&.sat {
+		background-color: rgb(167, 221, 252);
+	}
+
+	&.sun {
+		background-color: rgb(252, 167, 167);
+	}
 }
 
-td.sat {
-	background-color: rgb(167, 221, 252);
-}
 
-td.sun {
-	background-color: rgb(252, 167, 167);
-}
 
 .App {
 	grid-area: main;
@@ -50,22 +58,22 @@ td.sun {
 	background-color: white;
 }
 
-div.export {
+.export {
 	cursor: pointer;
 	padding-top: 1rem;
 }
 
-span.export {
+.export-button {
 	color: #000;
 	padding: 0.5rem 1rem;
 	border: 1px solid #000;
 	border-radius: 3px;
-}
 
-span.export:hover {
-	color: rgb(12, 90, 255);
-	border: 1px solid rgb(12, 90, 255);
-	border-radius: 3px;
+	&:hover {
+		color: rgb(12, 90, 255);
+		border: 1px solid rgb(12, 90, 255);
+		border-radius: 3px;
+	}
 }
 
 .export-icon {

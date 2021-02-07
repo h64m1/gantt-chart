@@ -8,7 +8,7 @@ import { BodyRow } from './BodyRow'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileExport } from '@fortawesome/free-solid-svg-icons'
 
-import './Gantt.css'
+import './Gantt.scss'
 
 type Props = {
 	yearMonth: string
@@ -37,7 +37,7 @@ const Navigation: React.FC<{
 			<Select value={yearMonth} dispatch={dispatch} />
 			<div className="export">
 				<span
-					className="export"
+					className="export-button"
 					onClick={(event) => {
 						console.debug('click export ...', event)
 					}}
