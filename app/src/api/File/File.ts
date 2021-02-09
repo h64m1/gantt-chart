@@ -9,12 +9,21 @@ const dialog = remote.dialog
 export function saveFile(fileName: string): void {
 	console.debug('saveFile', fileName)
 
-	dialog.showSaveDialog({
-		filters: [
-			{
-				name: 'Json',
-				extensions: ['json'],
-			},
-		],
-	})
+	dialog
+		.showSaveDialog({
+			filters: [
+				{
+					name: 'Json',
+					extensions: ['json'],
+				},
+			],
+		})
+		.then((result) => {
+			console.debug('exportJson: save json ...')
+			console.debug(result.canceled)
+			console.debug(result.filePath)
+		})
+		.catch((error) => {
+			console.debug(error)
+		})
 }
