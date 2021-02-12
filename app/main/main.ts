@@ -16,8 +16,11 @@ function createWindow() {
 	win.setMenu(menu.createMenu(app))
 
 	console.debug('ipcMain add "send" handler ...')
-	ipcMain.handle('send', () => {
-		console.debug('send success')
+	ipcMain.handle('send', (event, message: string) => {
+		console.debug('send success : ', message)
+	})
+	ipcMain.handle('export', (event, response: Array<unknown>) => {
+		console.debug('export success : ', response)
 	})
 
 	// and load the index.html of the app.

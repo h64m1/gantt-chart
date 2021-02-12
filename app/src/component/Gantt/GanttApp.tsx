@@ -4,7 +4,7 @@ import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'
-// import * as File from '../../api/File/File'
+import * as db from '../../db/Database'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileExport } from '@fortawesome/free-solid-svg-icons'
@@ -38,9 +38,14 @@ const Navigation: React.FC<{
 			<div className="export">
 				<span
 					className="export-button"
-					onClick={(event) => {
+					onClick={async (event) => {
 						console.debug('click export ...', event)
-						// File.saveFile('test.json')
+						try {
+							const response = await db.readAll()
+							window.api.export(response)
+						} catch (e) {
+							console.debug('error: cannot find window.api')
+						}
 					}}
 				>
 					<FontAwesomeIcon icon={faFileExport} className="export-icon" />

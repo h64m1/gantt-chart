@@ -5,5 +5,6 @@ declare global {
 }
 
 export interface Api {
-	send: () => void
+	send: (message: string) => void
+	export: (response: Array<unknown>) => void
 }

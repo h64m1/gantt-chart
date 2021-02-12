@@ -4,6 +4,7 @@ import { ThisYearMonth } from './api/Date/Day'
 import GanttApp from './component/Gantt/GanttApp'
 import { reducer, initializer } from './reducer/reducer'
 import * as db from './db/Database'
+import { Send } from './api/Send'
 import './App.css'
 
 function App(): JSX.Element {
@@ -18,20 +19,8 @@ function App(): JSX.Element {
 		initializer,
 	)
 
-	React.useEffect(() => {
-		const test = () => {
-			console.debug('start load ...')
-
-			try {
-				const messages = window.api.send()
-				console.debug(`success send api | message: ${messages}`)
-			} catch (e) {
-				// cannot call window.api without electron
-				console.debug('error: load failed')
-			}
-		}
-		test()
-	}, [])
+	// send apiのテスト
+	Send()
 
 	React.useEffect(() => {
 		let didRead = false
