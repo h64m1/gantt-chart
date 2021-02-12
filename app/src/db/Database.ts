@@ -8,7 +8,7 @@ const WRITE = 'readwrite'
 
 export type dbKey = string
 
-type Record = {
+type DbRecord = {
 	key: dbKey
 	data: unknown
 }
@@ -38,18 +38,18 @@ const dbCreate = (): Promise<IDBDatabase> =>
 		openRequest.onerror = () => reject(new Error('Error: Indexeddbを開けません'))
 	})
 
-const dbGet = (db: IDBDatabase, key: string): Promise<Record> =>
-	new Promise<Record>((resolve, reject) => {
+const dbGet = (db: IDBDatabase, key: string): Promise<DbRecord> =>
+	new Promise<DbRecord>((resolve, reject) => {
 		const transaction = db.transaction(STORE, READ)
 		const store = transaction.objectStore(STORE)
 		const request = store.get(key)
 
-		request.onsuccess = (event: Event) => resolve(getResult(event) as Record)
+		request.onsuccess = (event: Event) => resolve(getResult(event) as DbRecord)
 		request.onerror = () => reject(new Error('Error: Indexeddbからget失敗'))
 	})
 
-const dbPut = (db: IDBDatabase, record: Record): Promise<Record> =>
-	new Promise<Record>((resolve, reject) => {
+const dbPut = (db: IDBDatabase, record: DbRecord): Promise<DbRecord> =>
+	new Promise<DbRecord>((resolve, reject) => {
 		const transaction = db.transaction(STORE, WRITE)
 		const store = transaction.objectStore(STORE)
 		const request = store.put(record)
