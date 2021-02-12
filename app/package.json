@@ -19,16 +19,16 @@
 		"react-scripts": "^4.0.0",
 		"typescript": "^3.7.5"
 	},
-	"main": "dist/main.js",
+	"main": "build/main/main.js",
 	"scripts": {
-		"electron-dev": "npm run build:main && concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+		"electron-dev": "concurrently -k \"npm run build:watch\" \"BROWSER=none npm start\" \"npm:electron\"",
 		"start": "react-scripts start",
 		"electron": "wait-on tcp:3000 && electron .",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"build:main": "tsc src/main.ts --outDir dist",
-		"build:watch": "tsc -w src/main.ts --outDir dist"
+		"build:main": "tsc -p main",
+		"build:watch": "tsc -w -p main"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

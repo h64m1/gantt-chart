@@ -19,6 +19,21 @@ function App(): JSX.Element {
 	)
 
 	React.useEffect(() => {
+		const test = () => {
+			console.debug('start load ...')
+
+			try {
+				const messages = window.api.send()
+				console.debug(`success send api | message: ${messages}`)
+			} catch (e) {
+				// cannot call window.api without electron
+				console.debug('error: load failed')
+			}
+		}
+		test()
+	}, [])
+
+	React.useEffect(() => {
 		let didRead = false
 
 		// { yearMonth: '2021-02-01', tasks: { 'task1': { id: 'task1', row: 0, title: 'title1', taskStatus: [false, false]} }}

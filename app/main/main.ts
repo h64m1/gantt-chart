@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import * as menu from './menu'
+import * as path from 'path'
 
 function createWindow() {
 	// Create the browser window.
@@ -8,9 +9,16 @@ function createWindow() {
 		height: 600,
 		webPreferences: {
 			nodeIntegration: false,
+			contextIsolation: true,
+			preload: path.join(__dirname, 'preload.js'),
 		},
 	})
 	win.setMenu(menu.createMenu(app))
+
+	console.debug('ipcMain add "send" handler ...')
+	ipcMain.handle('send', () => {
+		console.debug('send success')
+	})
 
 	// and load the index.html of the app.
 	win.loadURL('http://localhost:3000')
