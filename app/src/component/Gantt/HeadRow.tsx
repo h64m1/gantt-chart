@@ -1,5 +1,5 @@
 import React from 'react'
-import { Days } from '../Date/Day'
+import { Days } from '../../api/Date/Day'
 
 type Props = {
 	yearMonth: string

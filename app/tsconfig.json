@@ -22,5 +22,8 @@
   },
   "include": [
     "src"
-  ]
+  ],
+  "files": [
+    "@types/global.d.ts"
+  ],
 }

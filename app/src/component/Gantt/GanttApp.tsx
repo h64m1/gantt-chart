@@ -4,7 +4,12 @@ import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'
-import './Gantt.css'
+import * as db from '../../db/Database'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileExport } from '@fortawesome/free-solid-svg-icons'
+
+import './Gantt.scss'
 
 type Props = {
 	yearMonth: string
@@ -15,8 +20,38 @@ type Props = {
 export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 	return (
 		<>
-			<nav id="navigation">{<Select value={yearMonth} dispatch={dispatch} />}</nav>
+			<nav id="navigation">
+				<Navigation yearMonth={yearMonth} dispatch={dispatch} />
+			</nav>
 			<article id="gantt-main">{<Gantt yearMonth={yearMonth} tasks={tasks} dispatch={dispatch} />}</article>
+		</>
+	)
+}
+
+const Navigation: React.FC<{
+	yearMonth: string
+	dispatch: React.Dispatch<Action>
+}> = ({ yearMonth, dispatch }) => {
+	return (
+		<>
+			<Select value={yearMonth} dispatch={dispatch} />
+			<div className="export">
+				<span
+					className="export-button"
+					onClick={async (event) => {
+						console.debug('click export ...', event)
+						try {
+							const response = await db.readAll()
+							window.api.export(response)
+						} catch (e) {
+							console.debug('error: cannot find window.api')
+						}
+					}}
+				>
+					<FontAwesomeIcon icon={faFileExport} className="export-icon" />
+					エクスポート
+				</span>
+			</div>
 		</>
 	)
 }

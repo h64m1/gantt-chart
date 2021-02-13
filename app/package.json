@@ -3,6 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^1.2.34",
+		"@fortawesome/free-solid-svg-icons": "^5.15.2",
+		"@fortawesome/react-fontawesome": "^0.1.14",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
 		"@testing-library/user-event": "^7.2.1",
@@ -16,16 +19,16 @@
 		"react-scripts": "^4.0.0",
 		"typescript": "^3.7.5"
 	},
-	"main": "dist/main.js",
+	"main": "build/main/main.js",
 	"scripts": {
-		"start": "npm run build:main & concurrently \"react-scripts start\" \"electron .\"",
-		"start:react": "react-scripts start",
-		"start:electron": "electron .",
+		"electron-dev": "concurrently -k \"npm run build:watch\" \"BROWSER=none npm start\" \"npm:electron\"",
+		"start": "react-scripts start",
+		"electron": "wait-on tcp:3000 && electron .",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"build:main": "tsc src/main.ts --outDir dist",
-		"build:watch": "tsc -w src/main.ts --outDir dist"
+		"build:main": "tsc -p main",
+		"build:watch": "tsc -w -p main"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -60,6 +63,8 @@
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.1.1",
 		"prettier-eslint": "^11.0.0",
-		"prettier-eslint-cli": "^5.0.0"
+		"prettier-eslint-cli": "^5.0.0",
+		"sass": "^1.32.6",
+		"wait-on": "^5.2.1"
 	}
 }

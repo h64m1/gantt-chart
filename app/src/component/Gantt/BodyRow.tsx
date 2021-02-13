@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
 
-import { Days } from '../Date/Day'
+import { Days } from '../../api/Date/Day'
 import { Action } from '../../reducer/Action'
 import { Task } from '../../reducer/Tasks'
 import { BodyColumn } from './BodyColumn'
