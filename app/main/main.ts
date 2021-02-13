@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
+import * as File from './File/File'
 import * as menu from './menu'
 import * as path from 'path'
 
@@ -20,7 +21,7 @@ function createWindow() {
 		console.debug('send success : ', message)
 	})
 	ipcMain.handle('export', (event, response: Array<unknown>) => {
-		console.debug('export success : ', response)
+		File.saveFile(response)
 	})
 
 	// and load the index.html of the app.

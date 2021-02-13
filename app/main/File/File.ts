@@ -1,13 +1,12 @@
-import { remote } from 'electron'
-
-const dialog = remote.dialog
+import { dialog } from 'electron'
+import * as fs from 'fs'
 
 /**
  * ファイルを保存
- * @param {string} fileName ファイル名
+ * @param {Array<unknown>} response DBの全レコード
  */
-export function saveFile(fileName: string): void {
-	console.debug('saveFile', fileName)
+export function saveFile(response: Array<unknown>): void {
+	console.debug('saveFile', response)
 
 	dialog
 		.showSaveDialog({
@@ -19,11 +18,26 @@ export function saveFile(fileName: string): void {
 			],
 		})
 		.then((result) => {
-			console.debug('exportJson: save json ...')
-			console.debug(result.canceled)
-			console.debug(result.filePath)
+			console.debug('exportJson: save json ...', result)
+			const fileName = result.filePath
+			if (fileName !== undefined) {
+				writeFile(fileName, response)
+			}
 		})
 		.catch((error) => {
 			console.debug(error)
 		})
+}
+
+/**
+ * ローカルにファイル書き出し
+ * @param {string} fileName 出力ファイル名
+ * @param {Array<unknown>} data データ
+ */
+function writeFile(fileName: string, data: Array<unknown>) {
+	console.debug('writeFile')
+	fs.writeFile(fileName, JSON.stringify(data), (error) => {
+		if (error) throw error
+		console.debug(`File ${fileName} saved`)
+	})
 }
