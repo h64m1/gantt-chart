@@ -19,6 +19,11 @@ export function saveFile(response: Array<unknown>): void {
 		})
 		.then((result) => {
 			console.debug('exportJson: save json ...', result)
+			if (result.canceled) {
+				console.debug('file save canceled', result)
+				return
+			}
+
 			const fileName = result.filePath
 			if (fileName !== undefined) {
 				writeFile(fileName, response)
