@@ -8,7 +8,6 @@ contextBridge.exposeInMainWorld('api', {
 	// ローカルファイルをimport
 	import: async (): Promise<unknown> => {
 		const data = await ipcRenderer.invoke('import')
-		console.debug('contextBridge::import', data)
 		return data
 	},
 })

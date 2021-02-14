@@ -37,10 +37,10 @@ export const ImportButton: React.FC = () => {
 		<div className="import">
 			<span
 				className="import-button"
-				onClick={(event) => {
+				onClick={async (event) => {
 					console.debug('click import ...', event)
 					try {
-						const data = window.api.import()
+						const data = await window.api.import()
 						console.debug('ImportButton: import', data)
 					} catch (e) {
 						console.debug('error: cannot find window.api')
