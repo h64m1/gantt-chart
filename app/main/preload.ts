@@ -7,7 +7,6 @@ contextBridge.exposeInMainWorld('api', {
 	export: (response: Array<unknown>) => ipcRenderer.invoke('export', response),
 	// ローカルファイルをimport
 	import: async (): Promise<unknown> => {
-		const data = await ipcRenderer.invoke('import')
-		return data
+		return await ipcRenderer.invoke('import')
 	},
 })

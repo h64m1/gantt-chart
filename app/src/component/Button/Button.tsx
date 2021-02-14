@@ -40,8 +40,15 @@ export const ImportButton: React.FC = () => {
 				onClick={async (event) => {
 					console.debug('click import ...', event)
 					try {
-						const data = await window.api.import()
+						const data: Array<{
+							key: string
+							value: unknown
+						}> = await window.api.import()
 						console.debug('ImportButton: import', data)
+						// DBに登録
+						data.forEach((item) => {
+							db.write(item.key, item.value)
+						})
 					} catch (e) {
 						console.debug('error: cannot find window.api')
 					}

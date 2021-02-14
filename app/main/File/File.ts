@@ -57,7 +57,8 @@ export async function loadFile(): Promise<unknown> {
 	const data = filePaths.map((path) => {
 		return readFile(path)
 	})
-	return { canceled, data }
+	const result = data.length > 0 ? data[0] : []
+	return result
 }
 
 /**
