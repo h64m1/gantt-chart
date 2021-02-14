@@ -23,6 +23,12 @@ function createWindow() {
 	ipcMain.handle('export', (event, response: Array<unknown>) => {
 		File.saveFile(response)
 	})
+	ipcMain.handle(
+		'import',
+		async (): Promise<unknown> => {
+			return await File.loadFile()
+		},
+	)
 
 	// and load the index.html of the app.
 	win.loadURL('http://localhost:3000')

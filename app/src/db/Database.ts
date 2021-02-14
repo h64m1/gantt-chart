@@ -101,7 +101,8 @@ export const readAll = async (): Promise<Array<unknown>> => {
 				const record = await read(item)
 				const isRecordEmpty = record === null || record === undefined
 				if (!isRecordEmpty) {
-					data.push(record)
+					const recordWithKey = { key: item, value: record }
+					data.push(recordWithKey)
 				}
 			}),
 		)

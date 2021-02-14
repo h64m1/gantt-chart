@@ -79,3 +79,25 @@ td {
 .export-icon {
 	padding-right: 0.5rem;
 }
+
+.import {
+	cursor: pointer;
+	padding-top: 1rem;
+}
+
+.import-button {
+	color: #000;
+	padding: 0.5rem 1rem;
+	border: 1px solid #000;
+	border-radius: 3px;
+
+	&:hover {
+		color: rgb(12, 90, 255);
+		border: 1px solid rgb(12, 90, 255);
+		border-radius: 3px;
+	}
+}
+
+.import-icon {
+	padding-right: 0.5rem;
+}
