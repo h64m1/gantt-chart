@@ -195,24 +195,24 @@ const deleteRow = (state: State) => {
  * @param state {State} ステート
  * @param data {Array} インポートしたデータ
  */
-const importJson = async (
+const importJson = (
 	state: State,
 	data: Array<{
 		key: string
 		value: unknown
 	}>,
 ) => {
-	console.debug('click import ...')
-	// DBに登録
-	await Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
-	// 現在の処理年月でstateを検索
-	const dbState = (await db.read(state.yearMonth)) as State
+	const currentData = data.find((item) => item.key === state.yearMonth)
+	console.debug('click import ...', currentData)
 
 	const newState = {
 		...state,
 		yearMonth: state.yearMonth,
-		tasks: dbState.tasks,
+		tasks: currentData?.value,
 	}
+
+	// DBに登録
+	Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
 
 	return newState
 }

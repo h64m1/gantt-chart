@@ -49,7 +49,7 @@ export const ImportButton: React.FC<{
 						console.debug('ImportButton: import', data)
 
 						// DBに登録
-						dispatch({ type: 'importJson', data: data })
+						return dispatch({ type: 'importJson', data: data })
 					} catch (e) {
 						console.debug('error: cannot find window.api')
 					}
