@@ -1,4 +1,5 @@
 import React from 'react'
+import { Action } from '../../reducer/Action'
 import * as db from '../../db/Database'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,23 +33,23 @@ export const ExportButton: React.FC = () => {
 /**
  * データのインポート
  */
-export const ImportButton: React.FC = () => {
+export const ImportButton: React.FC<{
+	dispatch: React.Dispatch<Action>
+}> = ({ dispatch }) => {
 	return (
 		<div className="import">
 			<span
 				className="import-button"
-				onClick={async (event) => {
-					console.debug('click import ...', event)
+				onClick={async () => {
 					try {
 						const data: Array<{
 							key: string
 							value: unknown
 						}> = await window.api.import()
 						console.debug('ImportButton: import', data)
+
 						// DBに登録
-						data.forEach((item) => {
-							db.write(item.key, item.value)
-						})
+						dispatch({ type: 'importJson', data: data })
 					} catch (e) {
 						console.debug('error: cannot find window.api')
 					}

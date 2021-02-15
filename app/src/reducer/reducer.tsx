@@ -34,6 +34,10 @@ export const reducer = (state: State, action: Action): any => {
 
 		case 'deleteRow':
 			return deleteRow(state)
+
+		// ローカルファイルのインポート
+		case 'importJson':
+			return importJson(state, action.data)
 	}
 }
 
@@ -182,6 +186,33 @@ const deleteRow = (state: State) => {
 		tasks: tasks,
 	}
 	db.write(state.yearMonth, newState.tasks)
+
+	return newState
+}
+
+/**
+ * ファイルのインポート
+ * @param state {State} ステート
+ * @param data {Array} インポートしたデータ
+ */
+const importJson = async (
+	state: State,
+	data: Array<{
+		key: string
+		value: unknown
+	}>,
+) => {
+	console.debug('click import ...')
+	// DBに登録
+	await Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
+	// 現在の処理年月でstateを検索
+	const dbState = (await db.read(state.yearMonth)) as State
+
+	const newState = {
+		...state,
+		yearMonth: state.yearMonth,
+		tasks: dbState.tasks,
+	}
 
 	return newState
 }

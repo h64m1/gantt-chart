@@ -33,7 +33,7 @@ const Navigation: React.FC<{
 		<>
 			<Select value={yearMonth} dispatch={dispatch} />
 			<ExportButton />
-			<ImportButton />
+			<ImportButton dispatch={dispatch} />
 		</>
 	)
 }
