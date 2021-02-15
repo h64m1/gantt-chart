@@ -38,3 +38,11 @@ export type Action =
 			// 行削除
 			type: 'deleteRow'
 	  }
+	| {
+			// ローカルファイルのインポート
+			type: 'importJson'
+			data: Array<{
+				key: string
+				value: unknown
+			}>
+	  }

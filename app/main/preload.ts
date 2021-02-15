@@ -5,4 +5,8 @@ contextBridge.exposeInMainWorld('api', {
 	send: (message: string) => ipcRenderer.invoke('send', message),
 	// DBのレコード全体をエクスポート
 	export: (response: Array<unknown>) => ipcRenderer.invoke('export', response),
+	// ローカルファイルをimport
+	import: async (): Promise<unknown> => {
+		return await ipcRenderer.invoke('import')
+	},
 })

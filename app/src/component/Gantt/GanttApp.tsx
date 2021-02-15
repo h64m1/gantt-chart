@@ -4,10 +4,7 @@ import { Tasks } from '../../reducer/Tasks'
 import { Select } from '../Select/Select'
 import { HeadRow } from './HeadRow'
 import { BodyRow } from './BodyRow'
-import * as db from '../../db/Database'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileExport } from '@fortawesome/free-solid-svg-icons'
+import { ExportButton, ImportButton } from '../Button/Button'
 
 import './Gantt.scss'
 
@@ -35,23 +32,8 @@ const Navigation: React.FC<{
 	return (
 		<>
 			<Select value={yearMonth} dispatch={dispatch} />
-			<div className="export">
-				<span
-					className="export-button"
-					onClick={async (event) => {
-						console.debug('click export ...', event)
-						try {
-							const response = await db.readAll()
-							window.api.export(response)
-						} catch (e) {
-							console.debug('error: cannot find window.api')
-						}
-					}}
-				>
-					<FontAwesomeIcon icon={faFileExport} className="export-icon" />
-					エクスポート
-				</span>
-			</div>
+			<ExportButton />
+			<ImportButton dispatch={dispatch} />
 		</>
 	)
 }

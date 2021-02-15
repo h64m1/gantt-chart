@@ -7,4 +7,10 @@ declare global {
 export interface Api {
 	send: (message: string) => void
 	export: (response: Array<unknown>) => void
+	import: () => Promise<
+		Array<{
+			key: string
+			value: unknown
+		}>
+	>
 }
