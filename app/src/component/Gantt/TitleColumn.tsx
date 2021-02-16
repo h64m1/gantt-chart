@@ -3,7 +3,7 @@ import { Action } from '../../reducer/Action'
 import { getTaskKey } from '../../reducer/Tasks'
 
 import 'flatpickr/dist/themes/material_blue.css'
-import DatePicker from 'react-flatpickr'
+import FlatPickr from 'react-flatpickr'
 
 type Props = {
 	row: number
@@ -22,9 +22,8 @@ export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title,
 	return (
 		<>
 			<Title row={row} column={column} title={title} id={id} dispatch={dispatch} />
+			<DatePicker row={row} column={column} date={yearMonth} id={id} dispatch={dispatch} />
 			<ColorPicker row={row} column={column} color={color} id={id} dispatch={dispatch} />
-			<Date dateName={'beginDate'} row={row} column={column} date={yearMonth} id={id} dispatch={dispatch} />
-			<Date dateName={'endDate'} row={row} column={column} date={yearMonth} id={id} dispatch={dispatch} />
 		</>
 	)
 })
@@ -89,18 +88,17 @@ const ColorPicker: React.FC<{
 /**
  * 開始日/終了日
  */
-const Date: React.FC<{
-	dateName: string
+const DatePicker: React.FC<{
 	row: number
 	column: number
 	date: string
 	id: string
 	dispatch: React.Dispatch<Action>
-}> = ({ dateName, row, column, date, id, dispatch }) => {
+}> = ({ row, column, date, id, dispatch }) => {
 	return (
-		<td key={`${dateName}-${row}-${column}`} className="gantt-body date">
+		<td key={`date-${row}-${column}`} className="gantt-body date">
 			{/* タスクの日付 */}
-			<DatePicker />
+			<FlatPickr options={{ mode: 'range' }} />
 		</td>
 	)
 }
