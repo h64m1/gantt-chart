@@ -20,6 +20,9 @@ HeadRow.displayName = 'HeadRow'
 function getDatesInMonth(yearMonth: string): Array<JSX.Element> {
 	// 一ヶ月分の日付
 	const dates = Days(yearMonth, { format: 'DD (ddd)' })
+	// 開始日と終了日の要素を追加
+	dates.unshift('')
+	dates.unshift('')
 	// タイトル用の要素を追加
 	dates.unshift('')
 	// カラーピッカー用の要素追加
