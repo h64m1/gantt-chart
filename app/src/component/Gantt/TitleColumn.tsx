@@ -2,6 +2,9 @@ import React from 'react'
 import { Action } from '../../reducer/Action'
 import { getTaskKey } from '../../reducer/Tasks'
 
+import 'flatpickr/dist/themes/material_blue.css'
+import DatePicker from 'react-flatpickr'
+
 type Props = {
 	row: number
 	yearMonth: string
@@ -97,17 +100,7 @@ const Date: React.FC<{
 	return (
 		<td key={`${dateName}-${row}-${column}`} className="gantt-body date">
 			{/* タスクの日付 */}
-			<input
-				type="date"
-				value={date}
-				// onChange={(e) =>
-				// 	dispatch({
-				// 		type: 'color',
-				// 		id: id,
-				// 		color: e.target.value,
-				// 	})
-				// }
-			/>
+			<DatePicker />
 		</td>
 	)
 }
