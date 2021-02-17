@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react'
-import { Day, Today } from '../../api/Date/Day'
+import * as Day from '../../api/Date/Day'
 import { Action } from '../../reducer/Action'
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 export const Select: React.FC<Props> = React.memo(({ value, dispatch }) => {
 	console.debug('render Select', value)
-	const thisYear = Today({ format: 'YYYY' })
+	const thisYear = Day.DayF(undefined, 'YYYY')
 	return (
 		<select
 			value={value}
@@ -24,6 +24,8 @@ export const Select: React.FC<Props> = React.memo(({ value, dispatch }) => {
 		</select>
 	)
 })
+
+Select.displayName = 'Select'
 
 /**
  * 処理年月selecterのoptionを取得
@@ -40,7 +42,7 @@ function getMonthOptions(thisYear: string): Array<JSX.Element> {
 	})
 
 	return yearMonths.map((v, i) => {
-		const label = Day(v, { format: 'YYYY/MM' })
+		const label = Day.DayF(v, 'YYYY/MM')
 		return (
 			<option key={`${i}`} value={`${v}`} label={label}>
 				{v}

@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
 
-import { Days } from '../../api/Date/Day'
+import * as Day from '../../api/Date/Day'
 import { Action } from '../../reducer/Action'
 import { Task } from '../../reducer/Tasks'
 import { BodyColumn } from './BodyColumn'
@@ -20,7 +20,7 @@ export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, disp
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
 
 	// 一ヶ月分の日付
-	const dates = Days(yearMonth, { format: 'DD (ddd)' })
+	const dates = Day.Days(yearMonth, 'DD (ddd)')
 
 	return (
 		<tr key={row}>

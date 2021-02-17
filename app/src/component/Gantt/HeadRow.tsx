@@ -1,5 +1,5 @@
 import React from 'react'
-import { Days } from '../../api/Date/Day'
+import * as Day from '../../api/Date/Day'
 
 type Props = {
 	yearMonth: string
@@ -19,7 +19,7 @@ HeadRow.displayName = 'HeadRow'
  */
 function getDatesInMonth(yearMonth: string): Array<JSX.Element> {
 	// 一ヶ月分の日付
-	const dates = Days(yearMonth, { format: 'DD (ddd)' })
+	const dates = Day.Days(yearMonth, 'DD (ddd)')
 	// タイトル用の要素を追加
 	dates.unshift('')
 	// 開始日と終了日の要素を追加

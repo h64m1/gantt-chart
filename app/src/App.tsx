@@ -1,5 +1,5 @@
 import React from 'react'
-import { AddMonth, ThisYearMonth } from './api/Date/Day'
+import * as Day from './api/Date/Day'
 import { Send } from './api/Send'
 import './App.css'
 import GanttApp from './component/Gantt/GanttApp'
@@ -9,11 +9,10 @@ import { createTasks, Tasks } from './reducer/Tasks'
 
 function App(): JSX.Element {
 	// 当日の日付で処理年月stateを初期化
-	const format = { format: 'YYYY-MM-DD' }
-	const thisYearMonth = ThisYearMonth(format)
+	const thisYearMonth = Day.startOfF('month')
 	// TODO: 開始日と終了日、実装完了までは処理年月を残す
-	const beginDate = AddMonth(-1)
-	const endDate = AddMonth(1)
+	const beginDate = Day.addF(-1, 'month')
+	const endDate = Day.addF(1, 'month')
 	console.debug('begin, end', beginDate, endDate)
 	const [{ yearMonth, tasks }, dispatch] = React.useReducer(
 		reducer,
