@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 const DEFAULT_FORMAT = 'YYYY-MM-DD'
 
@@ -14,11 +14,11 @@ type DayProps = Partial<{
  */
 export function Days(date: string, props?: DayProps): Array<string> {
 	// 配列:当該月の日付分
-	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((v, i) => i)
+	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((_, i) => i)
 	// 月初日
 	const firstDate = dayjs(date).startOf('month')
 	// 日付文字列の配列
-	return daysInNumber.map((v, i) => firstDate.add(i, 'day').format(getFormat(props)))
+	return daysInNumber.map((_, i) => firstDate.add(i, 'day').format(getFormat(props)))
 }
 
 /**
@@ -31,6 +31,20 @@ export function Day(date?: string, props?: DayProps): string {
 	// propsが空の場合、default formatを設定
 	const format = getFormat(props)
 	return getDate(date, format)
+}
+
+/**
+ * 日付を指定されたフォーマットで取得、加算したい月も指定
+ * @param {number} amount 月
+ * @param {string} date 日付
+ * @param {DayProps} props プロパティ
+ * @return {string} 日付文字列
+ */
+export function AddMonth(amount: number, date?: string, props?: DayProps): string {
+	// propsが空の場合、default formatを設定
+	const format = getFormat(props)
+	const _day = date === null || date === undefined ? dayjs() : dayjs(date)
+	return addMonth(_day, amount).format(format)
 }
 
 /**
@@ -95,4 +109,14 @@ function getDate(date?: string, format?: string): string {
 
 	const day = dayjs(date)
 	return day.format(format)
+}
+
+/**
+ * 日付をを1月分加算、減算
+ * @param {dayjs} day 日付
+ * @param {number} amount 加算、減算する量
+ */
+function addMonth(day: Dayjs, amount: number) {
+	const unit = 'month'
+	return day.add(amount, unit)
 }
