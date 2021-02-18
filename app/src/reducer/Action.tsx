@@ -10,6 +10,8 @@ export type Action =
 			// 初期化
 			type: 'init'
 			yearMonth: string
+			beginDate: string
+			endDate: string
 			tasks: Tasks
 	  }
 	| {

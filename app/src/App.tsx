@@ -7,7 +7,7 @@ import * as db from './db/Database'
 import { initializer, reducer } from './reducer/reducer'
 import { createTasks, Tasks } from './reducer/Tasks'
 
-function App(): JSX.Element {
+const App: React.FC = () => {
 	// 当日の日付で処理年月stateを初期化
 	const thisYearMonth = Day.startOfF('month')
 	// TODO: 開始日と終了日、実装完了までは処理年月を残す
@@ -36,6 +36,8 @@ function App(): JSX.Element {
 				dispatch({
 					type: 'init',
 					yearMonth: yearMonth,
+					beginDate: beginDate,
+					endDate: endDate,
 					tasks: tasks,
 				})
 			}

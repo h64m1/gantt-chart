@@ -8,11 +8,13 @@
 // }
 
 export type Task = {
-	id: string
-	row: number
-	title: string
-	color: string
-	taskStatus: Array<boolean>
+	id: string // タスクの主キー
+	row: number // 行番号
+	title: string // タスクのタイトル
+	color: string // タスクの色
+	taskStatus: Array<boolean> // TODO: 不要になるまで残す
+	beginDate: string | undefined // タスク開始日: YYYY-MM-DD
+	endDate: string | undefined // タスク完了日: YYYY-MM-DD
 }
 
 export type Tasks = {
@@ -20,7 +22,9 @@ export type Tasks = {
 }
 
 export type State = {
-	yearMonth: string
+	yearMonth: string // 処理年月 TODO: 不要になるまで残す
+	beginDate: string // gantt-chartの表示開始日
+	endDate: string // gantt-chartの表示終了日
 	tasks: Tasks
 }
 
@@ -48,6 +52,8 @@ export const createTask = (row: number, yearMonth: string): Task => {
 		title: '',
 		color: defaultColor(),
 		taskStatus: createEmptyDateArray(),
+		beginDate: undefined,
+		endDate: undefined,
 	}
 }
 
@@ -60,7 +66,9 @@ export const defaultColor = (): string => {
 
 /**
  * tasksの初期化
- * @param yearMonth 処理年月
+ * @param {string} yearMonth 処理年月
+ * @param {string} beginDate 開始日
+ * @param {string} endDate 終了日
  */
 export const createTasks = (yearMonth: string): Tasks => {
 	// 	'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
