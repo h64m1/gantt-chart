@@ -1,13 +1,12 @@
 import React from 'react'
 import * as Day from '../../api/Date/Day'
+import { useTaskState } from '../../context/TaskContext'
 
-type Props = {
-	yearMonth: string
-}
+export const HeadRow: React.FC = React.memo(() => {
+	const state = useTaskState()
 
-export const HeadRow: React.FC<Props> = React.memo(({ yearMonth }) => {
 	console.debug('render HeadRow')
-	const headRows = getDatesInMonth(yearMonth)
+	const headRows = getDatesInMonth(state.yearMonth)
 	return <tr key={0}>{headRows}</tr>
 })
 

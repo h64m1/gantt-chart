@@ -1,18 +1,18 @@
-import React, { Dispatch } from 'react'
+import React from 'react'
 import * as Day from '../../api/Date/Day'
-import { Action } from '../../reducer/Action'
+import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 
-type Props = {
-	value: string
-	dispatch: Dispatch<Action>
-}
+export const Select: React.FC = React.memo(() => {
+	const state = useTaskState()
+	const dispatch = useTaskDispatch()
 
-export const Select: React.FC<Props> = React.memo(({ value, dispatch }) => {
-	console.debug('render Select', value)
+	const yearMonth = state.yearMonth
+
+	console.debug('render Select', yearMonth)
 	const thisYear = Day.DayF(undefined, 'YYYY')
 	return (
 		<select
-			value={value}
+			value={yearMonth}
 			onChange={(e) =>
 				dispatch({
 					type: 'yearMonth',

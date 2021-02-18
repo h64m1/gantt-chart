@@ -1,16 +1,13 @@
 import { Action } from './Action'
 import { State, Tasks, createTask, createTasks, getTaskKey } from './Tasks'
+import * as Day from '../api/Date/Day'
 import * as db from '../db/Database'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
 	switch (action.type) {
 		case 'yearMonth':
-			console.debug('処理年月変更', action.yearMonth)
-			return {
-				...state,
-				yearMonth: action.yearMonth,
-			}
+			return yearMonth(state, action.yearMonth)
 
 		// 初期化
 		case 'init':
@@ -49,6 +46,21 @@ export const reducer = (state: State, action: Action): any => {
 export const initializer = (state: State): any => {
 	console.debug('initializer', state)
 	return init(state.yearMonth, state.endDate, state.endDate, state.tasks)
+}
+
+/**
+ * 処理年月を変更
+ * @param {State} state ステート
+ * @param {string} yearMonth 処理年月
+ */
+const yearMonth = (state: State, yearMonth: string) => {
+	console.debug('処理年月変更', yearMonth)
+	return {
+		...state,
+		beginDate: Day.addF(-1, 'month', yearMonth),
+		endDate: Day.addF(1, 'month', yearMonth),
+		yearMonth: yearMonth,
+	}
 }
 
 /**

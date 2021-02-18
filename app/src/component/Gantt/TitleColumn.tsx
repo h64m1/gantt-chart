@@ -1,29 +1,25 @@
+import 'flatpickr/dist/themes/material_blue.css'
 import React from 'react'
-import { Action } from '../../reducer/Action'
+import FlatPickr from 'react-flatpickr'
+import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { getTaskKey } from '../../reducer/Tasks'
 
-import 'flatpickr/dist/themes/material_blue.css'
-import FlatPickr from 'react-flatpickr'
-
-type Props = {
+export const TitleColumn: React.FC<{
 	row: number
-	yearMonth: string
 	title: string
 	color: string
-	dispatch: React.Dispatch<Action>
-}
-
-export const TitleColumn: React.FC<Props> = React.memo(({ row, yearMonth, title, color, dispatch }) => {
-	console.debug('render TitleColumn', row, yearMonth, title, color)
+}> = React.memo(({ row, title, color }) => {
+	const state = useTaskState()
+	console.debug('render TitleColumn', row, state.yearMonth, title, color)
 
 	const column = 0
-	const id = getTaskKey(row + 1, yearMonth)
+	const id = getTaskKey(row + 1, state.yearMonth)
 
 	return (
 		<>
-			<Title row={row} column={column} title={title} id={id} dispatch={dispatch} />
-			<DatePicker row={row} column={column} date={yearMonth} id={id} dispatch={dispatch} />
-			<ColorPicker row={row} column={column} color={color} id={id} dispatch={dispatch} />
+			<Title row={row} column={column} title={title} id={id} />
+			<DatePicker row={row} column={column} id={id} />
+			<ColorPicker row={row} column={column} color={color} id={id} />
 		</>
 	)
 })
@@ -36,8 +32,9 @@ const Title: React.FC<{
 	column: number
 	title: string
 	id: string
-	dispatch: React.Dispatch<Action>
-}> = ({ row, column, title, id, dispatch }) => {
+}> = ({ row, column, title, id }) => {
+	const dispatch = useTaskDispatch()
+
 	return (
 		<td key={`title-${row}-${column}`} className="gantt-body title">
 			{/* タイトル */}
@@ -65,8 +62,9 @@ const ColorPicker: React.FC<{
 	column: number
 	color: string
 	id: string
-	dispatch: React.Dispatch<Action>
-}> = ({ row, column, color, id, dispatch }) => {
+}> = ({ row, column, color, id }) => {
+	const dispatch = useTaskDispatch()
+
 	return (
 		<td key={`color-picker-${row}-${column}`} className="gantt-body color-picker">
 			{/* タスク用のカラーピッカー */}
@@ -91,10 +89,8 @@ const ColorPicker: React.FC<{
 const DatePicker: React.FC<{
 	row: number
 	column: number
-	date: string
 	id: string
-	dispatch: React.Dispatch<Action>
-}> = ({ row, column, date, id, dispatch }) => {
+}> = ({ row, column, id }) => {
 	return (
 		<td key={`date-${row}-${column}`} className="gantt-body date">
 			{/* タスクの日付 */}
