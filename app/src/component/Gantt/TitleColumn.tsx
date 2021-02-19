@@ -91,12 +91,49 @@ const DatePicker: React.FC<{
 	column: number
 	id: string
 }> = ({ row, column, id }) => {
+	const dispatch = useTaskDispatch()
+
 	return (
 		<td key={`date-${row}-${column}`} className="gantt-body date">
 			{/* タスクの日付 */}
-			<FlatPickr options={{ mode: 'range' }} />
+			<FlatPickr
+				options={{ mode: 'range' }}
+				onChange={(dates, currentDate) => {
+					// currentDate: YYYY-MM-DD to YYYY-MM-DD
+					const beginDate = getBeginDate(currentDate)
+					const endDate = getEndDate(currentDate)
+					dispatch({
+						type: 'taskDate',
+						id: id,
+						beginDate: beginDate,
+						endDate: endDate,
+					})
+				}}
+			/>
 		</td>
 	)
+}
+
+/**
+ * 開始日を出力
+ * @param {string} currentDate FlatPickrの出力日付文字列
+ */
+function getBeginDate(currentDate: string): string {
+	const dates = currentDate.split('to')
+	return dates[0].trim()
+}
+
+/**
+ * 完了日を出力
+ * @param {string} currentDate FlatPickrの出力日付文字列
+ */
+function getEndDate(currentDate: string): string {
+	const dates = currentDate.split('to')
+	if (dates.length < 2) {
+		return dates[0].trim()
+	}
+
+	return dates[1].trim()
 }
 
 TitleColumn.displayName = 'TitleColumn'

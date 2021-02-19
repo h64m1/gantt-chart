@@ -33,6 +33,13 @@ export type Action =
 			column: number
 	  }
 	| {
+			// 特定タスクの開始日と終了日を設定
+			type: 'taskDate'
+			id: string
+			beginDate: string
+			endDate: string
+	  }
+	| {
 			// 行追加
 			type: 'addRow'
 	  }

@@ -19,6 +19,9 @@ const GanttApp: React.FC = () => {
 	)
 }
 
+/**
+ * ナビゲーション
+ */
 const Navigation: React.FC = () => {
 	return (
 		<>
@@ -29,6 +32,9 @@ const Navigation: React.FC = () => {
 	)
 }
 
+/**
+ * ガントチャート本体
+ */
 const Gantt: React.FC = () => {
 	const state = useTaskState()
 	const dispatch = useTaskDispatch()
@@ -50,7 +56,6 @@ const Gantt: React.FC = () => {
 				</thead>
 				<tbody>
 					{Object.values(tasks).map((task, row) => {
-						console.debug('Gantt:', state.yearMonth, row, 'task:', task)
 						return <BodyRow key={`${row}`} row={row} task={task} />
 					})}
 				</tbody>

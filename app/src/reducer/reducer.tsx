@@ -25,6 +25,10 @@ export const reducer = (state: State, action: Action): any => {
 		case 'task':
 			return task(state, action.id, action.column)
 
+		// 当該日のタスク日付変更
+		case 'taskDate':
+			return taskDate(state, action.id, action.beginDate, action.endDate)
+
 		// 行追加と削除
 		case 'addRow':
 			return addRow(state)
@@ -146,6 +150,31 @@ const task = (state: State, id: string, column: number) => {
 			[id]: {
 				...state.tasks[id],
 				taskStatus: taskStatus,
+			},
+		},
+	}
+	db.write(state.yearMonth, newState.tasks)
+
+	return newState
+}
+
+/**
+ * task日付変更
+ * @param {State} state ステート
+ * @param {string} id ID
+ * @param {string} beginDate 開始日
+ * @param {string} endDate 終了日
+ */
+const taskDate = (state: State, id: string, beginDate: string, endDate: string) => {
+	console.debug('タスク日付変更', state, id, beginDate, endDate)
+	const newState = {
+		...state,
+		tasks: {
+			...state.tasks,
+			[id]: {
+				...state.tasks[id],
+				beginDate: beginDate,
+				endDate: endDate,
 			},
 		},
 	}
