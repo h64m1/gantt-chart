@@ -4,7 +4,7 @@ import FlatPickr from 'react-flatpickr'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { getTaskKey } from '../../reducer/Tasks'
 
-export const TitleColumn: React.FC<{
+const TitleColumn: React.FC<{
 	row: number
 	title: string
 	color: string
@@ -100,3 +100,5 @@ const DatePicker: React.FC<{
 }
 
 TitleColumn.displayName = 'TitleColumn'
+
+export { TitleColumn }

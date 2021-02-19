@@ -6,13 +6,15 @@ import { BodyRow } from './BodyRow'
 import './Gantt.scss'
 import { HeadRow } from './HeadRow'
 
-export const GanttApp: React.FC = () => {
+const GanttApp: React.FC = () => {
 	return (
 		<>
 			<nav id="navigation">
 				<Navigation />
 			</nav>
-			<article id="gantt-main">{<Gantt />}</article>
+			<article id="gantt-main">
+				<Gantt />
+			</article>
 		</>
 	)
 }

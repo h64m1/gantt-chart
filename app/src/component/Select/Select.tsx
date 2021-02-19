@@ -2,7 +2,7 @@ import React from 'react'
 import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 
-export const Select: React.FC = React.memo(() => {
+const Select: React.FC = React.memo(() => {
 	const state = useTaskState()
 	const dispatch = useTaskDispatch()
 
@@ -50,3 +50,5 @@ function getMonthOptions(thisYear: string): Array<JSX.Element> {
 		)
 	})
 }
+
+export { Select }

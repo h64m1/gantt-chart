@@ -7,7 +7,7 @@ import * as db from '../../db/Database'
 /**
  * データのエクスポート
  */
-export const ExportButton: React.FC = () => {
+const ExportButton: React.FC = () => {
 	return (
 		<div className="export">
 			<span
@@ -32,7 +32,7 @@ export const ExportButton: React.FC = () => {
 /**
  * データのインポート
  */
-export const ImportButton: React.FC = () => {
+const ImportButton: React.FC = () => {
 	const dispatch = useTaskDispatch()
 
 	return (
@@ -60,3 +60,5 @@ export const ImportButton: React.FC = () => {
 		</div>
 	)
 }
+
+export { ExportButton, ImportButton }

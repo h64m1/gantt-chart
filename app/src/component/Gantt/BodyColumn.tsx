@@ -3,7 +3,7 @@ import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { getTaskKey } from '../../reducer/Tasks'
 
 // ガントチャート本体の列を描画
-export const BodyColumn: React.FC<{
+const BodyColumn: React.FC<{
 	row: number
 	column: number
 	taskStatusList: Array<boolean>
@@ -46,3 +46,5 @@ const hasTask = (column: number, taskStatusList: Array<boolean>): boolean => {
 	const taskFound = taskStatusList.find((_, i) => i === column)
 	return taskFound === undefined ? false : taskFound
 }
+
+export { BodyColumn }

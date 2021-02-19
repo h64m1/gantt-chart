@@ -5,16 +5,12 @@ type Day = Dayjs
 
 const _defaultFormat: DEFAULT_FORMAT = 'YYYY-MM-DD'
 
-export function DefaultFormat(): DEFAULT_FORMAT {
-	return _defaultFormat
-}
-
 /**
  * 指定された日付を含む、一ヶ月分の日付文字列を配列で取得
  * @param {string} date 日付文字列
  * @param {string} format 日付のフォーマット
  */
-export function Days(date: string, format?: string): Array<string> {
+function Days(date: string, format?: string): Array<string> {
 	// 配列:当該月の日付分
 	const daysInNumber = [...Array(dayjs(date).daysInMonth())].map((_, i) => i)
 	// 月初日
@@ -28,7 +24,7 @@ export function Days(date: string, format?: string): Array<string> {
  * @param {string} date 日付
  * @return {Day} 日付文字列
  */
-export function Day(date?: string): Day {
+function Day(date?: string): Day {
 	// dateがnull or undefinedの場合、現在時刻を返す
 	if (date === null || date === undefined) {
 		return dayjs()
@@ -42,7 +38,7 @@ export function Day(date?: string): Day {
  * @param {string} format フォーマット
  * @return {string} 日付文字列
  */
-export function DayF(date?: string, format?: string): string {
+function DayF(date?: string, format?: string): string {
 	return Day(date).format(getFormat(format))
 }
 
@@ -53,7 +49,7 @@ export function DayF(date?: string, format?: string): string {
  * @param {string} format フォーマット
  * @return {string} 日付文字列
  */
-export function startOfF(unit?: OpUnitType, date?: string, format?: string): string {
+function startOfF(unit?: OpUnitType, date?: string, format?: string): string {
 	if (unit === null || unit === undefined) {
 		return DayF(date, format)
 	}
@@ -69,7 +65,7 @@ export function startOfF(unit?: OpUnitType, date?: string, format?: string): str
  * @param {string} format フォーマット
  * @return {string} 日付文字列
  */
-export function addF(amount?: number, unit?: OpUnitType, date?: string, format?: string): string {
+function addF(amount?: number, unit?: OpUnitType, date?: string, format?: string): string {
 	if (amount === null || amount === undefined || unit === null || unit === undefined) {
 		return DayF(date, format)
 	}
@@ -89,3 +85,5 @@ function getFormat(format?: string): string {
 
 	return format || _defaultFormat
 }
+
+export { Days, DayF, startOfF, addF }

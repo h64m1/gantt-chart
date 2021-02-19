@@ -6,7 +6,7 @@ import { BodyColumn } from './BodyColumn'
 import { TitleColumn } from './TitleColumn'
 
 // ガントチャート本体の行全体を描画
-export const BodyRow: React.FC<{
+const BodyRow: React.FC<{
 	row: number
 	task: Task
 }> = React.memo(({ row, task }) => {
@@ -37,3 +37,5 @@ export const BodyRow: React.FC<{
 })
 
 BodyRow.displayName = 'BodyRow'
+
+export { BodyRow }

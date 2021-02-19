@@ -2,7 +2,7 @@ import React from 'react'
 import * as Day from '../../api/Date/Day'
 import { useTaskState } from '../../context/TaskContext'
 
-export const HeadRow: React.FC = React.memo(() => {
+const HeadRow: React.FC = React.memo(() => {
 	const state = useTaskState()
 
 	console.debug('render HeadRow')
@@ -64,3 +64,5 @@ function getDayOfWeek(date: string): string {
 function getDayOfWeekString(date: string, dayOfWeek: string): string {
 	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
+
+export { HeadRow }
