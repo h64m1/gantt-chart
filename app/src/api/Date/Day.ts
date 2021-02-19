@@ -20,6 +20,40 @@ function Days(date: string, format?: string): Array<string> {
 }
 
 /**
+ * 指定された日付範囲の日付文字列を配列で取得
+ * @param {string} begin 開始日付文字列
+ * @param {string} end 完了日付文字列
+ * @param {string} format 日付のフォーマット
+ */
+function DaysFromTo(begin: string, end: string, format?: string): Array<string> {
+	const _begin = Day(begin)
+	const _end = Day(end)
+	const isSameMonth = _begin.isSame(end, 'month')
+	const beginMonth = Array(_begin.daysInMonth())
+
+	// 配列:開始日と完了日を含む月の全日数
+	const ids = isSameMonth
+		? [...beginMonth].map((_, i) => i)
+		: [...beginMonth, ...Array(_end.daysInMonth())].map((_, i) => i)
+
+	// 月初日
+	const firstDate = _begin.startOf('month')
+
+	// 日付文字列の配列
+	const dates = []
+	for (const id of ids) {
+		const date = firstDate.add(id, 'day')
+		const isBegin = date.isSame(begin) || date.isAfter(begin)
+		const isEnd = date.isSame(end) || date.isBefore(end)
+		if (isBegin && isEnd) {
+			dates.push(date.format(getFormat(format)))
+		}
+	}
+
+	return dates
+}
+
+/**
  * 日付を取得: Day
  * @param {string} date 日付
  * @return {Day} 日付文字列
@@ -86,4 +120,4 @@ function getFormat(format?: string): string {
 	return format || _defaultFormat
 }
 
-export { Days, DayF, startOfF, addF }
+export { Days, DaysFromTo, DayF, startOfF, addF }

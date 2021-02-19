@@ -15,8 +15,8 @@ const BodyRow: React.FC<{
 
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
 
-	// 一ヶ月分の日付
-	const dates = Day.Days(state.yearMonth, 'DD (ddd)')
+	// 開始日から完了日まで
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
 
 	return (
 		<tr key={row}>

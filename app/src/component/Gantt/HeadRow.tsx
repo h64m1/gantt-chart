@@ -3,22 +3,23 @@ import * as Day from '../../api/Date/Day'
 import { useTaskState } from '../../context/TaskContext'
 
 const HeadRow: React.FC = React.memo(() => {
-	const state = useTaskState()
-
 	console.debug('render HeadRow')
-	const headRows = getDatesInMonth(state.yearMonth)
+	const headRows = getHeadRowContents()
 	return <tr key={0}>{headRows}</tr>
 })
 
 HeadRow.displayName = 'HeadRow'
 
 /**
- * 1ヶ月分の日付を<td>の配列で取得
- * @param yearMonth 処理年月
+ * 開始日から完了日までの日付を<td>の配列で取得
  */
-function getDatesInMonth(yearMonth: string): Array<JSX.Element> {
-	// 一ヶ月分の日付
-	const dates = Day.Days(yearMonth, 'DD (ddd)')
+function getHeadRowContents(): Array<JSX.Element> {
+	const state = useTaskState()
+
+	// 開始日から完了日まで
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
+	console.debug('  HeadRow: 開始日-完了日', dates)
+
 	// タイトル用の要素を追加
 	dates.unshift('')
 	// 開始日と終了日の要素を追加

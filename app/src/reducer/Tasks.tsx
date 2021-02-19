@@ -7,7 +7,7 @@
 // 	 }
 // }
 
-export type Task = {
+type Task = {
 	id: string // タスクの主キー
 	row: number // 行番号
 	title: string // タスクのタイトル
@@ -17,11 +17,11 @@ export type Task = {
 	endDate: string | undefined // タスク完了日: YYYY-MM-DD
 }
 
-export type Tasks = {
+type Tasks = {
 	[id: string]: Task
 }
 
-export type State = {
+type State = {
 	yearMonth: string // 処理年月 TODO: 不要になるまで残す
 	beginDate: string // gantt-chartの表示開始日
 	endDate: string // gantt-chartの表示終了日
@@ -31,19 +31,25 @@ export type State = {
 /**
  * 31日分の要素を持つ配列を取得
  */
-export const createEmptyDateArray = (): Array<boolean> => {
+const createEmptyDateArray = (): Array<boolean> => {
 	return Array(31).fill(false)
 }
 
 /**
  * Taskのidを取得
- * @param id ID
+ * @param {number} id ID
+ * @param {string} yearMonth 処理年月
  */
-export const getTaskKey = (id: number, yearMonth: string): string => {
+const getTaskKey = (id: number, yearMonth: string): string => {
 	return `task-${yearMonth}-${id}`
 }
 
-export const createTask = (row: number, yearMonth: string): Task => {
+/**
+ * tasksの初期化
+ * @param {number} row 行番号
+ * @param {string} yearMonth 処理年月
+ */
+const createTask = (row: number, yearMonth: string): Task => {
 	// 	{ id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
 	const key = getTaskKey(row + 1, yearMonth)
 	return {
@@ -60,17 +66,15 @@ export const createTask = (row: number, yearMonth: string): Task => {
 /**
  * カラーピッカーのデフォルト色を取得
  */
-export const defaultColor = (): string => {
+const defaultColor = (): string => {
 	return '#ffff00'
 }
 
 /**
  * tasksの初期化
  * @param {string} yearMonth 処理年月
- * @param {string} beginDate 開始日
- * @param {string} endDate 終了日
  */
-export const createTasks = (yearMonth: string): Tasks => {
+const createTasks = (yearMonth: string): Tasks => {
 	// 	'task1': { id: 'task1', row: 0, title: 'タイトル1', taskStatus: [false,false]}
 	const row = 0
 	const key = getTaskKey(row + 1, yearMonth)
@@ -78,3 +82,6 @@ export const createTasks = (yearMonth: string): Tasks => {
 	tasks[key] = createTask(row, yearMonth)
 	return tasks
 }
+
+export type { Task, Tasks, State }
+export { createEmptyDateArray, getTaskKey, createTask, createTasks }
