@@ -49,7 +49,7 @@ export const reducer = (state: State, action: Action): any => {
 // eslint-disable-next-line
 export const initializer = (state: State): any => {
 	console.debug('initializer', state)
-	return init(state.yearMonth, state.endDate, state.endDate, state.tasks)
+	return init(state.yearMonth, state.beginDate, state.endDate, state.tasks)
 }
 
 /**

@@ -18,7 +18,7 @@ function getHeadRowContents(): Array<JSX.Element> {
 
 	// 開始日から完了日まで
 	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
-	console.debug('  HeadRow: 開始日-完了日', dates)
+	console.debug('  HeadRow: 開始日-完了日', state.yearMonth, state.beginDate, state.endDate, '日付配列', dates)
 
 	// タイトル用の要素を追加
 	dates.unshift('')

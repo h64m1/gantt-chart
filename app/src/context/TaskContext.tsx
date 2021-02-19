@@ -51,8 +51,8 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 				dispatch({
 					type: 'init',
 					yearMonth: state.yearMonth,
-					beginDate: beginDate,
-					endDate: endDate,
+					beginDate: state.beginDate,
+					endDate: state.endDate,
 					tasks: tasks,
 				})
 			}
@@ -61,7 +61,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		return () => {
 			didRead = true
 		}
-	}, [state.yearMonth])
+	}, [state.beginDate, state.endDate])
 
 	return (
 		<TaskStateContext.Provider value={state}>
