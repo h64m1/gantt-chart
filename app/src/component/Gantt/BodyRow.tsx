@@ -1,40 +1,34 @@
-import React, { Dispatch } from 'react'
-
-import { Days } from '../../api/Date/Day'
-import { Action } from '../../reducer/Action'
+import React from 'react'
+import * as Day from '../../api/Date/Day'
+import { useTaskState } from '../../context/TaskContext'
 import { Task } from '../../reducer/Tasks'
 import { BodyColumn } from './BodyColumn'
 import { TitleColumn } from './TitleColumn'
 
-type Props = {
-	row: number
-	yearMonth: string
-	task: Task
-	dispatch: Dispatch<Action>
-}
-
 // ガントチャート本体の行全体を描画
-export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, dispatch }) => {
-	console.debug('render BodyRow', row, yearMonth, task)
+const BodyRow: React.FC<{
+	row: number
+	task: Task
+}> = React.memo(({ row, task }) => {
+	const state = useTaskState()
+	console.debug('render BodyRow', row, state.yearMonth, task)
 
 	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
 
-	// 一ヶ月分の日付
-	const dates = Days(yearMonth, { format: 'DD (ddd)' })
+	// 開始日から完了日まで
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
 
 	return (
 		<tr key={row}>
-			<TitleColumn row={row} yearMonth={yearMonth} title={task.title} color={task.color} dispatch={dispatch} />
+			<TitleColumn row={row} title={task.title} color={task.color} />
 			{dates.map((_, column) => {
 				return (
 					<BodyColumn
 						key={`body-${row}-${column}`}
 						row={row}
 						column={column}
-						yearMonth={yearMonth}
 						taskStatusList={taskStatus}
 						color={task.color}
-						dispatch={dispatch}
 					/>
 				)
 			})}
@@ -43,3 +37,5 @@ export const BodyRow: React.FC<Props> = React.memo(({ row, yearMonth, task, disp
 })
 
 BodyRow.displayName = 'BodyRow'
+
+export { BodyRow }

@@ -1,14 +1,13 @@
-import React from 'react'
-import { Action } from '../../reducer/Action'
-import * as db from '../../db/Database'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileExport } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react'
+import { useTaskDispatch } from '../../context/TaskContext'
+import * as db from '../../db/Database'
 
 /**
  * データのエクスポート
  */
-export const ExportButton: React.FC = () => {
+const ExportButton: React.FC = () => {
 	return (
 		<div className="export">
 			<span
@@ -33,9 +32,9 @@ export const ExportButton: React.FC = () => {
 /**
  * データのインポート
  */
-export const ImportButton: React.FC<{
-	dispatch: React.Dispatch<Action>
-}> = ({ dispatch }) => {
+const ImportButton: React.FC = () => {
+	const dispatch = useTaskDispatch()
+
 	return (
 		<div className="import">
 			<span
@@ -61,3 +60,5 @@ export const ImportButton: React.FC<{
 		</div>
 	)
 }
+
+export { ExportButton, ImportButton }

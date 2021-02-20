@@ -1,44 +1,45 @@
 import React from 'react'
-import { Action } from '../../reducer/Action'
-import { Tasks } from '../../reducer/Tasks'
-import { Select } from '../Select/Select'
-import { HeadRow } from './HeadRow'
-import { BodyRow } from './BodyRow'
+import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { ExportButton, ImportButton } from '../Button/Button'
-
+import { Select } from '../Select/Select'
+import { BodyRow } from './BodyRow'
 import './Gantt.scss'
+import { HeadRow } from './HeadRow'
 
-type Props = {
-	yearMonth: string
-	tasks: Tasks
-	dispatch: React.Dispatch<Action>
-}
-
-export const GanttApp: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
+const GanttApp: React.FC = () => {
 	return (
 		<>
 			<nav id="navigation">
-				<Navigation yearMonth={yearMonth} dispatch={dispatch} />
+				<Navigation />
 			</nav>
-			<article id="gantt-main">{<Gantt yearMonth={yearMonth} tasks={tasks} dispatch={dispatch} />}</article>
+			<article id="gantt-main">
+				<Gantt />
+			</article>
 		</>
 	)
 }
 
-const Navigation: React.FC<{
-	yearMonth: string
-	dispatch: React.Dispatch<Action>
-}> = ({ yearMonth, dispatch }) => {
+/**
+ * ナビゲーション
+ */
+const Navigation: React.FC = () => {
 	return (
 		<>
-			<Select value={yearMonth} dispatch={dispatch} />
+			<Select />
 			<ExportButton />
-			<ImportButton dispatch={dispatch} />
+			<ImportButton />
 		</>
 	)
 }
 
-const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
+/**
+ * ガントチャート本体
+ */
+const Gantt: React.FC = () => {
+	const state = useTaskState()
+	const dispatch = useTaskDispatch()
+
+	const tasks = state.tasks
 	const maxRow = Object.values(tasks).length
 	console.debug('render Gantt', maxRow, 'tasks:', tasks)
 	return (
@@ -51,14 +52,11 @@ const Gantt: React.FC<Props> = ({ yearMonth, tasks, dispatch }) => {
 			{/* ガントチャートのボディ部分 */}
 			<table>
 				<thead>
-					<HeadRow yearMonth={yearMonth} />
+					<HeadRow />
 				</thead>
 				<tbody>
 					{Object.values(tasks).map((task, row) => {
-						console.debug('Gantt:', yearMonth, row, 'task:', task)
-						return (
-							<BodyRow key={`${row}`} row={row} yearMonth={yearMonth} task={task} dispatch={dispatch} />
-						)
+						return <BodyRow key={`${row}`} row={row} task={task} />
 					})}
 				</tbody>
 				<tfoot></tfoot>

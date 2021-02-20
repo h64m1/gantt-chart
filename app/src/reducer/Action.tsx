@@ -10,6 +10,8 @@ export type Action =
 			// 初期化
 			type: 'init'
 			yearMonth: string
+			beginDate: string
+			endDate: string
 			tasks: Tasks
 	  }
 	| {
@@ -29,6 +31,13 @@ export type Action =
 			type: 'task'
 			id: string
 			column: number
+	  }
+	| {
+			// 特定タスクの開始日と終了日を設定
+			type: 'taskDate'
+			id: string
+			beginDate: string
+			endDate: string
 	  }
 	| {
 			// 行追加

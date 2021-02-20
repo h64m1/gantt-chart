@@ -1,26 +1,28 @@
 import React from 'react'
-import { Days } from '../../api/Date/Day'
+import * as Day from '../../api/Date/Day'
+import { useTaskState } from '../../context/TaskContext'
 
-type Props = {
-	yearMonth: string
-}
-
-export const HeadRow: React.FC<Props> = React.memo(({ yearMonth }) => {
+const HeadRow: React.FC = React.memo(() => {
 	console.debug('render HeadRow')
-	const headRows = getDatesInMonth(yearMonth)
+	const headRows = getHeadRowContents()
 	return <tr key={0}>{headRows}</tr>
 })
 
 HeadRow.displayName = 'HeadRow'
 
 /**
- * 1ヶ月分の日付を<td>の配列で取得
- * @param yearMonth 処理年月
+ * 開始日から完了日までの日付を<td>の配列で取得
  */
-function getDatesInMonth(yearMonth: string): Array<JSX.Element> {
-	// 一ヶ月分の日付
-	const dates = Days(yearMonth, { format: 'DD (ddd)' })
+function getHeadRowContents(): Array<JSX.Element> {
+	const state = useTaskState()
+
+	// 開始日から完了日まで
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
+	console.debug('  HeadRow: 開始日-完了日', state.yearMonth, state.beginDate, state.endDate, '日付配列', dates)
+
 	// タイトル用の要素を追加
+	dates.unshift('')
+	// 開始日と終了日の要素を追加
 	dates.unshift('')
 	// カラーピッカー用の要素追加
 	dates.unshift('')
@@ -63,3 +65,5 @@ function getDayOfWeek(date: string): string {
 function getDayOfWeekString(date: string, dayOfWeek: string): string {
 	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
+
+export { HeadRow }
