@@ -120,4 +120,4 @@ function getFormat(format?: string): string {
 	return format || _defaultFormat
 }
 
-export { Days, DaysFromTo, DayF, startOfF, addF }
+export { Days, DaysFromTo, Day, DayF, startOfF, addF }

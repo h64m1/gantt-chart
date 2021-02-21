@@ -2,7 +2,7 @@ import 'flatpickr/dist/themes/material_blue.css'
 import React from 'react'
 import FlatPickr from 'react-flatpickr'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
-import { getTaskKey } from '../../reducer/Tasks'
+import { getTaskKey, Task } from '../../reducer/Tasks'
 
 const TitleColumn: React.FC<{
 	row: number
@@ -13,7 +13,7 @@ const TitleColumn: React.FC<{
 	console.debug('render TitleColumn', row, state.yearMonth, title, color)
 
 	const column = 0
-	const id = getTaskKey(row + 1, state.yearMonth)
+	const id = getTaskKey(row, state.yearMonth)
 
 	return (
 		<>
@@ -91,13 +91,17 @@ const DatePicker: React.FC<{
 	column: number
 	id: string
 }> = ({ row, column, id }) => {
+	const state = useTaskState()
 	const dispatch = useTaskDispatch()
+
+	const date = getDate(state.tasks[id])
 
 	return (
 		<td key={`date-${row}-${column}`} className="gantt-body date">
 			{/* タスクの日付 */}
 			<FlatPickr
 				options={{ mode: 'range' }}
+				value={date}
 				onChange={(dates, currentDate) => {
 					// currentDate: YYYY-MM-DD to YYYY-MM-DD
 					const beginDate = getBeginDate(currentDate)
@@ -112,6 +116,24 @@ const DatePicker: React.FC<{
 			/>
 		</td>
 	)
+}
+
+/**
+ * datepicker用のdate
+ * @param {Task} task タスク
+ */
+function getDate(task: Task): string {
+	if (task === undefined) {
+		return ''
+	}
+
+	const beginDate = task.beginDate
+	const endDate = task.endDate
+	if (beginDate === undefined || endDate === undefined) {
+		return ''
+	}
+
+	return `${task.beginDate} to ${task.endDate}`
 }
 
 /**

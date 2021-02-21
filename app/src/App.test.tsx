@@ -21,7 +21,6 @@ describe('Test IndexedDB', () => {
 						id: '0',
 						row: 0,
 						title: 'タイトル',
-						taskStatus: [false, false, true],
 					},
 				},
 			}

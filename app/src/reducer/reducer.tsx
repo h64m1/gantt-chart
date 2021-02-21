@@ -141,15 +141,12 @@ const color = (state: State, id: string, color: string) => {
 const task = (state: State, id: string, column: number) => {
 	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
-	const taskStatus = [...state.tasks[id].taskStatus]
-	taskStatus[column] = !taskStatus[column]
 	const newState = {
 		...state,
 		tasks: {
 			...state.tasks,
 			[id]: {
 				...state.tasks[id],
-				taskStatus: taskStatus,
 			},
 		},
 	}
@@ -195,7 +192,7 @@ const addRow = (state: State) => {
 	const tasks = { ...state.tasks }
 	const length = Object.values(tasks).length
 
-	const key = getTaskKey(length + 1, state.yearMonth)
+	const key = getTaskKey(length, state.yearMonth)
 	const newState = {
 		...state,
 		tasks: {
@@ -222,7 +219,7 @@ const deleteRow = (state: State) => {
 
 	if (length > 1) {
 		// 要素が1つの場合は削除しない
-		const key = getTaskKey(length, state.yearMonth)
+		const key = getTaskKey(length - 1, state.yearMonth)
 		delete tasks[key]
 	}
 
