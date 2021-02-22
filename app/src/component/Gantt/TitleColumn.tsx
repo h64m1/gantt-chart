@@ -1,8 +1,8 @@
 import 'flatpickr/dist/themes/material_blue.css'
 import React from 'react'
-import FlatPickr from 'react-flatpickr'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
-import { getTaskKey, Task } from '../../reducer/Tasks'
+import { getTaskKey } from '../../reducer/Tasks'
+import { DatePicker } from '../Picker/DatePicker'
 
 const TitleColumn: React.FC<{
 	row: number
@@ -14,11 +14,13 @@ const TitleColumn: React.FC<{
 
 	const column = 0
 	const id = getTaskKey(row, state.yearMonth)
+	const task = state.tasks[id]
 
 	return (
 		<>
 			<Title row={row} column={column} title={title} id={id} />
-			<DatePicker row={row} column={column} id={id} />
+			<DatePicker row={row} column={column} id={id} name={'beginDate'} date={task.beginDate} />
+			<DatePicker row={row} column={column} id={id} name={'endDate'} date={task.endDate} />
 			<ColorPicker row={row} column={column} color={color} id={id} />
 		</>
 	)
@@ -81,81 +83,6 @@ const ColorPicker: React.FC<{
 			/>
 		</td>
 	)
-}
-
-/**
- * 開始日/終了日
- */
-const DatePicker: React.FC<{
-	row: number
-	column: number
-	id: string
-}> = ({ row, column, id }) => {
-	const state = useTaskState()
-	const dispatch = useTaskDispatch()
-
-	const date = getDate(state.tasks[id])
-
-	return (
-		<td key={`date-${row}-${column}`} className="gantt-body date">
-			{/* タスクの日付 */}
-			<FlatPickr
-				options={{ mode: 'range' }}
-				value={date}
-				onChange={(dates, currentDate) => {
-					// currentDate: YYYY-MM-DD to YYYY-MM-DD
-					const beginDate = getBeginDate(currentDate)
-					const endDate = getEndDate(currentDate)
-					dispatch({
-						type: 'taskDate',
-						id: id,
-						beginDate: beginDate,
-						endDate: endDate,
-					})
-				}}
-			/>
-		</td>
-	)
-}
-
-/**
- * datepicker用のdate
- * @param {Task} task タスク
- */
-function getDate(task: Task): string {
-	if (task === undefined) {
-		return ''
-	}
-
-	const beginDate = task.beginDate
-	const endDate = task.endDate
-	if (beginDate === undefined || endDate === undefined) {
-		return ''
-	}
-
-	return `${task.beginDate} to ${task.endDate}`
-}
-
-/**
- * 開始日を出力
- * @param {string} currentDate FlatPickrの出力日付文字列
- */
-function getBeginDate(currentDate: string): string {
-	const dates = currentDate.split('to')
-	return dates[0].trim()
-}
-
-/**
- * 完了日を出力
- * @param {string} currentDate FlatPickrの出力日付文字列
- */
-function getEndDate(currentDate: string): string {
-	const dates = currentDate.split('to')
-	if (dates.length < 2) {
-		return dates[0].trim()
-	}
-
-	return dates[1].trim()
 }
 
 TitleColumn.displayName = 'TitleColumn'

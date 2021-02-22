@@ -7,6 +7,8 @@
 // 	 }
 // }
 
+type TaskDate = 'beginDate' | 'endDate'
+
 type Task = {
 	id: string // タスクの主キー
 	row: number // 行番号
@@ -73,5 +75,5 @@ const createTasks = (yearMonth: string): Tasks => {
 	return tasks
 }
 
-export type { Task, Tasks, State }
+export type { TaskDate, Task, Tasks, State }
 export { getTaskKey, createTask, createTasks }

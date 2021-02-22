@@ -24,6 +24,7 @@ function getHeadRowContents(): Array<JSX.Element> {
 	dates.unshift('')
 	// 開始日と終了日の要素を追加
 	dates.unshift('')
+	dates.unshift('')
 	// カラーピッカー用の要素追加
 	dates.unshift('')
 
