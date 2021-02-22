@@ -18,7 +18,7 @@ const DatePicker: React.FC<{
 }> = ({ row, column, id, name, date }) => {
 	return (
 		<td key={`date-${row}-${column}`} className="gantt-body date">
-			{date === undefined ? <div>{'Loading ...'}</div> : <DateComponent id={id} name={name} date={date} />}
+			<DateComponent id={id} name={name} date={date} />
 		</td>
 	)
 }
@@ -29,11 +29,11 @@ const DatePicker: React.FC<{
 const DateComponent: React.FC<{
 	id: string
 	name: TaskDate
-	date: string
+	date: string | undefined
 }> = ({ id, name, date }) => {
 	const dispatch = useTaskDispatch()
 	console.debug('DatePicker: date', name, date)
-	const _date = new Date(date)
+	const _date = date === undefined ? date : new Date(date)
 
 	return (
 		<ReactDatePicker
