@@ -37,7 +37,7 @@ const DateComponent: React.FC<{
 
 	return (
 		<ReactDatePicker
-			className="datepicker"
+			className="task-datepicker"
 			dateFormat="yyyy/MM/dd"
 			selected={_date}
 			onChange={(date) => {

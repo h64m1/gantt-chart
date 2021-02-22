@@ -2,9 +2,14 @@ import { Tasks } from './Tasks'
 
 export type Action =
 	| {
-			// 処理年月の変更
-			type: 'yearMonth'
-			yearMonth: string
+			// カレンダー開始日を設定
+			type: 'beginDate'
+			date: string
+	  }
+	| {
+			// カレンダー終了日を設定
+			type: 'endDate'
+			date: string
 	  }
 	| {
 			// 初期化
@@ -34,13 +39,13 @@ export type Action =
 	  }
 	| {
 			// 特定タスクの開始日を設定
-			type: 'beginDate'
+			type: 'taskBeginDate'
 			id: string
 			date: string
 	  }
 	| {
 			// 特定タスクの完了日を設定
-			type: 'endDate'
+			type: 'taskEndDate'
 			id: string
 			date: string
 	  }

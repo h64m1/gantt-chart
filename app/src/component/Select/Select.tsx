@@ -1,54 +1,50 @@
 import React from 'react'
+import ReactDatePicker from 'react-datepicker'
 import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
+import './select.scss'
+
+type SearchDate = 'beginDate' | 'endDate'
 
 const Select: React.FC = React.memo(() => {
 	const state = useTaskState()
-	const dispatch = useTaskDispatch()
 
-	const yearMonth = state.yearMonth
-
-	console.debug('render Select', yearMonth)
-	const thisYear = Day.DayF(undefined, 'YYYY')
+	console.debug('render Select: ', state.beginDate, state.endDate)
 	return (
-		<select
-			value={yearMonth}
-			onChange={(e) =>
-				dispatch({
-					type: 'yearMonth',
-					yearMonth: e.target.value,
-				})
-			}
-		>
-			{getMonthOptions(thisYear)}
-		</select>
+		<div id="select-parent">
+			<DPicker name={'beginDate'} date={state.beginDate} />
+			<DPicker name={'endDate'} date={state.endDate} />
+		</div>
 	)
 })
 
-Select.displayName = 'Select'
+const DPicker: React.FC<{
+	name: SearchDate
+	date?: string | undefined
+}> = ({ name, date }) => {
+	const dispatch = useTaskDispatch()
+	const _date = date === undefined ? date : new Date(date)
 
-/**
- * 処理年月selecterのoptionを取得
- * @param props オプション
- */
-function getMonthOptions(thisYear: string): Array<JSX.Element> {
-	// 処理月
-	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	const yearMonths: Array<string> = []
-	months.forEach((value) => {
-		const month = `${value}`
-		const yearMonth = `${thisYear}-${month.padStart(2, `0`)}-01`
-		yearMonths.push(yearMonth)
-	})
+	return (
+		<ReactDatePicker
+			className="search-datepicker"
+			dateFormat="yyyy/MM/dd"
+			selected={_date}
+			onChange={(date) => {
+				// date: Date | [Date, Date] | null
+				if (date instanceof Array || date === null) {
+					return
+				}
 
-	return yearMonths.map((v, i) => {
-		const label = Day.DayF(v, 'YYYY/MM')
-		return (
-			<option key={`${i}`} value={`${v}`} label={label}>
-				{v}
-			</option>
-		)
-	})
+				return dispatch({
+					type: name,
+					date: Day.convertDateToString(date),
+				})
+			}}
+		/>
+	)
 }
+
+Select.displayName = 'Select'
 
 export { Select }
