@@ -120,4 +120,12 @@ function getFormat(format?: string): string {
 	return format || _defaultFormat
 }
 
-export { Days, DaysFromTo, DayF, startOfF, addF }
+/**
+ * Dateオブジェクトを、'YYYY-MM-DD'文字列に変換
+ * @param {Date} date 日付
+ */
+function convertDateToString(date: Date): string {
+	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+}
+
+export { Days, DaysFromTo, Day, DayF, startOfF, addF, convertDateToString }

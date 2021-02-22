@@ -25,9 +25,13 @@ export const reducer = (state: State, action: Action): any => {
 		case 'task':
 			return task(state, action.id, action.column)
 
-		// 当該日のタスク日付変更
-		case 'taskDate':
-			return taskDate(state, action.id, action.beginDate, action.endDate)
+		// タスク開始日変更
+		case 'beginDate':
+			return beginDate(state, action.id, action.date)
+
+		// タスク完了日変更
+		case 'endDate':
+			return endDate(state, action.id, action.date)
 
 		// 行追加と削除
 		case 'addRow':
@@ -141,15 +145,12 @@ const color = (state: State, id: string, color: string) => {
 const task = (state: State, id: string, column: number) => {
 	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
-	const taskStatus = [...state.tasks[id].taskStatus]
-	taskStatus[column] = !taskStatus[column]
 	const newState = {
 		...state,
 		tasks: {
 			...state.tasks,
 			[id]: {
 				...state.tasks[id],
-				taskStatus: taskStatus,
 			},
 		},
 	}
@@ -159,22 +160,43 @@ const task = (state: State, id: string, column: number) => {
 }
 
 /**
- * task日付変更
+ * タスク開始日変更
  * @param {State} state ステート
  * @param {string} id ID
- * @param {string} beginDate 開始日
- * @param {string} endDate 終了日
+ * @param {string} date 開始日
  */
-const taskDate = (state: State, id: string, beginDate: string, endDate: string) => {
-	console.debug('タスク日付変更', state, id, beginDate, endDate)
+const beginDate = (state: State, id: string, date: string) => {
+	console.debug('タスク開始日変更', state, id, date)
 	const newState = {
 		...state,
 		tasks: {
 			...state.tasks,
 			[id]: {
 				...state.tasks[id],
-				beginDate: beginDate,
-				endDate: endDate,
+				beginDate: date,
+			},
+		},
+	}
+	db.write(state.yearMonth, newState.tasks)
+
+	return newState
+}
+
+/**
+ * タスク完了日変更
+ * @param {State} state ステート
+ * @param {string} id ID
+ * @param {string} date 完了日
+ */
+const endDate = (state: State, id: string, date: string) => {
+	console.debug('タスク開始日変更', state, id, date)
+	const newState = {
+		...state,
+		tasks: {
+			...state.tasks,
+			[id]: {
+				...state.tasks[id],
+				endDate: date,
 			},
 		},
 	}
@@ -195,7 +217,7 @@ const addRow = (state: State) => {
 	const tasks = { ...state.tasks }
 	const length = Object.values(tasks).length
 
-	const key = getTaskKey(length + 1, state.yearMonth)
+	const key = getTaskKey(length, state.yearMonth)
 	const newState = {
 		...state,
 		tasks: {
@@ -222,7 +244,7 @@ const deleteRow = (state: State) => {
 
 	if (length > 1) {
 		// 要素が1つの場合は削除しない
-		const key = getTaskKey(length, state.yearMonth)
+		const key = getTaskKey(length - 1, state.yearMonth)
 		delete tasks[key]
 	}
 

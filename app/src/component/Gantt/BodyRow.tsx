@@ -13,8 +13,6 @@ const BodyRow: React.FC<{
 	const state = useTaskState()
 	console.debug('render BodyRow', row, state.yearMonth, task)
 
-	const taskStatus = task.taskStatus === undefined ? [] : task.taskStatus
-
 	// 開始日から完了日まで
 	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
 
@@ -22,14 +20,9 @@ const BodyRow: React.FC<{
 		<tr key={row}>
 			<TitleColumn row={row} title={task.title} color={task.color} />
 			{dates.map((_, column) => {
+				const day = Day.addF(column, 'day', state.beginDate)
 				return (
-					<BodyColumn
-						key={`body-${row}-${column}`}
-						row={row}
-						column={column}
-						taskStatusList={taskStatus}
-						color={task.color}
-					/>
+					<BodyColumn key={`body-${row}-${column}`} row={row} column={column} day={day} color={task.color} />
 				)
 			})}
 		</tr>
