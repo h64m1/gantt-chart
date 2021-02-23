@@ -8,6 +8,7 @@
 // }
 
 type TaskDate = 'taskBeginDate' | 'taskEndDate'
+type YearMonth = string
 
 type Task = {
 	id: string // タスクの主キー
@@ -23,10 +24,14 @@ type Tasks = {
 }
 
 type State = {
-	yearMonth: string // 処理年月 TODO: 不要になるまで残す
-	beginDate: string // gantt-chartの表示開始日
-	endDate: string // gantt-chartの表示終了日
+	yearMonth: YearMonth // 処理年月 TODO: 不要になるまで残す
+	beginDate: YearMonth // gantt-chartの表示開始日
+	endDate: YearMonth // gantt-chartの表示終了日
 	tasks: Tasks
+	validation: {
+		beginDate: YearMonth
+		endDate: YearMonth
+	}
 }
 
 /**

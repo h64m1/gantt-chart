@@ -65,3 +65,13 @@ export type Action =
 				value: unknown
 			}>
 	  }
+	| {
+			// カレンダー開始日のバリデーション
+			type: 'validateBeginDate'
+			message: string
+	  }
+	| {
+			// カレンダー終了日のバリデーション
+			type: 'validateEndDate'
+			message: string
+	  }

@@ -47,6 +47,14 @@ export const reducer = (state: State, action: Action): any => {
 		// ローカルファイルのインポート
 		case 'importJson':
 			return importJson(state, action.data)
+
+		// カレンダー開始日のバリデーション
+		case 'validateBeginDate':
+			return validateBeginDate(state, action.message)
+
+		// カレンダー終了日のバリデーション
+		case 'validateEndDate':
+			return validateEndDate(state, action.message)
 	}
 }
 
@@ -102,6 +110,10 @@ const init = (yearMonth: string, beginDate: string, endDate: string, tasks: Task
 		beginDate: beginDate,
 		endDate: endDate,
 		tasks: newTasks,
+		validation: {
+			beginDate: '',
+			endDate: '',
+		},
 	}
 }
 
@@ -297,4 +309,36 @@ const importJson = (
 	Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
 
 	return newState
+}
+
+/**
+ * カレンダー開始日のバリデーション
+ * @param {State} state ステート
+ * @param {string} message バリデーションメッセージ
+ */
+const validateBeginDate = (state: State, message: string) => {
+	console.debug('開始日バリデーション', message)
+	return {
+		...state,
+		validation: {
+			...state.validation,
+			beginDate: message,
+		},
+	}
+}
+
+/**
+ * カレンダー終了日のバリデーション
+ * @param {State} state ステート
+ * @param {string} message バリデーションメッセージ
+ */
+const validateEndDate = (state: State, message: string) => {
+	console.debug('終了日バリデーション', message)
+	return {
+		...state,
+		validation: {
+			...state.validation,
+			endDate: message,
+		},
+	}
 }

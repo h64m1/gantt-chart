@@ -3,22 +3,29 @@ import * as Day from '../Date/Day'
 
 type ValidationType = 'beginDate' | 'endDate'
 
-const validate = (state: State, type: ValidationType): string => {
+const validate = (value: unknown, state: State, type: ValidationType): string => {
 	switch (type) {
-		case 'beginDate':
-			return validateBeginDate(state)
-		case 'endDate':
-			return validateEndDate(state)
+		case 'beginDate': {
+			const date = typeof value === 'string' ? value : ''
+			return validateBeginDate(date, state)
+		}
+		case 'endDate': {
+			const date = typeof value === 'string' ? value : ''
+			return validateEndDate(date, state)
+		}
 	}
 }
 
 /**
  * カレンダー開始日のバリデーション
+ * @param {string} beginDate 開始日
  * @param {State} state ステート
  */
-function validateBeginDate(state: State): string {
+function validateBeginDate(beginDate: string, state: State): string {
+	console.debug('validateBeginDate', beginDate, state)
+
 	// 開始日 < 終了日となっていること
-	const begin = Day.Day(state.beginDate)
+	const begin = Day.Day(beginDate)
 	const end = Day.Day(state.endDate)
 	if (begin.isAfter(end)) {
 		return '開始日は終了日以前の日付を設定して下さい'
@@ -30,12 +37,15 @@ function validateBeginDate(state: State): string {
 
 /**
  * カレンダー終了日のバリデーション
+ * @param {string} endDate 終了日
  * @param {State} state ステート
  */
-function validateEndDate(state: State): string {
+function validateEndDate(endDate: string, state: State): string {
+	console.debug('validateEndDate', endDate, state)
+
 	// 開始日 < 終了日となっていること
 	const begin = Day.Day(state.beginDate)
-	const end = Day.Day(state.endDate)
+	const end = Day.Day(endDate)
 	if (end.isBefore(begin)) {
 		return '終了日は開始日以後の日付を設定して下さい'
 	}
