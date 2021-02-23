@@ -13,7 +13,7 @@ const TaskDatePicker: React.FC<{
 	id: string
 	name: TaskDate
 	date?: string
-}> = ({ row, column, id, name, date }) => {
+}> = React.memo(({ row, column, id, name, date }) => {
 	const dispatch = useTaskDispatch()
 	console.debug('DatePicker: date', name, date)
 	return (
@@ -38,7 +38,7 @@ const TaskDatePicker: React.FC<{
 			/>
 		</td>
 	)
-}
+})
 
 TaskDatePicker.displayName = 'TaskDatePicker'
 
