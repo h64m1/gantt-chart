@@ -11,6 +11,10 @@ const TaskStateContext = React.createContext<State>({
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
 	tasks: {},
+	validation: {
+		beginDate: '',
+		endDate: '',
+	},
 })
 
 type Dispatch = (action: Action) => void
