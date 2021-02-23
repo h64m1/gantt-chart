@@ -12,7 +12,6 @@ const DatePicker: React.FC<{
 	onChange: (date: Date) => void
 	className?: string
 }> = ({ date, dateFormat, onChange, className }) => {
-	console.debug('DatePicker: date', date, 'format', dateFormat)
 	const _date = date === undefined ? date : new Date(date)
 
 	return <ReactDatePicker className={className} dateFormat={dateFormat} selected={_date} onChange={onChange} />

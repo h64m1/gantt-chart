@@ -30,7 +30,6 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 	// TODO: 開始日と終了日、実装完了までは処理年月を残す
 	const beginDate = Day.addF(-1, 'month')
 	const endDate = Day.addF(1, 'month')
-	console.debug('begin, end', beginDate, endDate)
 	const [state, dispatch] = React.useReducer(
 		reducer,
 		{

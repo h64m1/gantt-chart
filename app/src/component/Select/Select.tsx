@@ -3,23 +3,26 @@ import * as Day from '../../api/Date/Day'
 import { validate } from '../../api/Validation/Validation'
 import { DatePicker } from '../../component/Picker/DatePicker'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
+import { Validation } from '../../reducer/Tasks'
 import './select.scss'
 
 type SearchDate = 'beginDate' | 'endDate'
 
-const Select: React.FC = React.memo(() => {
-	const state = useTaskState()
-
-	console.debug('render Select: ', state.beginDate, state.endDate)
+const Select: React.FC<{
+	beginDate: string
+	endDate: string
+	validation: Validation
+}> = React.memo(({ beginDate, endDate, validation }) => {
+	console.debug('render Select: ', beginDate, endDate)
 	return (
 		<>
 			<div id="select-parent">
-				<DPicker name={'beginDate'} date={state.beginDate} />
-				<DPicker name={'endDate'} date={state.endDate} />
+				<DPicker name={'beginDate'} date={beginDate} />
+				<DPicker name={'endDate'} date={endDate} />
 			</div>
 			<div className="validation-date">
-				{state.validation.beginDate === '' ? '' : state.validation.beginDate}
-				{state.validation.endDate === '' ? '' : state.validation.endDate}
+				{validation.beginDate === '' ? '' : validation.beginDate}
+				{validation.endDate === '' ? '' : validation.endDate}
 			</div>
 		</>
 	)

@@ -2,37 +2,23 @@ import React from 'react'
 import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { getTaskKey } from '../../reducer/Tasks'
-import { ExportButton, ImportButton } from '../Button/Button'
 import { ColorPicker } from '../Picker/ColorPicker'
 import { TaskDatePicker } from '../Picker/TaskDatePicker'
-import { Select } from '../Select/Select'
 import { Title } from '../Title/Title'
 import { BodyColumn } from './BodyColumn'
 import './Gantt.scss'
 import { HeadRow } from './HeadRow'
+import { Navigation } from './Navigation'
 
 const GanttApp: React.FC = () => {
+	const state = useTaskState()
+
 	return (
 		<>
-			<nav id="navigation">
-				<Navigation />
-			</nav>
+			<Navigation beginDate={state.beginDate} endDate={state.endDate} validation={state.validation} />
 			<article id="gantt-main">
 				<Gantt />
 			</article>
-		</>
-	)
-}
-
-/**
- * ナビゲーション
- */
-const Navigation: React.FC = () => {
-	return (
-		<>
-			<Select />
-			<ExportButton />
-			<ImportButton />
 		</>
 	)
 }

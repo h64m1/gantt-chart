@@ -23,15 +23,17 @@ type Tasks = {
 	[id: string]: Task
 }
 
+type Validation = {
+	beginDate: YearMonth
+	endDate: YearMonth
+}
+
 type State = {
 	yearMonth: YearMonth // 処理年月 TODO: 不要になるまで残す
 	beginDate: YearMonth // gantt-chartの表示開始日
 	endDate: YearMonth // gantt-chartの表示終了日
 	tasks: Tasks
-	validation: {
-		beginDate: YearMonth
-		endDate: YearMonth
-	}
+	validation: Validation
 }
 
 /**
@@ -80,5 +82,5 @@ const createTasks = (yearMonth: string): Tasks => {
 	return tasks
 }
 
-export type { TaskDate, Task, Tasks, State }
+export type { TaskDate, Task, Tasks, Validation, State }
 export { getTaskKey, createTask, createTasks }
