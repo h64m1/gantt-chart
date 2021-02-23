@@ -1,8 +1,13 @@
 import React from 'react'
+import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
+import { getTaskKey } from '../../reducer/Tasks'
 import { ExportButton, ImportButton } from '../Button/Button'
+import { ColorPicker } from '../Picker/ColorPicker'
+import { TaskDatePicker } from '../Picker/TaskDatePicker'
 import { Select } from '../Select/Select'
-import { BodyRow } from './BodyRow'
+import { Title } from '../Title/Title'
+import { BodyColumn } from './BodyColumn'
 import './Gantt.scss'
 import { HeadRow } from './HeadRow'
 
@@ -39,6 +44,8 @@ const Gantt: React.FC = () => {
 	const state = useTaskState()
 	const dispatch = useTaskDispatch()
 
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
+
 	const tasks = state.tasks
 	const maxRow = Object.values(tasks).length
 	console.debug('render Gantt', maxRow, 'tasks:', tasks)
@@ -52,11 +59,44 @@ const Gantt: React.FC = () => {
 			{/* ガントチャートのボディ部分 */}
 			<table>
 				<thead>
-					<HeadRow />
+					<HeadRow beginDate={state.yearMonth} endDate={state.endDate} />
 				</thead>
 				<tbody>
 					{Object.values(tasks).map((task, row) => {
-						return <BodyRow key={`${row}`} row={row} task={task} />
+						const titleColumn = 0
+						const id = getTaskKey(row, state.yearMonth)
+						return (
+							<tr key={row}>
+								<Title row={row} column={titleColumn} title={task.title} id={id} />
+								<TaskDatePicker
+									row={row}
+									column={titleColumn}
+									id={id}
+									name={'taskBeginDate'}
+									date={task.beginDate}
+								/>
+								<TaskDatePicker
+									row={row}
+									column={titleColumn}
+									id={id}
+									name={'taskEndDate'}
+									date={task.endDate}
+								/>
+								<ColorPicker row={row} column={titleColumn} color={task.color} id={id} />
+								{dates.map((_, column) => {
+									const day = Day.addF(column, 'day', state.beginDate)
+									return (
+										<BodyColumn
+											key={`body-${row}-${column}`}
+											row={row}
+											column={column}
+											day={day}
+											color={task.color}
+										/>
+									)
+								})}
+							</tr>
+						)
 					})}
 				</tbody>
 				<tfoot></tfoot>
