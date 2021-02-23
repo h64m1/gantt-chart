@@ -19,8 +19,8 @@ const TitleColumn: React.FC<{
 	return (
 		<>
 			<Title row={row} column={column} title={title} id={id} />
-			<DatePicker row={row} column={column} id={id} name={'beginDate'} date={task.beginDate} />
-			<DatePicker row={row} column={column} id={id} name={'endDate'} date={task.endDate} />
+			<DatePicker row={row} column={column} id={id} name={'taskBeginDate'} date={task.beginDate} />
+			<DatePicker row={row} column={column} id={id} name={'taskEndDate'} date={task.endDate} />
 			<ColorPicker row={row} column={column} color={color} id={id} />
 		</>
 	)

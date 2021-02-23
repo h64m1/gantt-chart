@@ -7,7 +7,7 @@
 // 	 }
 // }
 
-type TaskDate = 'beginDate' | 'endDate'
+type TaskDate = 'taskBeginDate' | 'taskEndDate'
 
 type Task = {
 	id: string // タスクの主キー

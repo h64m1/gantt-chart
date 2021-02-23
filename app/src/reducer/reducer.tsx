@@ -1,13 +1,17 @@
-import { Action } from './Action'
-import { State, Tasks, createTask, createTasks, getTaskKey } from './Tasks'
-import * as Day from '../api/Date/Day'
 import * as db from '../db/Database'
+import { Action } from './Action'
+import { createTask, createTasks, getTaskKey, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
 	switch (action.type) {
-		case 'yearMonth':
-			return yearMonth(state, action.yearMonth)
+		// カレンダー開始日変更
+		case 'beginDate':
+			return beginDate(state, action.date)
+
+		// カレンダー終了日変更
+		case 'endDate':
+			return endDate(state, action.date)
 
 		// 初期化
 		case 'init':
@@ -26,12 +30,12 @@ export const reducer = (state: State, action: Action): any => {
 			return task(state, action.id, action.column)
 
 		// タスク開始日変更
-		case 'beginDate':
-			return beginDate(state, action.id, action.date)
+		case 'taskBeginDate':
+			return taskBeginDate(state, action.id, action.date)
 
 		// タスク完了日変更
-		case 'endDate':
-			return endDate(state, action.id, action.date)
+		case 'taskEndDate':
+			return taskEndDate(state, action.id, action.date)
 
 		// 行追加と削除
 		case 'addRow':
@@ -57,17 +61,28 @@ export const initializer = (state: State): any => {
 }
 
 /**
- * 処理年月を変更
+ * カレンダー開始日を変更
  * @param {State} state ステート
- * @param {string} yearMonth 処理年月
+ * @param {string} date 日付
  */
-const yearMonth = (state: State, yearMonth: string) => {
-	console.debug('処理年月変更', yearMonth)
+const beginDate = (state: State, date: string) => {
+	console.debug('開始日変更', date)
 	return {
 		...state,
-		beginDate: Day.addF(-1, 'month', yearMonth),
-		endDate: Day.addF(1, 'month', yearMonth),
-		yearMonth: yearMonth,
+		beginDate: date,
+	}
+}
+
+/**
+ * カレンダー終了日を変更
+ * @param {State} state ステート
+ * @param {string} date 日付
+ */
+const endDate = (state: State, date: string) => {
+	console.debug('終了日変更', date)
+	return {
+		...state,
+		endDate: date,
 	}
 }
 
@@ -165,7 +180,7 @@ const task = (state: State, id: string, column: number) => {
  * @param {string} id ID
  * @param {string} date 開始日
  */
-const beginDate = (state: State, id: string, date: string) => {
+const taskBeginDate = (state: State, id: string, date: string) => {
 	console.debug('タスク開始日変更', state, id, date)
 	const newState = {
 		...state,
@@ -188,7 +203,7 @@ const beginDate = (state: State, id: string, date: string) => {
  * @param {string} id ID
  * @param {string} date 完了日
  */
-const endDate = (state: State, id: string, date: string) => {
+const taskEndDate = (state: State, id: string, date: string) => {
 	console.debug('タスク開始日変更', state, id, date)
 	const newState = {
 		...state,
