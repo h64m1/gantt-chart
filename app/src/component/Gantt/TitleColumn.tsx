@@ -1,7 +1,8 @@
 import 'flatpickr/dist/themes/material_blue.css'
 import React from 'react'
+import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
-import { getTaskKey } from '../../reducer/Tasks'
+import { getTaskKey, TaskDate } from '../../reducer/Tasks'
 import { DatePicker } from '../Picker/DatePicker'
 
 const TitleColumn: React.FC<{
@@ -19,8 +20,8 @@ const TitleColumn: React.FC<{
 	return (
 		<>
 			<Title row={row} column={column} title={title} id={id} />
-			<DatePicker row={row} column={column} id={id} name={'taskBeginDate'} date={task.beginDate} />
-			<DatePicker row={row} column={column} id={id} name={'taskEndDate'} date={task.endDate} />
+			<DPicker row={row} column={column} id={id} name={'taskBeginDate'} date={task.beginDate} />
+			<DPicker row={row} column={column} id={id} name={'taskEndDate'} date={task.endDate} />
 			<ColorPicker row={row} column={column} color={color} id={id} />
 		</>
 	)
@@ -80,6 +81,42 @@ const ColorPicker: React.FC<{
 						color: e.target.value,
 					})
 				}
+			/>
+		</td>
+	)
+}
+
+/**
+ * 開始日/終了日
+ */
+const DPicker: React.FC<{
+	row: number
+	column: number
+	id: string
+	name: TaskDate
+	date?: string
+}> = ({ row, column, id, name, date }) => {
+	const dispatch = useTaskDispatch()
+	console.debug('DatePicker: date', name, date)
+	return (
+		<td key={`date-${row}-${column}`} className="gantt-body date">
+			<DatePicker
+				className="task-datepicker"
+				dateFormat="yyyy/MM/dd"
+				date={date}
+				onChange={(date) => {
+					// date: Date | [Date, Date] | null
+					console.warn('DatePicker onChange:', date)
+					if (date instanceof Array || date === null) {
+						return
+					}
+
+					return dispatch({
+						type: name,
+						id: id,
+						date: Day.convertDateToString(date),
+					})
+				}}
 			/>
 		</td>
 	)

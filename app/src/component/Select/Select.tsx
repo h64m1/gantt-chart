@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDatePicker from 'react-datepicker'
 import * as Day from '../../api/Date/Day'
 import { validate } from '../../api/Validation/Validation'
+import { DatePicker } from '../../component/Picker/DatePicker'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import './select.scss'
 
@@ -14,32 +14,29 @@ const Select: React.FC = React.memo(() => {
 	return (
 		<>
 			<div id="select-parent">
-				<DatePicker name={'beginDate'} date={state.beginDate} />
-				<DatePicker name={'endDate'} date={state.endDate} />
+				<DPicker name={'beginDate'} date={state.beginDate} />
+				<DPicker name={'endDate'} date={state.endDate} />
 			</div>
 			<div className="validation-date">
-				{state.validation.beginDate === '' ? '' : <div>{state.validation.beginDate}</div>}
-			</div>
-			<div className="validation-date">
-				{state.validation.endDate === '' ? '' : <div>{state.validation.endDate}</div>}
+				{state.validation.beginDate === '' ? '' : state.validation.beginDate}
+				{state.validation.endDate === '' ? '' : state.validation.endDate}
 			</div>
 		</>
 	)
 })
 
-const DatePicker: React.FC<{
+const DPicker: React.FC<{
 	name: SearchDate
 	date?: string | undefined
 }> = ({ name, date }) => {
 	const dispatch = useTaskDispatch()
 	const state = useTaskState()
-	const _date = date === undefined ? date : new Date(date)
 
 	return (
-		<ReactDatePicker
+		<DatePicker
 			className="search-datepicker"
 			dateFormat="yyyy/MM/dd"
-			selected={_date}
+			date={date}
 			onChange={(dateChanged) => {
 				// date: Date | [Date, Date] | null
 				if (dateChanged instanceof Array || dateChanged === null) {
