@@ -1,14 +1,13 @@
 import React from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import * as Day from '../api/Date/Day'
 import { Send } from '../api/Send'
 import * as db from '../db/Database'
 import { Action } from '../reducer/Action'
 import { initializer, reducer } from '../reducer/reducer'
-import { createTasks, State, Tasks } from '../reducer/Tasks'
+import { createTasks, generateKey, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
-	key: uuidv4(),
+	key: generateKey(),
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
 	tasks: [],

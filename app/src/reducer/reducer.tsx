@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, State, Tasks } from './Tasks'
+import { createTask, createTasks, generateKey, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -106,7 +106,7 @@ const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
 	const newTasks = tasks === null || tasks === undefined ? createTasks() : tasks
 
 	return {
-		key: uuidv4(),
+		key: generateKey(),
 		beginDate: beginDate,
 		endDate: endDate,
 		tasks: newTasks,
