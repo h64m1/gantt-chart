@@ -20,7 +20,7 @@ function createWindow() {
 	ipcMain.handle('send', (event, message: string) => {
 		console.debug('send success : ', message)
 	})
-	ipcMain.handle('export', (event, response: Array<unknown>) => {
+	ipcMain.handle('export', (event, response: unknown) => {
 		File.saveFile(response)
 	})
 	ipcMain.handle(

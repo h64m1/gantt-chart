@@ -260,28 +260,15 @@ const deleteRow = (state: State) => {
 /**
  * ファイルのインポート
  * @param {State} state ステート
- * @param {Array} data インポートしたデータ
+ * @param {State} data インポートしたデータ
  */
-const importJson = (
-	state: State,
-	data: Array<{
-		key: string
-		value: unknown
-	}>,
-) => {
-	const currentData = data.find((item) => item.key === state.key)
-	console.debug('click import ...', currentData)
-
-	const newState = {
-		...state,
-		key: state.key,
-		tasks: currentData?.value,
-	}
+const importJson = (state: State, data: State) => {
+	console.debug('click import ...', data)
 
 	// DBに登録
-	Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
+	db.write(data.key, data.tasks)
 
-	return newState
+	return data
 }
 
 /**

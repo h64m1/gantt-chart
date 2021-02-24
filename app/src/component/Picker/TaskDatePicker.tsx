@@ -23,7 +23,7 @@ const TaskDatePicker: React.FC<{
 				date={date}
 				onChange={(date) => {
 					// date: Date | [Date, Date] | null
-					console.warn('DatePicker onChange:', date)
+					console.debug('DatePicker onChange:', date)
 					if (date instanceof Array || date === null) {
 						return
 					}

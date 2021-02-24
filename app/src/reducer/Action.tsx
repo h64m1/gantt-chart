@@ -1,4 +1,4 @@
-import { Tasks } from './Tasks'
+import { State, Tasks } from './Tasks'
 
 export type Action =
 	| {
@@ -59,10 +59,7 @@ export type Action =
 	| {
 			// ローカルファイルのインポート
 			type: 'importJson'
-			data: Array<{
-				key: string
-				value: unknown
-			}>
+			data: State
 	  }
 	| {
 			// カレンダー開始日のバリデーション
