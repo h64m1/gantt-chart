@@ -10,10 +10,9 @@ import { DatePicker } from './DatePicker'
 const TaskDatePicker: React.FC<{
 	row: number
 	column: number
-	id: string
 	name: TaskDate
 	date?: string
-}> = React.memo(({ row, column, id, name, date }) => {
+}> = React.memo(({ row, column, name, date }) => {
 	const dispatch = useTaskDispatch()
 	console.debug('DatePicker: date', name, date)
 	return (
@@ -31,7 +30,7 @@ const TaskDatePicker: React.FC<{
 
 					return dispatch({
 						type: name,
-						id: id,
+						id: row,
 						date: Day.convertDateToString(date),
 					})
 				}}

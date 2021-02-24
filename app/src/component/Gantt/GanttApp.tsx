@@ -1,7 +1,6 @@
 import React from 'react'
 import * as Day from '../../api/Date/Day'
 import { useTaskState } from '../../context/TaskContext'
-import { getTaskKey } from '../../reducer/Tasks'
 import { ColorPicker } from '../Picker/ColorPicker'
 import { TaskDatePicker } from '../Picker/TaskDatePicker'
 import { Title } from '../Title/Title'
@@ -31,40 +30,30 @@ const GanttApp: React.FC = () => {
  */
 const Gantt: React.FC = () => {
 	const state = useTaskState()
+	const tasks = state.tasks
 
 	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
-
-	const tasks = state.tasks
-	const maxRow = Object.values(tasks).length
-	console.debug('render Gantt', maxRow, 'tasks:', tasks)
+	console.debug('render Gantt | tasks:', tasks)
 	return (
 		// ガントチャート本体
 		<table>
 			<thead>
-				<HeadRow beginDate={state.yearMonth} endDate={state.endDate} />
+				<HeadRow beginDate={state.beginDate} endDate={state.endDate} />
 			</thead>
 			<tbody>
-				{Object.values(tasks).map((task, row) => {
+				{state.tasks.map((task, row) => {
 					const titleColumn = 0
-					const id = getTaskKey(row, state.yearMonth)
 					return (
 						<tr key={row}>
-							<Title row={row} column={titleColumn} title={task.title} id={id} />
+							<Title row={row} column={titleColumn} title={task.title} />
 							<TaskDatePicker
 								row={row}
 								column={titleColumn}
-								id={id}
 								name={'taskBeginDate'}
 								date={task.beginDate}
 							/>
-							<TaskDatePicker
-								row={row}
-								column={titleColumn}
-								id={id}
-								name={'taskEndDate'}
-								date={task.endDate}
-							/>
-							<ColorPicker row={row} column={titleColumn} color={task.color} id={id} />
+							<TaskDatePicker row={row} column={titleColumn} name={'taskEndDate'} date={task.endDate} />
+							<ColorPicker row={row} column={titleColumn} color={task.color} />
 							{dates.map((_, column) => {
 								const day = Day.addF(column, 'day', state.beginDate)
 								return (

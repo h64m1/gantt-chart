@@ -8,9 +8,8 @@ const Title: React.FC<{
 	row: number
 	column: number
 	title: string
-	id: string
-}> = React.memo(({ row, column, title, id }) => {
-	console.debug('render Title', row, column, id, title)
+}> = React.memo(({ row, column, title }) => {
+	console.debug('render Title', row, column, title)
 
 	const dispatch = useTaskDispatch()
 
@@ -24,7 +23,7 @@ const Title: React.FC<{
 				onChange={(e) =>
 					dispatch({
 						type: 'title',
-						id: id,
+						id: row,
 						title: e.target.value,
 					})
 				}

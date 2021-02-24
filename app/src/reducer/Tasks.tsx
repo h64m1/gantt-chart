@@ -1,10 +1,11 @@
-// state type
+import { v4 as uuidv4 } from 'uuid'
 
+// state type
 // const state = {
-//   yearMonth: '2021-01-01',
-// 	 tasks: {
-// 		'task1': { id: 'task1', row: 0, title: 'タイトル1' }
-// 	 }
+// 	 tasks: [
+// 		{ id: 'task1', title: 'タイトル1', ... },
+// 		{ id: 'task2', title: 'タイトル2', ... },
+// 	 ]
 // }
 
 type TaskDate = 'taskBeginDate' | 'taskEndDate'
@@ -12,16 +13,13 @@ type YearMonth = string
 
 type Task = {
 	id: string // タスクの主キー
-	row: number // 行番号
 	title: string // タスクのタイトル
 	color: string // タスクの色
 	beginDate: string | undefined // タスク開始日: YYYY-MM-DD
 	endDate: string | undefined // タスク完了日: YYYY-MM-DD
 }
 
-type Tasks = {
-	[id: string]: Task
-}
+type Tasks = Array<Task>
 
 type Validation = {
 	beginDate: YearMonth
@@ -29,7 +27,7 @@ type Validation = {
 }
 
 type State = {
-	yearMonth: YearMonth // 処理年月 TODO: 不要になるまで残す
+	key: string // uniqueなkey
 	beginDate: YearMonth // gantt-chartの表示開始日
 	endDate: YearMonth // gantt-chartの表示終了日
 	tasks: Tasks
@@ -37,24 +35,18 @@ type State = {
 }
 
 /**
- * Taskのidを取得
- * @param {number} id ID
- * @param {string} yearMonth 処理年月
+ * Taskのidを生成
  */
-const getTaskKey = (id: number, yearMonth: string): string => {
-	return `task-${yearMonth}-${id}`
+const generateKey = () => {
+	return uuidv4()
 }
 
 /**
  * tasksの初期化
- * @param {number} row 行番号
- * @param {string} yearMonth 処理年月
  */
-const createTask = (row: number, yearMonth: string): Task => {
-	const key = getTaskKey(row, yearMonth)
+const createTask = (): Task => {
 	return {
-		id: key,
-		row: row,
+		id: generateKey(),
 		title: '',
 		color: defaultColor(),
 		beginDate: undefined,
@@ -71,16 +63,11 @@ const defaultColor = (): string => {
 
 /**
  * tasksの初期化
- * @param {string} yearMonth 処理年月
  */
-const createTasks = (yearMonth: string): Tasks => {
-	// 	'task1': { id: 'task1', row: 0, title: 'タイトル1' }
-	const row = 0
-	const key = getTaskKey(row, yearMonth)
-	const tasks: Tasks = {}
-	tasks[key] = createTask(row, yearMonth)
-	return tasks
+const createTasks = (): Tasks => {
+	// 	[{ id: 'task1', title: 'タイトル1', ... }]
+	return [createTask()]
 }
 
 export type { TaskDate, Task, Tasks, Validation, State }
-export { getTaskKey, createTask, createTasks }
+export { createTask, createTasks }

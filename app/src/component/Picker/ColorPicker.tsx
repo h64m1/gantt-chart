@@ -8,8 +8,7 @@ const ColorPicker: React.FC<{
 	row: number
 	column: number
 	color: string
-	id: string
-}> = React.memo(({ row, column, color, id }) => {
+}> = React.memo(({ row, column, color }) => {
 	const dispatch = useTaskDispatch()
 
 	return (
@@ -21,7 +20,7 @@ const ColorPicker: React.FC<{
 				onChange={(e) =>
 					dispatch({
 						type: 'color',
-						id: id,
+						id: row,
 						color: e.target.value,
 					})
 				}
