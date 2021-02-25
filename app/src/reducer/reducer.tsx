@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, getTaskKey, State, Tasks } from './Tasks'
+import { createTask, createTasks, generateKey, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -15,7 +16,7 @@ export const reducer = (state: State, action: Action): any => {
 
 		// 初期化
 		case 'init':
-			return init(action.yearMonth, action.beginDate, action.endDate, action.tasks)
+			return init(action.beginDate, action.endDate, action.tasks)
 
 		// タイトル修正
 		case 'title':
@@ -65,7 +66,7 @@ export const reducer = (state: State, action: Action): any => {
 // eslint-disable-next-line
 export const initializer = (state: State): any => {
 	console.debug('initializer', state)
-	return init(state.yearMonth, state.beginDate, state.endDate, state.tasks)
+	return init(state.beginDate, state.endDate, state.tasks)
 }
 
 /**
@@ -96,17 +97,16 @@ const endDate = (state: State, date: string) => {
 
 /**
  * 初期化処理: useEffectでstateを初期化
- * @param {string} yearMonth 処理年月
  * @param {string} beginDate 開始日
  * @param {string} endDate 終了日
  * @param {Tasks} tasks タスク
  */
-const init = (yearMonth: string, beginDate: string, endDate: string, tasks: Tasks): State => {
-	console.debug('init', yearMonth, 'tasks', tasks)
-	const newTasks = tasks === null || tasks === undefined ? createTasks(yearMonth) : tasks
+const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
+	console.debug('init', beginDate, endDate, 'tasks', tasks)
+	const newTasks = tasks === null || tasks === undefined ? createTasks() : tasks
 
 	return {
-		yearMonth: yearMonth,
+		key: generateKey(),
 		beginDate: beginDate,
 		endDate: endDate,
 		tasks: newTasks,
@@ -120,22 +120,19 @@ const init = (yearMonth: string, beginDate: string, endDate: string, tasks: Task
 /**
  * タイトル変更
  * @param {State} state ステート
- * @param {string} id ID
+ * @param {number} id ID
  * @param {string} title タイトル
  */
-const title = (state: State, id: string, title: string) => {
+const title = (state: State, id: number, title: string) => {
 	console.debug('タイトル変更', id, title)
+	const newTasks = [...state.tasks]
+	newTasks[id].title = title
+
 	const newState = {
 		...state,
-		tasks: {
-			...state.tasks,
-			[id]: {
-				...state.tasks[id],
-				title: title,
-			},
-		},
+		tasks: newTasks,
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -143,22 +140,18 @@ const title = (state: State, id: string, title: string) => {
 /**
  * タスク背景色の変更
  * @param {State} state ステート
- * @param {string} id ID
+ * @param {number} id ID
  * @param {string} title タイトル
  */
-const color = (state: State, id: string, color: string) => {
+const color = (state: State, id: number, color: string) => {
 	console.debug('タスク背景色変更', id, color)
+	const newTasks = [...state.tasks]
+	newTasks[id].color = color
 	const newState = {
 		...state,
-		tasks: {
-			...state.tasks,
-			[id]: {
-				...state.tasks[id],
-				color: color,
-			},
-		},
+		tasks: newTasks,
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -166,22 +159,18 @@ const color = (state: State, id: string, color: string) => {
 /**
  * task変更
  * @param {State} state ステート
- * @param {string} id ID
+ * @param {number} id ID
  * @param {number} column 列ID
  */
-const task = (state: State, id: string, column: number) => {
+const task = (state: State, id: number, column: number) => {
+	// TODO: task変更のアクション、コメントアウトを外した際に修正する
 	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
 	const newState = {
 		...state,
-		tasks: {
-			...state.tasks,
-			[id]: {
-				...state.tasks[id],
-			},
-		},
+		tasks: [...state.tasks],
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -189,22 +178,18 @@ const task = (state: State, id: string, column: number) => {
 /**
  * タスク開始日変更
  * @param {State} state ステート
- * @param {string} id ID
+ * @param {number} id ID
  * @param {string} date 開始日
  */
-const taskBeginDate = (state: State, id: string, date: string) => {
+const taskBeginDate = (state: State, id: number, date: string) => {
 	console.debug('タスク開始日変更', state, id, date)
+	const newTasks = [...state.tasks]
+	newTasks[id].beginDate = date
 	const newState = {
 		...state,
-		tasks: {
-			...state.tasks,
-			[id]: {
-				...state.tasks[id],
-				beginDate: date,
-			},
-		},
+		tasks: newTasks,
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -212,22 +197,18 @@ const taskBeginDate = (state: State, id: string, date: string) => {
 /**
  * タスク完了日変更
  * @param {State} state ステート
- * @param {string} id ID
+ * @param {number} id ID
  * @param {string} date 完了日
  */
-const taskEndDate = (state: State, id: string, date: string) => {
-	console.debug('タスク開始日変更', state, id, date)
+const taskEndDate = (state: State, id: number, date: string) => {
+	console.debug('タスク終了日変更', state, id, date)
+	const newTasks = [...state.tasks]
+	newTasks[id].endDate = date
 	const newState = {
 		...state,
-		tasks: {
-			...state.tasks,
-			[id]: {
-				...state.tasks[id],
-				endDate: date,
-			},
-		},
+		tasks: newTasks,
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -241,18 +222,11 @@ const taskEndDate = (state: State, id: string, date: string) => {
 const addRow = (state: State) => {
 	console.debug('行追加:', state)
 
-	const tasks = { ...state.tasks }
-	const length = Object.values(tasks).length
-
-	const key = getTaskKey(length, state.yearMonth)
 	const newState = {
 		...state,
-		tasks: {
-			...tasks,
-			[key]: createTask(length, state.yearMonth),
-		},
+		tasks: [...state.tasks, createTask()],
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -266,20 +240,19 @@ const addRow = (state: State) => {
 const deleteRow = (state: State) => {
 	console.debug('行削除', state)
 
-	const tasks = { ...state.tasks }
-	const length = Object.values(tasks).length
+	const length = state.tasks.length
 
 	if (length > 1) {
 		// 要素が1つの場合は削除しない
-		const key = getTaskKey(length - 1, state.yearMonth)
-		delete tasks[key]
+		state.tasks.pop()
 	}
+	console.debug('after delete', state.tasks)
 
 	const newState = {
 		...state,
-		tasks: tasks,
+		tasks: state.tasks,
 	}
-	db.write(state.yearMonth, newState.tasks)
+	db.write(state.key, newState.tasks)
 
 	return newState
 }
@@ -287,28 +260,15 @@ const deleteRow = (state: State) => {
 /**
  * ファイルのインポート
  * @param {State} state ステート
- * @param {Array} data インポートしたデータ
+ * @param {State} data インポートしたデータ
  */
-const importJson = (
-	state: State,
-	data: Array<{
-		key: string
-		value: unknown
-	}>,
-) => {
-	const currentData = data.find((item) => item.key === state.yearMonth)
-	console.debug('click import ...', currentData)
-
-	const newState = {
-		...state,
-		yearMonth: state.yearMonth,
-		tasks: currentData?.value,
-	}
+const importJson = (state: State, data: State) => {
+	console.debug('click import ...', data)
 
 	// DBに登録
-	Promise.all(data.map(async (item) => await db.write(item.key, item.value)))
+	db.write(data.key, data.tasks)
 
-	return newState
+	return data
 }
 
 /**

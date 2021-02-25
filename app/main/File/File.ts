@@ -5,7 +5,7 @@ import * as fs from 'fs'
  * ファイルを保存
  * @param {Array<unknown>} response DBの全レコード
  */
-export function saveFile(response: Array<unknown>): void {
+export function saveFile(response: unknown): void {
 	console.debug('saveFile', response)
 
 	dialog
@@ -57,7 +57,7 @@ export async function loadFile(): Promise<unknown> {
 	const data = filePaths.map((path) => {
 		return readFile(path)
 	})
-	const result = data.length > 0 ? data[0] : []
+	const result = data.length > 0 ? data[0] : {}
 	return result
 }
 
@@ -66,7 +66,7 @@ export async function loadFile(): Promise<unknown> {
  * @param {string} fileName 出力ファイル名
  * @param {Array<unknown>} data データ
  */
-function writeFile(fileName: string, data: Array<unknown>) {
+function writeFile(fileName: string, data: unknown) {
 	console.debug('writeFile')
 	fs.writeFile(fileName, JSON.stringify(data), (error) => {
 		if (error) throw error
@@ -78,7 +78,7 @@ function writeFile(fileName: string, data: Array<unknown>) {
  * ローカルからファイル読み出し
  * @param {string} fileName 出力ファイル名
  */
-function readFile(fileName: string): Array<unknown> {
+function readFile(fileName: string): unknown {
 	console.debug('readFile', fileName)
 
 	const data = fs.readFileSync(fileName, { encoding: 'utf8' })
@@ -89,13 +89,6 @@ function readFile(fileName: string): Array<unknown> {
 
 	const json = JSON.parse(data)
 	console.debug(`File ${fileName} loaded: data`, data)
-	const keys = Object.keys(json)
 
-	return keys.map((key) => {
-		// console.debug('key', key, ' index:', json[key].key, 'data:', json[key].value)
-		return {
-			key: json[key].key,
-			value: json[key].value,
-		}
-	})
+	return json
 }

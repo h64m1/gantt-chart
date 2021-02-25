@@ -48,6 +48,16 @@ const dbGet = (db: IDBDatabase, key: string): Promise<DbRecord> =>
 		request.onerror = () => reject(new Error('Error: Indexeddbからget失敗'))
 	})
 
+const dbGetAll = (db: IDBDatabase): Promise<DbRecord> =>
+	new Promise<DbRecord>((resolve, reject) => {
+		const transaction = db.transaction(STORE, READ)
+		const store = transaction.objectStore(STORE)
+		const request = store.getAll()
+
+		request.onsuccess = (event: Event) => resolve(getResult(event) as DbRecord)
+		request.onerror = () => reject(new Error('Error: Indexeddbからget失敗'))
+	})
+
 const dbPut = (db: IDBDatabase, record: DbRecord): Promise<DbRecord> =>
 	new Promise<DbRecord>((resolve, reject) => {
 		const transaction = db.transaction(STORE, WRITE)
@@ -75,43 +85,6 @@ export const write = async (key: dbKey, data: unknown): Promise<boolean> => {
 	} catch (error) {
 		console.error(error)
 		return false
-	}
-}
-
-/**
- * DBからの取り出し、export用に全レコードを取得
- */
-export const readAll = async (): Promise<Array<unknown>> => {
-	try {
-		// _dbの初期化
-		await initDb('readAll')
-
-		const thisYear = new Date().getFullYear()
-		const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-		const yearMonths: Array<string> = []
-		months.forEach((value) => {
-			const month = `${value}`
-			const yearMonth = `${thisYear}-${month.padStart(2, `0`)}-01`
-			yearMonths.push(yearMonth)
-		})
-
-		const data: Array<unknown> = []
-		await Promise.all(
-			yearMonths.map(async (item) => {
-				const record = await read(item)
-				const isRecordEmpty = record === null || record === undefined
-				if (!isRecordEmpty) {
-					const recordWithKey = { key: item, value: record }
-					data.push(recordWithKey)
-				}
-			}),
-		)
-
-		console.debug('read | data', data)
-		return data
-	} catch (error) {
-		console.error(error)
-		return []
 	}
 }
 

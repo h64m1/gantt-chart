@@ -1,10 +1,12 @@
 import React from 'react'
 import * as Day from '../../api/Date/Day'
-import { useTaskState } from '../../context/TaskContext'
 
-const HeadRow: React.FC = React.memo(() => {
+const HeadRow: React.FC<{
+	beginDate: string
+	endDate: string
+}> = React.memo(({ beginDate, endDate }) => {
 	console.debug('render HeadRow')
-	const headRows = getHeadRowContents()
+	const headRows = getHeadRowContents(beginDate, endDate)
 	return <tr key={0}>{headRows}</tr>
 })
 
@@ -12,13 +14,13 @@ HeadRow.displayName = 'HeadRow'
 
 /**
  * 開始日から完了日までの日付を<td>の配列で取得
+ * @param {string} beginDate 開始日
+ * @param {string} endDate 終了日
  */
-function getHeadRowContents(): Array<JSX.Element> {
-	const state = useTaskState()
-
+function getHeadRowContents(beginDate: string, endDate: string): Array<JSX.Element> {
 	// 開始日から完了日まで
-	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
-	console.debug('  HeadRow: 開始日-完了日', state.yearMonth, state.beginDate, state.endDate, '日付配列', dates)
+	const dates = Day.DaysFromTo(beginDate, endDate, 'MM/DD (ddd)')
+	console.debug('  HeadRow: 開始日-完了日', beginDate, endDate, '日付配列', dates)
 
 	// タイトル用の要素を追加
 	dates.unshift('')

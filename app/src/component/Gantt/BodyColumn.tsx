@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Day from '../../api/Date/Day'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
-import { getTaskKey } from '../../reducer/Tasks'
+// import { getTaskKey } from '../../reducer/Tasks'
 
 // ガントチャート本体の列を描画
 const BodyColumn: React.FC<{
@@ -14,8 +14,8 @@ const BodyColumn: React.FC<{
 	const state = useTaskState()
 	const dispatch = useTaskDispatch()
 
-	const id = getTaskKey(row, state.yearMonth)
-	const task = state.tasks[id]
+	// const id = getTaskKey(row, state.yearMonth)
+	const task = state.tasks[row]
 
 	const style = { backgroundColor: '' }
 	if (hasTask(day, task.beginDate, task.endDate)) {

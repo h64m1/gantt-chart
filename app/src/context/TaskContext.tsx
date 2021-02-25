@@ -4,13 +4,13 @@ import { Send } from '../api/Send'
 import * as db from '../db/Database'
 import { Action } from '../reducer/Action'
 import { initializer, reducer } from '../reducer/reducer'
-import { createTasks, State, Tasks } from '../reducer/Tasks'
+import { createTasks, generateKey, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
-	yearMonth: Day.DayF(),
+	key: generateKey(),
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
-	tasks: {},
+	tasks: [],
 	validation: {
 		beginDate: '',
 		endDate: '',
@@ -25,19 +25,15 @@ const TaskDispatchContext = React.createContext<Dispatch | undefined>(undefined)
  * @param children 子要素
  */
 const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-	// 当日の日付で処理年月stateを初期化
-	const thisYearMonth = Day.startOfF('month')
 	// TODO: 開始日と終了日、実装完了までは処理年月を残す
 	const beginDate = Day.addF(-1, 'month')
 	const endDate = Day.addF(1, 'month')
-	console.debug('begin, end', beginDate, endDate)
 	const [state, dispatch] = React.useReducer(
 		reducer,
 		{
-			yearMonth: thisYearMonth,
 			beginDate: beginDate,
 			endDate: endDate,
-			tasks: createTasks(thisYearMonth),
+			tasks: createTasks(),
 		},
 		initializer,
 	)
@@ -49,12 +45,11 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		let didRead = false
 
 		;(async () => {
-			const tasks = (await db.read(state.yearMonth)) as Tasks
+			const tasks = (await db.read(state.key)) as Tasks
 			if (!didRead) {
 				// マウント時に初期化
 				dispatch({
 					type: 'init',
-					yearMonth: state.yearMonth,
 					beginDate: state.beginDate,
 					endDate: state.endDate,
 					tasks: tasks,

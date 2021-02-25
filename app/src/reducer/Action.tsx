@@ -1,4 +1,4 @@
-import { Tasks } from './Tasks'
+import { State, Tasks } from './Tasks'
 
 export type Action =
 	| {
@@ -14,7 +14,6 @@ export type Action =
 	| {
 			// 初期化
 			type: 'init'
-			yearMonth: string
 			beginDate: string
 			endDate: string
 			tasks: Tasks
@@ -22,31 +21,31 @@ export type Action =
 	| {
 			// 行毎のタイトル変更
 			type: 'title'
-			id: string
+			id: number
 			title: string
 	  }
 	| {
 			// 行毎のタスク背景色の変更
 			type: 'color'
-			id: string
+			id: number
 			color: string
 	  }
 	| {
 			// 特定タスク、当該日付のタスクON/OFF
 			type: 'task'
-			id: string
+			id: number
 			column: number
 	  }
 	| {
 			// 特定タスクの開始日を設定
 			type: 'taskBeginDate'
-			id: string
+			id: number
 			date: string
 	  }
 	| {
 			// 特定タスクの完了日を設定
 			type: 'taskEndDate'
-			id: string
+			id: number
 			date: string
 	  }
 	| {
@@ -60,10 +59,7 @@ export type Action =
 	| {
 			// ローカルファイルのインポート
 			type: 'importJson'
-			data: Array<{
-				key: string
-				value: unknown
-			}>
+			data: State
 	  }
 	| {
 			// カレンダー開始日のバリデーション
