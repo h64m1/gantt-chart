@@ -15,7 +15,9 @@ const GanttApp: React.FC = () => {
 
 	return (
 		<>
-			<Navigation beginDate={state.beginDate} endDate={state.endDate} validation={state.validation} />
+			<nav id="navigation">
+				<Navigation beginDate={state.beginDate} endDate={state.endDate} validation={state.validation} />
+			</nav>
 			<article id="gantt-main">
 				{/* 検索パネル: ガントチャートの表示範囲 */}
 				<Search />
