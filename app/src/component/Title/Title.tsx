@@ -6,29 +6,26 @@ import { useTaskDispatch } from '../../context/TaskContext'
  */
 const Title: React.FC<{
 	row: number
-	column: number
 	title: string
-}> = React.memo(({ row, column, title }) => {
-	console.debug('render Title', row, column, title)
+}> = React.memo(({ row, title }) => {
+	console.debug('render Title', row, title)
 
 	const dispatch = useTaskDispatch()
 
+	//  タイトル
 	return (
-		<td key={`title-${row}-${column}`} className="gantt-body title">
-			{/* タイトル */}
-			<input
-				type="text"
-				className="title"
-				value={title}
-				onChange={(e) =>
-					dispatch({
-						type: 'title',
-						id: row,
-						title: e.target.value,
-					})
-				}
-			/>
-		</td>
+		<input
+			type="text"
+			className="title"
+			value={title}
+			onChange={(e) =>
+				dispatch({
+					type: 'title',
+					id: row,
+					title: e.target.value,
+				})
+			}
+		/>
 	)
 })
 
