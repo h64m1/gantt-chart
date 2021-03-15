@@ -60,7 +60,7 @@ const GanttApp: React.FC = () => {
 				{/* 検索パネル: ガントチャートの表示範囲 */}
 				<Search />
 				<Table data={data}>
-					{dates.map((e, i) => (
+					{dates.map((e) => (
 						<Column key={e} name={e} className={className[e]} />
 					))}
 				</Table>
@@ -84,6 +84,25 @@ const hasTask = (date: string, beginDate?: string, endDate?: string): boolean =>
 	const isBeginDateOk = _date.isSame(_beginDate) || _date.isAfter(_beginDate)
 	const isEndDateOk = _date.isSame(_endDate) || _date.isBefore(_endDate)
 	return isBeginDateOk && isEndDateOk
+}
+
+/**
+ * 曜日を取得
+ * @param date 日付
+ * @return 曜日
+ */
+function getDayOfWeek(date: string): string {
+	return getDayOfWeekString(date, 'Sat') || getDayOfWeekString(date, 'Sun')
+}
+
+/**
+ * 日付が曜日に該当する場合、曜日を返却
+ * @param date 日付
+ * @param dayOfWeek 曜日
+ * @return 曜日
+ */
+function getDayOfWeekString(date: string, dayOfWeek: string): string {
+	return date.includes(dayOfWeek) ? dayOfWeek.toLowerCase() : ''
 }
 
 export default GanttApp
