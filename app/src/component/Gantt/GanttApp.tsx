@@ -51,6 +51,12 @@ const GanttApp: React.FC = () => {
 	// タイトル用の要素を追加
 	dates.unshift('title')
 
+	const header: { [key: string]: string } = {}
+	header['title'] = ''
+	header['beginDate'] = ''
+	header['endDate'] = ''
+	header['color'] = ''
+
 	return (
 		<>
 			<nav id="navigation">
@@ -61,7 +67,12 @@ const GanttApp: React.FC = () => {
 				<Search />
 				<Table data={data}>
 					{dates.map((e) => (
-						<Column key={e} name={e} className={className[e]} />
+						<Column
+							key={e}
+							name={e}
+							header={header[e] !== undefined ? header[e] : e}
+							className={className[e]}
+						/>
 					))}
 				</Table>
 			</article>
