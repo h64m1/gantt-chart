@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { State } from '../../reducer/Tasks'
+import './button.scss'
 
 /**
  * データのエクスポート
