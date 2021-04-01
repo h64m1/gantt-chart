@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { State } from '../../reducer/Tasks'
-import './button.scss'
+import './button.css'
 
 /**
  * データのエクスポート
@@ -11,9 +11,9 @@ import './button.scss'
 const ExportButton: React.FC = () => {
 	const state = useTaskState()
 	return (
-		<div className="export">
-			<span
-				className="export-button"
+		<div>
+			<button
+				className="btn btn-blue"
 				onClick={async (event) => {
 					console.debug('click export ...', event, state)
 					try {
@@ -23,9 +23,9 @@ const ExportButton: React.FC = () => {
 					}
 				}}
 			>
-				<FontAwesomeIcon icon={faFileExport} className="export-icon" />
+				<FontAwesomeIcon icon={faFileExport} className="button-icon" />
 				エクスポート
-			</span>
+			</button>
 		</div>
 	)
 }
@@ -37,9 +37,9 @@ const ImportButton: React.FC = () => {
 	const dispatch = useTaskDispatch()
 
 	return (
-		<div className="import">
-			<span
-				className="import-button"
+		<div>
+			<button
+				className="btn btn-blue"
 				onClick={async () => {
 					try {
 						const data = (await window.api.import()) as State
@@ -52,9 +52,9 @@ const ImportButton: React.FC = () => {
 					}
 				}}
 			>
-				<FontAwesomeIcon icon={faFileExport} className="import-icon" />
+				<FontAwesomeIcon icon={faFileExport} className="button-icon" />
 				インポート
-			</span>
+			</button>
 		</div>
 	)
 }

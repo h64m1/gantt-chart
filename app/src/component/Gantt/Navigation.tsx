@@ -17,6 +17,7 @@ const Navigation: React.FC<NavigationProps> = React.memo((props) => {
 		<>
 			<Select beginDate={props.beginDate} endDate={props.endDate} validation={props.validation} />
 			<ExportButton />
+			<div className="my-1" />
 			<ImportButton />
 		</>
 	)
