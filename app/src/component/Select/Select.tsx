@@ -4,7 +4,7 @@ import { validate } from '../../api/Validation/Validation'
 import { DatePicker } from '../../component/Picker/DatePicker'
 import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 import { Validation } from '../../reducer/Tasks'
-import './select.scss'
+import './select.css'
 
 type SearchDate = 'beginDate' | 'endDate'
 
@@ -16,8 +16,9 @@ const Select: React.FC<{
 	console.debug('render Select: ', beginDate, endDate)
 	return (
 		<>
-			<div id="select-parent">
+			<div id="select-parent" className="flex w-full justify-center">
 				<DPicker name={'beginDate'} date={beginDate} />
+				<span className="ml-1 mr-1"></span>
 				<DPicker name={'endDate'} date={endDate} />
 			</div>
 			<div className="validation-date">
@@ -37,7 +38,7 @@ const DPicker: React.FC<{
 
 	return (
 		<DatePicker
-			className="search-datepicker"
+			className="w-28 border border-black"
 			dateFormat="yyyy/MM/dd"
 			date={date}
 			onChange={(dateChanged) => {
