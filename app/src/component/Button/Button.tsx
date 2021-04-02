@@ -13,7 +13,7 @@ const ExportButton: React.FC = () => {
 	return (
 		<div>
 			<button
-				className="btn btn-blue"
+				className="data-btn data-btn-blue"
 				onClick={async (event) => {
 					console.debug('click export ...', event, state)
 					try {
@@ -39,7 +39,7 @@ const ImportButton: React.FC = () => {
 	return (
 		<div>
 			<button
-				className="btn btn-blue"
+				className="data-btn data-btn-blue"
 				onClick={async () => {
 					try {
 						const data = (await window.api.import()) as State
