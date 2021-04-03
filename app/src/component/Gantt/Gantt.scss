@@ -16,12 +16,6 @@ input {
 
 td {
 
-	/* テーブルセル */
-	&.title {
-		font-weight: bold;
-		background-color: paleturquoise;
-	}
-
 	// 曜日毎の色
 	&.sat {
 		background-color: rgb(167, 221, 252);
