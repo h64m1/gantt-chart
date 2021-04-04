@@ -15,9 +15,15 @@ type NavigationProps = {
 const Navigation: React.FC<NavigationProps> = React.memo((props) => {
 	return (
 		<>
+			<div className="h-8 flex flex-wrap place-content-center m-1">
+				<div className="p-1">
+					<ExportButton />
+				</div>
+				<div className="p-1">
+					<ImportButton />
+				</div>
+			</div>
 			<Select beginDate={props.beginDate} endDate={props.endDate} validation={props.validation} />
-			<ExportButton />
-			<ImportButton />
 		</>
 	)
 })

@@ -16,7 +16,7 @@ const Title: React.FC<{
 	return (
 		<input
 			type="text"
-			className="title"
+			className="font-bold border"
 			value={title}
 			onChange={(e) =>
 				dispatch({

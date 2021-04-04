@@ -16,7 +16,7 @@ const TaskDatePicker: React.FC<{
 	console.debug('DatePicker: date', name, date)
 	return (
 		<DatePicker
-			className="task-datepicker"
+			className="w-24 border border-blue-300"
 			dateFormat="yyyy/MM/dd"
 			date={date}
 			onChange={(date) => {
