@@ -1,17 +1,5 @@
-.gantt-body {
-	// border: solid thin;
-}
-
 .gantt-button {
 	text-align: left;
-}
-
-input {
-	&.title {
-		background-color: paleturquoise;
-		border-style: none;
-		margin: 2px;
-	}
 }
 
 td {
@@ -24,6 +12,14 @@ td {
 	&.sun {
 		background-color: rgb(252, 167, 167);
 	}
+}
+
+// 当日列
+#th-today {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background-color: rgba(255, 100, 100, 0.5);
 }
 
 .App {

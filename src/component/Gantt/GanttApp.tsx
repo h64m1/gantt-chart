@@ -19,7 +19,7 @@ const GanttApp: React.FC = () => {
 	className['taskEndDate'] = 'gantt-body date'
 	className['color'] = 'gantt-body color-picker'
 
-	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'MM/DD (ddd)')
+	const dates = Day.DaysFromTo(state.beginDate, state.endDate, 'YYYY-MM-DD')
 	const data = state.tasks.map((task, row) => {
 		const d = {
 			title: <Title row={row} title={task.title} />,
@@ -57,6 +57,9 @@ const GanttApp: React.FC = () => {
 	header['endDate'] = ''
 	header['color'] = ''
 
+	// 当日の日付
+	const today = Day.Day()
+
 	return (
 		<>
 			<nav id="navigation">
@@ -66,14 +69,20 @@ const GanttApp: React.FC = () => {
 				{/* 検索パネル: ガントチャートの表示範囲 */}
 				<Search />
 				<Table data={data}>
-					{dates.map((e) => (
-						<Column
-							key={e}
-							name={e}
-							header={header[e] !== undefined ? header[e] : e}
-							className={className[e]}
-						/>
-					))}
+					{dates.map((e, i) => {
+						const day = Day.Day(e)
+						const id = day.isSame(today.format('YYYY-MM-DD')) ? 'today' : undefined
+						const item = i < 4 ? e : day.format('MM/DD (ddd)')
+						return (
+							<Column
+								key={e}
+								name={e}
+								header={header[e] !== undefined ? header[e] : item}
+								className={className[e]}
+								id={id}
+							/>
+						)
+					})}
 				</Table>
 			</article>
 		</>
