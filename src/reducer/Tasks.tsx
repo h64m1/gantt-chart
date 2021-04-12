@@ -26,6 +26,11 @@ type Validation = {
 	endDate: YearMonth
 }
 
+type SearchDate = {
+	beginDate: YearMonth // gantt-chartの表示開始日
+	endDate: YearMonth // gantt-chartの表示終了日
+}
+
 type State = {
 	taskDbKey: string // task用のDB key
 	searchDateKey: string // 検索処理年月日用のkey
@@ -70,5 +75,17 @@ const createTasks = (): Tasks => {
 	return [createTask()]
 }
 
-export type { TaskDate, Task, Tasks, Validation, State }
-export { generateKey, createTask, createTasks }
+/**
+ * Stateから検索処理年月日を取得
+ * @param state State
+ * @returns 検索処理年月日
+ */
+const searchDate = (state: State): SearchDate => {
+	return {
+		beginDate: state.beginDate,
+		endDate: state.endDate,
+	}
+}
+
+export type { SearchDate, TaskDate, Task, Tasks, Validation, State }
+export { generateKey, createTask, createTasks, searchDate }

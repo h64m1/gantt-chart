@@ -1,7 +1,7 @@
 import * as Key from '../api/Key/Key'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, State, Tasks } from './Tasks'
+import { createTask, createTasks, State, Tasks, searchDate } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -76,6 +76,7 @@ export const initializer = (state: State): any => {
  */
 const beginDate = (state: State, date: string) => {
 	console.debug('開始日変更', date)
+	db.write(state.searchDateKey, { beginDate: date, endDate: state.endDate })
 	return {
 		...state,
 		beginDate: date,
@@ -89,6 +90,7 @@ const beginDate = (state: State, date: string) => {
  */
 const endDate = (state: State, date: string) => {
 	console.debug('終了日変更', date)
+	db.write(state.searchDateKey, { beginDate: state.beginDate, endDate: date })
 	return {
 		...state,
 		endDate: date,
@@ -266,6 +268,7 @@ const importJson = (state: State, data: State) => {
 	console.debug('click import ...', data)
 
 	// DBに登録
+	db.write(data.searchDateKey, searchDate(data))
 	db.write(data.taskDbKey, data.tasks)
 
 	return data

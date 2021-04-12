@@ -5,7 +5,7 @@ import { Send } from '../api/Send'
 import * as db from '../db/Database'
 import { Action } from '../reducer/Action'
 import { initializer, reducer } from '../reducer/reducer'
-import { createTasks, State, Tasks } from '../reducer/Tasks'
+import { createTasks, SearchDate, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
 	taskDbKey: Key.taskDbKey,
@@ -46,13 +46,14 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		let didRead = false
 
 		;(async () => {
+			const { beginDate, endDate } = (await db.read(state.searchDateKey)) as SearchDate
 			const tasks = (await db.read(state.taskDbKey)) as Tasks
 			if (!didRead) {
 				// マウント時に初期化
 				dispatch({
 					type: 'init',
-					beginDate: state.beginDate,
-					endDate: state.endDate,
+					beginDate: beginDate,
+					endDate: endDate,
 					tasks: tasks,
 				})
 			}
