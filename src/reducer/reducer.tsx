@@ -106,7 +106,8 @@ const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
 	const newTasks = tasks === null || tasks === undefined ? createTasks() : tasks
 
 	return {
-		key: Key.dbKey,
+		taskDbKey: Key.taskDbKey,
+		searchDateKey: Key.searchDateKey,
 		beginDate: beginDate,
 		endDate: endDate,
 		tasks: newTasks,
@@ -132,7 +133,7 @@ const title = (state: State, id: number, title: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -151,7 +152,7 @@ const color = (state: State, id: number, color: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -169,7 +170,7 @@ const task = (state: State, id: number, column: number) => {
 		...state,
 		tasks: [...state.tasks],
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -188,7 +189,7 @@ const taskBeginDate = (state: State, id: number, date: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -207,7 +208,7 @@ const taskEndDate = (state: State, id: number, date: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -225,7 +226,7 @@ const addRow = (state: State) => {
 		...state,
 		tasks: [...state.tasks, createTask()],
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -251,7 +252,7 @@ const deleteRow = (state: State) => {
 		...state,
 		tasks: state.tasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -265,7 +266,7 @@ const importJson = (state: State, data: State) => {
 	console.debug('click import ...', data)
 
 	// DBに登録
-	db.write(data.key, data.tasks)
+	db.write(data.taskDbKey, data.tasks)
 
 	return data
 }

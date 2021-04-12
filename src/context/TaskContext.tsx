@@ -8,7 +8,8 @@ import { initializer, reducer } from '../reducer/reducer'
 import { createTasks, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
-	key: Key.dbKey,
+	taskDbKey: Key.taskDbKey,
+	searchDateKey: Key.searchDateKey,
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
 	tasks: [],
@@ -45,7 +46,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		let didRead = false
 
 		;(async () => {
-			const tasks = (await db.read(state.key)) as Tasks
+			const tasks = (await db.read(state.taskDbKey)) as Tasks
 			if (!didRead) {
 				// マウント時に初期化
 				dispatch({

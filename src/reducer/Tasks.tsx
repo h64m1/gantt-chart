@@ -27,7 +27,8 @@ type Validation = {
 }
 
 type State = {
-	key: string // uniqueなkey
+	taskDbKey: string // task用のDB key
+	searchDateKey: string // 検索処理年月日用のkey
 	beginDate: YearMonth // gantt-chartの表示開始日
 	endDate: YearMonth // gantt-chartの表示終了日
 	tasks: Tasks
