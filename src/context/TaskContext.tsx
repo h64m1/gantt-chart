@@ -1,13 +1,14 @@
 import React from 'react'
 import * as Day from '../api/Date/Day'
+import * as Key from '../api/Key/Key'
 import { Send } from '../api/Send'
 import * as db from '../db/Database'
 import { Action } from '../reducer/Action'
 import { initializer, reducer } from '../reducer/reducer'
-import { createTasks, generateKey, State, Tasks } from '../reducer/Tasks'
+import { createTasks, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
-	key: generateKey(),
+	key: Key.dbKey,
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
 	tasks: [],
@@ -25,7 +26,6 @@ const TaskDispatchContext = React.createContext<Dispatch | undefined>(undefined)
  * @param children 子要素
  */
 const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-	// TODO: 開始日と終了日、実装完了までは処理年月を残す
 	const beginDate = Day.addF(-1, 'month')
 	const endDate = Day.addF(1, 'month')
 	const [state, dispatch] = React.useReducer(

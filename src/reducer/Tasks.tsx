@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 // state type
 // const state = {
 // 	 tasks: [
@@ -36,8 +38,7 @@ type State = {
  * Taskのidを生成
  */
 const generateKey = (): string => {
-	// keyは固定
-	return 'gantt-chart'
+	return uuidv4()
 }
 
 /**

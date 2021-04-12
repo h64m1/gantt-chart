@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid'
+import * as Key from '../api/Key/Key'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, generateKey, State, Tasks } from './Tasks'
+import { createTask, createTasks, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -106,7 +106,7 @@ const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
 	const newTasks = tasks === null || tasks === undefined ? createTasks() : tasks
 
 	return {
-		key: generateKey(),
+		key: Key.dbKey,
 		beginDate: beginDate,
 		endDate: endDate,
 		tasks: newTasks,
@@ -163,7 +163,6 @@ const color = (state: State, id: number, color: string) => {
  * @param {number} column 列ID
  */
 const task = (state: State, id: number, column: number) => {
-	// TODO: task変更のアクション、コメントアウトを外した際に修正する
 	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
 	const newState = {
