@@ -1,7 +1,8 @@
+import * as Day from '../api/Date/Day'
 import * as Key from '../api/Key/Key'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, State, Tasks, searchDate } from './Tasks'
+import { createTask, createTasks, searchDate, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -110,8 +111,8 @@ const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
 	return {
 		taskDbKey: Key.taskDbKey,
 		searchDateKey: Key.searchDateKey,
-		beginDate: beginDate,
-		endDate: endDate,
+		beginDate: beginDate === null || beginDate === undefined ? Day.addF(-1, 'month') : beginDate,
+		endDate: endDate === null || endDate === undefined ? Day.addF(1, 'month') : endDate,
 		tasks: newTasks,
 		validation: {
 			beginDate: '',

@@ -46,14 +46,14 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		let didRead = false
 
 		;(async () => {
-			const { beginDate, endDate } = (await db.read(state.searchDateKey)) as SearchDate
+			const searchDate = (await db.read(state.searchDateKey)) as SearchDate
 			const tasks = (await db.read(state.taskDbKey)) as Tasks
 			if (!didRead) {
 				// マウント時に初期化
 				dispatch({
 					type: 'init',
-					beginDate: beginDate,
-					endDate: endDate,
+					beginDate: searchDate?.beginDate,
+					endDate: searchDate?.endDate,
 					tasks: tasks,
 				})
 			}
