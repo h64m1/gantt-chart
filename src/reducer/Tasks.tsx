@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 // state type
 // const state = {
 // 	 tasks: [
@@ -24,8 +26,14 @@ type Validation = {
 	endDate: YearMonth
 }
 
+type SearchDate = {
+	beginDate: YearMonth // gantt-chartの表示開始日
+	endDate: YearMonth // gantt-chartの表示終了日
+}
+
 type State = {
-	key: string // uniqueなkey
+	taskDbKey: string // task用のDB key
+	searchDateKey: string // 検索処理年月日用のkey
 	beginDate: YearMonth // gantt-chartの表示開始日
 	endDate: YearMonth // gantt-chartの表示終了日
 	tasks: Tasks
@@ -36,8 +44,7 @@ type State = {
  * Taskのidを生成
  */
 const generateKey = (): string => {
-	// keyは固定
-	return 'gantt-chart'
+	return uuidv4()
 }
 
 /**
@@ -68,5 +75,17 @@ const createTasks = (): Tasks => {
 	return [createTask()]
 }
 
-export type { TaskDate, Task, Tasks, Validation, State }
-export { generateKey, createTask, createTasks }
+/**
+ * Stateから検索処理年月日を取得
+ * @param state State
+ * @returns 検索処理年月日
+ */
+const searchDate = (state: State): SearchDate => {
+	return {
+		beginDate: state.beginDate,
+		endDate: state.endDate,
+	}
+}
+
+export type { SearchDate, TaskDate, Task, Tasks, Validation, State }
+export { generateKey, createTask, createTasks, searchDate }

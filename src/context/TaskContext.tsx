@@ -1,13 +1,15 @@
 import React from 'react'
 import * as Day from '../api/Date/Day'
+import * as Key from '../api/Key/Key'
 import { Send } from '../api/Send'
 import * as db from '../db/Database'
 import { Action } from '../reducer/Action'
 import { initializer, reducer } from '../reducer/reducer'
-import { createTasks, generateKey, State, Tasks } from '../reducer/Tasks'
+import { createTasks, SearchDate, State, Tasks } from '../reducer/Tasks'
 
 const TaskStateContext = React.createContext<State>({
-	key: generateKey(),
+	taskDbKey: Key.taskDbKey,
+	searchDateKey: Key.searchDateKey,
 	beginDate: Day.addF(-1, 'month'),
 	endDate: Day.addF(-1, 'month'),
 	tasks: [],
@@ -25,7 +27,6 @@ const TaskDispatchContext = React.createContext<Dispatch | undefined>(undefined)
  * @param children 子要素
  */
 const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-	// TODO: 開始日と終了日、実装完了までは処理年月を残す
 	const beginDate = Day.addF(-1, 'month')
 	const endDate = Day.addF(1, 'month')
 	const [state, dispatch] = React.useReducer(
@@ -45,13 +46,14 @@ const TaskProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 		let didRead = false
 
 		;(async () => {
-			const tasks = (await db.read(state.key)) as Tasks
+			const searchDate = (await db.read(state.searchDateKey)) as SearchDate
+			const tasks = (await db.read(state.taskDbKey)) as Tasks
 			if (!didRead) {
 				// マウント時に初期化
 				dispatch({
 					type: 'init',
-					beginDate: state.beginDate,
-					endDate: state.endDate,
+					beginDate: searchDate?.beginDate,
+					endDate: searchDate?.endDate,
 					tasks: tasks,
 				})
 			}

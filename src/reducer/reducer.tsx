@@ -1,7 +1,8 @@
-import { v4 as uuidv4 } from 'uuid'
+import * as Day from '../api/Date/Day'
+import * as Key from '../api/Key/Key'
 import * as db from '../db/Database'
 import { Action } from './Action'
-import { createTask, createTasks, generateKey, State, Tasks } from './Tasks'
+import { createTask, createTasks, searchDate, State, Tasks } from './Tasks'
 
 // eslint-disable-next-line
 export const reducer = (state: State, action: Action): any => {
@@ -76,6 +77,7 @@ export const initializer = (state: State): any => {
  */
 const beginDate = (state: State, date: string) => {
 	console.debug('開始日変更', date)
+	db.write(state.searchDateKey, { beginDate: date, endDate: state.endDate })
 	return {
 		...state,
 		beginDate: date,
@@ -89,6 +91,7 @@ const beginDate = (state: State, date: string) => {
  */
 const endDate = (state: State, date: string) => {
 	console.debug('終了日変更', date)
+	db.write(state.searchDateKey, { beginDate: state.beginDate, endDate: date })
 	return {
 		...state,
 		endDate: date,
@@ -106,9 +109,10 @@ const init = (beginDate: string, endDate: string, tasks: Tasks): State => {
 	const newTasks = tasks === null || tasks === undefined ? createTasks() : tasks
 
 	return {
-		key: generateKey(),
-		beginDate: beginDate,
-		endDate: endDate,
+		taskDbKey: Key.taskDbKey,
+		searchDateKey: Key.searchDateKey,
+		beginDate: beginDate === null || beginDate === undefined ? Day.addF(-1, 'month') : beginDate,
+		endDate: endDate === null || endDate === undefined ? Day.addF(1, 'month') : endDate,
 		tasks: newTasks,
 		validation: {
 			beginDate: '',
@@ -132,7 +136,7 @@ const title = (state: State, id: number, title: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -151,7 +155,7 @@ const color = (state: State, id: number, color: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -163,14 +167,13 @@ const color = (state: State, id: number, color: string) => {
  * @param {number} column 列ID
  */
 const task = (state: State, id: number, column: number) => {
-	// TODO: task変更のアクション、コメントアウトを外した際に修正する
 	console.debug('タスク変更', state, id, column)
 	// ONとOFFを切り替える
 	const newState = {
 		...state,
 		tasks: [...state.tasks],
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -189,7 +192,7 @@ const taskBeginDate = (state: State, id: number, date: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -208,7 +211,7 @@ const taskEndDate = (state: State, id: number, date: string) => {
 		...state,
 		tasks: newTasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -226,7 +229,7 @@ const addRow = (state: State) => {
 		...state,
 		tasks: [...state.tasks, createTask()],
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -252,7 +255,7 @@ const deleteRow = (state: State) => {
 		...state,
 		tasks: state.tasks,
 	}
-	db.write(state.key, newState.tasks)
+	db.write(state.taskDbKey, newState.tasks)
 
 	return newState
 }
@@ -266,7 +269,8 @@ const importJson = (state: State, data: State) => {
 	console.debug('click import ...', data)
 
 	// DBに登録
-	db.write(data.key, data.tasks)
+	db.write(data.searchDateKey, searchDate(data))
+	db.write(data.taskDbKey, data.tasks)
 
 	return data
 }
