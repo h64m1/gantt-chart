@@ -1,17 +1,37 @@
+import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react'
-import { render, screen } from '@testing-library/react'
-import * as db from './db/Database'
 import App from './App'
+import * as db from './db/Database'
 
 // App test
 describe('renders App', () => {
 	it('render buttons', () => {
-		// buttons
+		// button title
 		render(<App />)
 		expect(screen.getByText('Export')).toBeInTheDocument()
 		expect(screen.getByText('Import')).toBeInTheDocument()
 		expect(screen.getByText(/行追加/i)).toBeInTheDocument()
 		expect(screen.getByText(/行削除/i)).toBeInTheDocument()
+	})
+	it('<Title />', () => {
+		// title
+		render(<App />)
+		const inputs1 = screen.getAllByLabelText('input-text')
+		expect(inputs1.length).toBe(1)
+
+		// event: add row
+		fireEvent.click(screen.getByText(/行追加/i))
+		const inputs2 = screen.getAllByLabelText('input-text')
+		expect(inputs2.length).toBe(2)
+
+		// event: delete row
+		fireEvent.click(screen.getByText(/行削除/i))
+		const inputs3 = screen.getAllByLabelText('input-text')
+		expect(inputs3.length).toBe(1)
+	})
+	it('<Title />', () => {
+		const { asFragment } = render(<App />)
+		expect(asFragment).toMatchSnapshot()
 	})
 })
 

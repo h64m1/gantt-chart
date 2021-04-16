@@ -15,6 +15,7 @@ const Title: React.FC<{
 	//  タイトル
 	return (
 		<input
+			aria-label="input-text"
 			type="text"
 			className="font-bold border"
 			value={title}
