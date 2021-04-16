@@ -1,13 +1,18 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import * as db from './db/Database'
 import App from './App'
 
 // App test
-test('renders learn react link', () => {
-	const { getByText } = render(<App />)
-	const addBUtton = getByText(/行追加/i)
-	expect(addBUtton).toBeInTheDocument()
+describe('renders App', () => {
+	it('render buttons', () => {
+		// buttons
+		render(<App />)
+		expect(screen.getByText('Export')).toBeInTheDocument()
+		expect(screen.getByText('Import')).toBeInTheDocument()
+		expect(screen.getByText(/行追加/i)).toBeInTheDocument()
+		expect(screen.getByText(/行削除/i)).toBeInTheDocument()
+	})
 })
 
 // DB test
@@ -24,15 +29,12 @@ describe('Test IndexedDB', () => {
 					},
 				},
 			}
-
 			const key: db.dbKey = '0'
 			await db.write(key, object)
 			const ret = await db.read(key)
 			expect(ret).toEqual(object)
-
 			const ret2 = await db.read(key)
 			expect(ret2).toEqual(object)
-
 			db.close()
 		})
 	})
