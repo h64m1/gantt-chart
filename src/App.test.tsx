@@ -28,6 +28,15 @@ describe('renders App', () => {
 		fireEvent.click(screen.getByText(/行削除/i))
 		const inputs3 = screen.getAllByLabelText('input-text')
 		expect(inputs3.length).toBe(1)
+
+		// input: display 'test'
+		const input = inputs1[0]
+		fireEvent.change(input, { target: { value: 'test' } })
+		expect(screen.getByDisplayValue('test')).toBeInTheDocument()
+
+		// change input: 'test' -> 'hello world'
+		fireEvent.change(input, { target: { value: 'hello world' } })
+		expect(screen.getByDisplayValue('hello world')).toBeInTheDocument()
 	})
 	it('<Title />', () => {
 		const { asFragment } = render(<App />)
