@@ -13,7 +13,6 @@ const TaskDatePicker: React.FC<{
 	date?: string
 }> = React.memo(({ row, name, date }) => {
 	const dispatch = useTaskDispatch()
-	console.debug('DatePicker: date', name, date)
 	return (
 		<DatePicker
 			className="w-24 border border-blue-300"

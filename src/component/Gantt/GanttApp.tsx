@@ -11,7 +11,6 @@ import { Search } from './Search'
 
 const GanttApp: React.FC = () => {
 	const state = useTaskState()
-	console.debug('render GanttApp | tasks:', state.tasks)
 
 	const className: { [key: string]: string } = {}
 	className['title'] = 'gantt-body title'
@@ -41,7 +40,6 @@ const GanttApp: React.FC = () => {
 
 		return Object.assign(dd, d)
 	})
-	console.debug('tasks', state.tasks, 'data', data)
 
 	// カラーピッカー用の要素追加
 	dates.unshift('color')

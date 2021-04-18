@@ -22,8 +22,6 @@ const validate = (value: unknown, state: State, type: ValidationType): string =>
  * @param {State} state ステート
  */
 function validateBeginDate(beginDate: string, state: State): string {
-	console.debug('validateBeginDate', beginDate, state)
-
 	// 開始日 < 終了日となっていること
 	const begin = Day.Day(beginDate)
 	const end = Day.Day(state.endDate)
@@ -41,8 +39,6 @@ function validateBeginDate(beginDate: string, state: State): string {
  * @param {State} state ステート
  */
 function validateEndDate(endDate: string, state: State): string {
-	console.debug('validateEndDate', endDate, state)
-
 	// 開始日 < 終了日となっていること
 	const begin = Day.Day(state.beginDate)
 	const end = Day.Day(endDate)

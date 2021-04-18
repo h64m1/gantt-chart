@@ -13,7 +13,6 @@ const Select: React.FC<{
 	endDate: string
 	validation: Validation
 }> = React.memo(({ beginDate, endDate, validation }) => {
-	console.debug('render Select: ', beginDate, endDate)
 	return (
 		<>
 			<div id="select-parent" className="flex w-full justify-center">

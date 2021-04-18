@@ -38,10 +38,6 @@ describe('renders App', () => {
 		fireEvent.change(input, { target: { value: 'hello world' } })
 		expect(screen.getByDisplayValue('hello world')).toBeInTheDocument()
 	})
-	it('<Title />', () => {
-		const { asFragment } = render(<App />)
-		expect(asFragment).toMatchSnapshot()
-	})
 })
 
 // DB test
