@@ -12,7 +12,7 @@ type NavigationProps = {
 /**
  * ナビゲーション
  */
-const Navigation: React.FC<NavigationProps> = React.memo((props) => {
+const Navigation: React.VFC<NavigationProps> = React.memo((props) => {
 	return (
 		<>
 			<div className="h-8 flex flex-wrap place-content-center m-1">

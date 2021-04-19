@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 /**
  * DatePickerを表示
  */
-const DatePicker: React.FC<{
+const DatePicker: React.VFC<{
 	date: string | undefined
 	dateFormat: string
 	onChange: (date: Date) => void

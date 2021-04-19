@@ -8,7 +8,7 @@ import './select.css'
 
 type SearchDate = 'beginDate' | 'endDate'
 
-const Select: React.FC<{
+const Select: React.VFC<{
 	beginDate: string
 	endDate: string
 	validation: Validation
@@ -28,7 +28,7 @@ const Select: React.FC<{
 	)
 })
 
-const DPicker: React.FC<{
+const DPicker: React.VFC<{
 	name: SearchDate
 	date?: string | undefined
 }> = ({ name, date }) => {

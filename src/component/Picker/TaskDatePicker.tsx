@@ -7,7 +7,7 @@ import { DatePicker } from './DatePicker'
 /**
  * 開始日/終了日
  */
-const TaskDatePicker: React.FC<{
+const TaskDatePicker: React.VFC<{
 	row: number
 	name: TaskDate
 	date?: string
