@@ -8,13 +8,12 @@ const Title: React.FC<{
 	row: number
 	title: string
 }> = React.memo(({ row, title }) => {
-	console.debug('render Title', row, title)
-
 	const dispatch = useTaskDispatch()
 
 	//  タイトル
 	return (
 		<input
+			aria-label="input-text"
 			type="text"
 			className="font-bold border"
 			value={title}
