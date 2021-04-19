@@ -5,7 +5,7 @@ import './search.css'
 /**
  * 検索用パネル
  */
-const Search: React.FC = () => {
+const Search: React.VFC = () => {
 	const dispatch = useTaskDispatch()
 
 	return (

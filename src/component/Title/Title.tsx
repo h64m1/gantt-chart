@@ -4,7 +4,7 @@ import { useTaskDispatch } from '../../context/TaskContext'
 /**
  * タイトル列
  */
-const Title: React.FC<{
+const Title: React.VFC<{
 	row: number
 	title: string
 }> = React.memo(({ row, title }) => {

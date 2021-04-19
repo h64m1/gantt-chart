@@ -8,7 +8,7 @@ import './button.css'
 /**
  * データのエクスポート
  */
-const ExportButton: React.FC = () => {
+const ExportButton: React.VFC = () => {
 	const state = useTaskState()
 	return (
 		<button
@@ -31,7 +31,7 @@ const ExportButton: React.FC = () => {
 /**
  * データのインポート
  */
-const ImportButton: React.FC = () => {
+const ImportButton: React.VFC = () => {
 	const dispatch = useTaskDispatch()
 
 	return (

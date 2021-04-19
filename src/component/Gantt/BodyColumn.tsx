@@ -4,7 +4,7 @@ import { useTaskDispatch, useTaskState } from '../../context/TaskContext'
 // import { getTaskKey } from '../../reducer/Tasks'
 
 // ガントチャート本体の列を描画
-const BodyColumn: React.FC<{
+const BodyColumn: React.VFC<{
 	row: number
 	column: number
 	day: string

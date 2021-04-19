@@ -9,7 +9,7 @@ import './Gantt.scss'
 import { Navigation } from './Navigation'
 import { Search } from './Search'
 
-const GanttApp: React.FC = () => {
+const GanttApp: React.VFC = () => {
 	const state = useTaskState()
 
 	const className: { [key: string]: string } = {}

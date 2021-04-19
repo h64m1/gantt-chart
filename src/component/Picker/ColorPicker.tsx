@@ -4,7 +4,7 @@ import { useTaskDispatch } from '../../context/TaskContext'
 /**
  * カラーピッカー
  */
-const ColorPicker: React.FC<{
+const ColorPicker: React.VFC<{
 	row: number
 	color: string
 }> = React.memo(({ row, color }) => {
